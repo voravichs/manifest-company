@@ -25,7 +25,6 @@ public class App extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-        //test
     }
 
     public static void main(String[] args) {
