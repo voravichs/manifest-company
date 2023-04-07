@@ -25,7 +25,8 @@ public class App extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-        // this is a change in the test branch
+        // this is a change in the test branch - Voravich
+        // this is a new change to test the test branch Jay - Jay.
     }
 
     public static void main(String[] args) {
