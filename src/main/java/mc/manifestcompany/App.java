@@ -26,6 +26,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         // now testing the branch protection - again by Jay
+        // new test - Jay
     }
 
     public static void main(String[] args) {
