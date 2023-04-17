@@ -6,30 +6,37 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * Starts the application, initializing the FXML and CSS files.
  * @author VoravichS
  */
 public class App extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader =
-                new FXMLLoader(App.class.getResource("root.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        String css = Objects.requireNonNull(
-                App.class.getResource("stylesheet.css")).toExternalForm();
-        scene.getStylesheets().add(css);
-
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+        // Boots the game either in "production" mode (with args)
+        // or in normal mode, showing the title screen
+        Parameters params = getParameters();
+        List<String> argList = params.getRaw();
+        FXMLLoader fxmlLoader;
+        if (argList.size() == 0) {
+            fxmlLoader = new FXMLLoader(App.class.getResource("root.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+            stage.setTitle("Manifest Company");
+            stage.setScene(scene);
+        } else {
+            fxmlLoader = new FXMLLoader(App.class.getResource("gameScreen.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+            stage.setTitle("Manifest Company");
+            stage.setScene(scene);
+        }
         stage.show();
-        // now testing the branch protection - again by Jay
-        // new test - Jay
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
+
