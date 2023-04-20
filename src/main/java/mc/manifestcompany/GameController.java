@@ -14,7 +14,7 @@ import java.net.URL;
 
 /**
  * Controls the GUI elements of the game screen.
- * @author VoravichS
+ * @author Team Manifest Company
  */
 public class GameController {
 

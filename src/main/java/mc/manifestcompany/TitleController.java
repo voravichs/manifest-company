@@ -6,15 +6,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 /**
  * Defines the functions of the buttons on the title screen.
- * @author VoravichS
+ * @author Team Manifest Company
  */
 public class TitleController {
     /**

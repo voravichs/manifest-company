@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * Represents a logical and graphical tile in the game.
+ * @author Team Manifest Company
  */
 public class Tile extends FXShape {
 
@@ -13,16 +14,8 @@ public class Tile extends FXShape {
     public Tile(Rectangle square, Point2D location, TileType type) {
         super(square, location);
         this.type = type;
-        setTileColor();
+        setType(type);
         setTilePosition();
-    }
-
-    /**
-     * Sets the color of the tile in the GUI.
-     */
-    public void setTileColor() {
-        this.square.setFill(this.type.fill());
-        this.square.setStroke(Color.BLACK);
     }
 
     /**
@@ -46,7 +39,8 @@ public class Tile extends FXShape {
      */
     public void setType(TileType type) {
         this.type = type;
-        setTileColor();
+        this.square.setFill(this.type.fill());
+        this.square.setStroke(Color.BLACK);
     }
 
     public enum TileType {

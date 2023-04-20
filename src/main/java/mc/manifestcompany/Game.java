@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * Manages the non-GUI, logical components of the game.
- * @author VoravichS
+ * @author Team Manifest Company
  */
 public class Game {
     /* Final Variables */
@@ -57,6 +57,18 @@ public class Game {
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // TODO: init stats for each player
+        // TODO: Add actual company names
+        Company player1 = new UserCompany("player", new CompanyActionImpl());
+        Company npc1 = new NPCompany("NPC1", new CompanyActionImpl());
+        Company npc2 = new NPCompany("NPC2", new CompanyActionImpl());
+        Company npc3 = new NPCompany("NPC3", new CompanyActionImpl());
+
+        // TODO: REMOVE, TESTING METHODS
+        player1.invest(1000, "marketing");
+        npc1.invest(2000, "HR");
+        npc2.invest(3000, "goods");
+        npc3.invest(4000, "hiring");
+
     }
 
     /**

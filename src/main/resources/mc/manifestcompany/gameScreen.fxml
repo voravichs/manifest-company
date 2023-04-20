@@ -27,12 +27,17 @@
                         <Font size="30.0" />
                     </font>
                 </Button>
+            <Button mnemonicParsing="false" text="DECISIONS">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
                 <Button mnemonicParsing="false" onAction="#advanceTurn" text="ADVANCE">
                     <font>
                         <Font size="30.0" />
                     </font>
                     <VBox.margin>
-                        <Insets top="60.0" />
+                        <Insets top="40.0" />
                     </VBox.margin>
                 </Button>
             </children>
