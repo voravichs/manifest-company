@@ -5,7 +5,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.io.FileInputStream;
@@ -29,12 +31,26 @@ public class GameController {
     private TextFlow textBox;
     @FXML
     private GridPane sideBar;
+    @FXML
+    private Pane transitionPane;
+    @FXML
+    private StackPane root;
 
     /* Instance Variables */
     private final Game game;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
+    }
+
+    /**
+     * Initializes the game and hides the transition pane.
+     */
+    @FXML
+    protected void init() throws FileNotFoundException {
+        initSidebar();
+        updateGrid();
+        root.getChildren().remove(transitionPane);
     }
 
     /**
@@ -90,7 +106,10 @@ public class GameController {
      */
     @FXML
     protected void advanceTurn() {
-
+        // TODO: WRITE CODE FOR WHAT HAPPENS WHEN A TURN ADVANCES
+        System.out.println("Advancing Turn...");
+        Text advanceText = new Text("Advancing Turn...\n");
+        textBox.getChildren().add(advanceText);
     }
 
 

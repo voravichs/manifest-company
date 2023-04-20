@@ -3,74 +3,104 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mc.manifestcompany.GameController">
-    <bottom>
-        <TextFlow fx:id="textBox" prefHeight="200.0" prefWidth="1200.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER" />
-    </bottom>
-    <right>
-        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="250.0" spacing="30.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-            <children>
-                <Button mnemonicParsing="false" onAction="#updateGrid" text="SHOW">
-                    <font>
-                        <Font size="30.0" />
-                    </font>
-                </Button>
-                <Button mnemonicParsing="false" onAction="#clearBoard" text="CLEAR">
-                    <font>
-                        <Font size="30.0" />
-                    </font>
-                </Button>
-                <Button mnemonicParsing="false" onAction="#initSidebar" text="SIDEBAR">
-                    <font>
-                        <Font size="30.0" />
-                    </font>
-                </Button>
-            <Button mnemonicParsing="false" text="DECISIONS">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Button>
-                <Button mnemonicParsing="false" onAction="#advanceTurn" text="ADVANCE">
-                    <font>
-                        <Font size="30.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="40.0" />
-                    </VBox.margin>
-                </Button>
-            </children>
-        </VBox>
-    </right>
-    <center>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <center>
-                <Pane prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane fx:id="gameBoard" layoutX="125.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" />
-               </children></Pane>
-            </center>
-         <left>
-            <GridPane fx:id="sideBar" prefHeight="500.0" prefWidth="300.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="125.0" minHeight="125.0" prefHeight="125.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="125.0" minHeight="125.0" prefHeight="125.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="125.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="125.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-               </children>
-            </GridPane>
-         </left>
-        </BorderPane>
-    </center>
-</BorderPane>
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mc.manifestcompany.GameController">
+    <BorderPane>
+        <center>
+            <BorderPane prefHeight="500.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <center>
+                    <Pane prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
+                        <children>
+                            <Pane fx:id="gameBoard" layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" />
+                        </children></Pane>
+                </center>
+                <left>
+                    <GridPane fx:id="sideBar" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.5" minWidth="137.5" prefWidth="137.5" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="137.5" minHeight="137.5" prefHeight="137.5" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="137.5" minHeight="137.5" percentHeight="25.0" prefHeight="137.5" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="125.0" minHeight="10.0" percentHeight="25.0" prefHeight="125.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="137.5" minHeight="137.5" prefHeight="137.5" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        </children>
+                    </GridPane>
+                </left>
+            </BorderPane>
+        </center>
+        <bottom>
+            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1200.0" spacing="50.0" BorderPane.alignment="CENTER">
+                <children>
+                    <Button mnemonicParsing="false" onAction="#updateGrid" text="SHOW">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#clearBoard" text="CLEAR">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#initSidebar" text="SIDEBAR">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" text="DECISIONS">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#advanceTurn" text="ADVANCE">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Button>
+                </children></HBox>
+        </bottom>
+        <right>
+            <TextFlow fx:id="textBox" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
+                <padding>
+                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                </padding>
+            </TextFlow>
+        </right>
+    </BorderPane>
+   <Pane fx:id="transitionPane" prefHeight="700.0" prefWidth="1200.0">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" height="700.0" onMouseClicked="#init" stroke="BLACK" strokeType="INSIDE" width="1200.0">
+            <fill>
+               <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.012609649449586868" green="0.47517362236976624" blue="0.9078947305679321" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="1.0" green="1.0" blue="1.0" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </RadialGradient>
+            </fill></Rectangle>
+         <Label layoutX="450.0" layoutY="328.0" onMouseClicked="#init" text="Click anywhere to start" textFill="WHITE">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Label>
+      </children>
+   </Pane>
+</StackPane>
