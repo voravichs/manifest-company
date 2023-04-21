@@ -1,0 +1,8 @@
+@font-face{
+    src: url("DotGothic16-Regular.ttf");
+}
+
+Text {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 20;
+}
