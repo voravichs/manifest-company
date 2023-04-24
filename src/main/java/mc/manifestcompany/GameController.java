@@ -150,6 +150,7 @@ public class GameController {
             for (Tile tile : tiles) {
                 Rectangle currTile = tile.getSquare();
                 gameBoard.getChildren().add(currTile);
+
             }
         }
     }
@@ -236,8 +237,5 @@ public class GameController {
         this.game.nextTurn();
         updateGrid();
     }
-
-
-
 
 }
