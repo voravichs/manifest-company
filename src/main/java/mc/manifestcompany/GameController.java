@@ -1,7 +1,9 @@
 package mc.manifestcompany;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -237,5 +239,29 @@ public class GameController {
         this.game.nextTurn();
         updateGrid();
     }
+
+    @FXML
+    protected void invest(ActionEvent event) {
+        Node node = (Node) event.getSource() ;
+        String data = node.getId();
+        switch (data) {
+            case "button1":
+                game.investIn(1);
+                break;
+            case "button2":
+                game.investIn(2);
+                break;
+            case "button3":
+                game.investIn(3);
+                break;
+            case "button4":
+                game.investIn(4);
+                break;
+            default:
+                System.out.println("error");
+                break;
+        }
+    }
+
 
 }

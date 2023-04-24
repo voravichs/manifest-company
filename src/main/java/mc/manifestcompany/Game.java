@@ -96,6 +96,28 @@ public class Game {
         claimTile(0,arrayEndIdx - 1, Tile.TileType.CLAIMED_P2);
         claimTile(arrayEndIdx - 1,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx - 1,arrayEndIdx, Tile.TileType.CLAIMED_P4);
+
+        // FOR NOW, JUST
+    }
+
+    public void investIn(int num) {
+        switch (num) {
+            case 1:
+                System.out.println(1);
+                break;
+            case 2:
+                System.out.println(2);
+                break;
+            case 3:
+                System.out.println(3);
+                break;
+            case 4:
+                System.out.println(4);
+                break;
+            default:
+                System.out.println(1);
+                break;
+        }
     }
 
 }
