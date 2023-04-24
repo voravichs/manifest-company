@@ -227,6 +227,7 @@ public class GameController {
      */
     @FXML
     protected void advanceTurn() {
+        // Add text to the box showing the turn has advanced
         Text advanceText = new Text("Advancing Turn...\n");
         textBox.getChildren().add(advanceText);
         textStack.push(advanceText);
