@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Starts the application, initializing the FXML and CSS files.
- * @author VoravichS
+ * @author Team Manifest Company
  */
 public class App extends Application {
 
@@ -22,7 +22,7 @@ public class App extends Application {
         List<String> argList = params.getRaw();
         FXMLLoader fxmlLoader;
         if (argList.size() == 0) {
-            fxmlLoader = new FXMLLoader(App.class.getResource("root.fxml"));
+            fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
             stage.setTitle("Manifest Company");
             stage.setScene(scene);

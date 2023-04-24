@@ -1,8 +1,9 @@
 package mc.manifestcompany;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * Enum defining fast food companies and their image links.
+ * @author Team Manifest Company
+ */
 public enum FastFoodLevel {
     PLAYER("Player", "images/playerfastfood.png"),
     WACMONDALDS("WacMondalds", "images/wacmonalds.png"),

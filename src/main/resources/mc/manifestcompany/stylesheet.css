@@ -1,3 +1,27 @@
+@font-face{
+    src: url("DotGothic16-Regular.ttf");
+}
+
+.label {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 30;
+}
+
+.button {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 25;
+}
+
 .label:hover {
     -fx-text-fill: goldenrod;
+}
+
+.stats-text {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 15;
+}
+
+.date-text {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 25;
 }

@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * Manages the non-GUI, logical components of the game.
- * @author VoravichS
+ * @author Team Manifest Company
  */
 public class Game {
     /* Final Variables */
@@ -57,10 +57,22 @@ public class Game {
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // TODO: init stats for each player
+        // TODO: Add actual company names
+        Company player1 = new UserCompany("player", new CompanyActionImpl());
+        Company npc1 = new NPCompany("NPC1", new CompanyActionImpl());
+        Company npc2 = new NPCompany("NPC2", new CompanyActionImpl());
+        Company npc3 = new NPCompany("NPC3", new CompanyActionImpl());
+
+        // TODO: REMOVE, TESTING METHODS
+        player1.invest(1000, "marketing");
+        npc1.invest(2000, "HR");
+        npc2.invest(3000, "goods");
+        npc3.invest(4000, "hiring");
+
     }
 
     /**
-     * Claims a tile at a certain index in the tileGrid for the playerType.
+     * Claims a tile at a given index in the tileGrid for the playerType.
      * @param x x-coordinate of the tile to claim
      * @param y y-coordinate of the tile to claim
      * @param playerType the player to grant the tile to
@@ -74,6 +86,16 @@ public class Game {
      */
     public Tile[][] getTileGrid() {
         return tileGrid;
+    }
+
+    public void nextTurn() {
+        // TODO: FILL THIS OUT, BFS, ETC
+        // TODO: PLACEHOLDER: claim hardcoded tiles
+        int arrayEndIdx = (int) squareSize - 1;
+        claimTile(0,1, Tile.TileType.CLAIMED_P1);
+        claimTile(0,arrayEndIdx - 1, Tile.TileType.CLAIMED_P2);
+        claimTile(arrayEndIdx - 1,0, Tile.TileType.CLAIMED_P3);
+        claimTile(arrayEndIdx - 1,arrayEndIdx, Tile.TileType.CLAIMED_P4);
     }
 
 }

@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 /**
  * Represents a graphical square tile in the game.
  * Stores the graphical square and the location of the square.
+ * @author Team Manifest Company
  */
 abstract class FXShape {
     // Instance variables
