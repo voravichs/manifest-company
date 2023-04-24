@@ -96,8 +96,30 @@ public class Game {
         claimTile(0,arrayEndIdx - 1, Tile.TileType.CLAIMED_P2);
         claimTile(arrayEndIdx - 1,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx - 1,arrayEndIdx, Tile.TileType.CLAIMED_P4);
+        // TURN CLASS, TURN LOGIC
 
-        // FOR NOW, JUST
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // BFS
     }
 
     public void investIn(int num) {
