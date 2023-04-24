@@ -90,7 +90,7 @@ public class Game {
 
     public void nextTurn() {
         // TODO: FILL THIS OUT, BFS, ETC
-        // PLACEHOLDER: claim hardcoded tiles
+        // TODO: PLACEHOLDER: claim hardcoded tiles
         int arrayEndIdx = (int) squareSize - 1;
         claimTile(0,1, Tile.TileType.CLAIMED_P1);
         claimTile(0,arrayEndIdx - 1, Tile.TileType.CLAIMED_P2);

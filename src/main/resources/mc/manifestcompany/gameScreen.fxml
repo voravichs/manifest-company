@@ -91,9 +91,9 @@
             </TextFlow>
         </right>
     </BorderPane>
-   <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+   <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0">
       <children>
-         <GridPane alignment="CENTER" gridLinesVisible="true" prefHeight="550.0" prefWidth="1200.0" style="-fx-background-color: lightgrey;">
+         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" prefHeight="550.0" prefWidth="1200.0" style="-fx-background-color: lightgrey;">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
@@ -189,7 +189,7 @@
             </padding></VBox>
       </children>
    </Pane>
-   <Pane fx:id="transitionPane" prefHeight="700.0" prefWidth="1200.0">
+   <Pane fx:id="transitionPane" prefHeight="700.0" prefWidth="1200.0" visible="false">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="700.0" onMouseClicked="#init" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
          <Label layoutX="450.0" layoutY="328.0" onMouseClicked="#init" text="Click anywhere to start" textFill="WHITE">

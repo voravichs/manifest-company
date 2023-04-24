@@ -2,6 +2,7 @@ package mc.manifestcompany;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -39,6 +40,7 @@ public class GameController {
     @FXML
     private Pane transitionPane;
 
+    // Changing Graphical Elements
     @FXML
     private Pane gameBoard;
     @FXML
@@ -47,6 +49,8 @@ public class GameController {
     private GridPane sideBar;
     @FXML
     private Text date;
+    @FXML
+    private GridPane dataChart;
 
     /* Instance Variables */
     private final Game game;
@@ -70,6 +74,23 @@ public class GameController {
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
+
+        // Init chart parameters
+        // TODO: Get company names dynamically
+        dataChart.add(new Label("User Company"), 0, 1);
+        dataChart.add(new Label("WcMonalds"), 0, 2);
+        dataChart.add(new Label("Queso Queen"), 0, 3);
+        dataChart.add(new Label("Pizza Shack"), 0, 4);
+        dataChart.add(new Label("Net Worth"), 1,0);
+        dataChart.add(new Label("Profit"), 2,0);
+        dataChart.add(new Label("Profit %"), 3,0);
+        dataChart.add(new Label("Goods"), 4,0);
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                dataChart.add(new Label("0"), 1+i,1+j);
+            }
+        }
     }
 
     /**
@@ -154,7 +175,6 @@ public class GameController {
     protected void showData() {
         gamePane.setOpacity(0.3);
         dataPane.setVisible(true);
-        // TODO: ACTUALLY ADD DATA
     }
 
     /**
@@ -207,13 +227,10 @@ public class GameController {
      */
     @FXML
     protected void advanceTurn() {
-        // TODO: WRITE CODE FOR WHAT HAPPENS WHEN A TURN ADVANCES
-        System.out.println("Advancing Turn...");
         Text advanceText = new Text("Advancing Turn...\n");
         textBox.getChildren().add(advanceText);
         textStack.push(advanceText);
 
-        // TODO: EXAMPLE METHOD, REPLACE LATER
         // go to next turn, changing the board, then update the grid
         this.game.nextTurn();
         updateGrid();
