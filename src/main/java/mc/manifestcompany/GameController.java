@@ -108,10 +108,11 @@ public class GameController {
         TextFlow tf = new TextFlow();
         tf.setPadding(new Insets(20,20,20,20));
         tf.getStyleClass().add("stats-text");
-        Text text = new Text("""
-                Net Worth: 0
-                Profit: 0
-                PLACEHOLDER: 0""");
+        Text text = new Text(
+                "Name\n" +
+                "Net Worth: 0\n" +
+                "Profit: 0\n" +
+                "PLACEHOLDER: 0");
         tf.getChildren().add(text);
 
         sideBar.add(tf,1,row);
@@ -122,6 +123,7 @@ public class GameController {
      */
     @FXML
     protected void updateGrid() {
+        clearBoard();
         Tile[][] tileGrid = game.getTileGrid();
         for (Tile[] tiles : tileGrid) {
             for (Tile tile : tiles) {
@@ -210,6 +212,11 @@ public class GameController {
         Text advanceText = new Text("Advancing Turn...\n");
         textBox.getChildren().add(advanceText);
         textStack.push(advanceText);
+
+        // TODO: EXAMPLE METHOD, REPLACE LATER
+        // go to next turn, changing the board, then update the grid
+        this.game.nextTurn();
+        updateGrid();
     }
 
 
