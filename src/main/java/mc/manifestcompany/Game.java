@@ -3,6 +3,7 @@ package mc.manifestcompany;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
@@ -68,10 +69,11 @@ public class Game {
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // TODO: Add actual company names
-        this.player = new UserCompany("player", new CompanyActionImpl(), new CompanyStatsImpl());
-        Company npc1 = new NPCompany("NPC1", new CompanyActionImpl(), new CompanyStatsImpl());
-        Company npc2 = new NPCompany("NPC2", new CompanyActionImpl(), new CompanyStatsImpl());
-        Company npc3 = new NPCompany("NPC3", new CompanyActionImpl(), new CompanyStatsImpl());
+        this.player = new UserCompany("player", new CompanyActionImpl());
+        Company npc1 = new NPCompany("NPC1", new CompanyActionImpl());
+        Company npc2 = new NPCompany("NPC2", new CompanyActionImpl());
+        Company npc3 = new NPCompany("NPC3", new CompanyActionImpl());
+        this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
         this.npcQueue.add(npc3);
@@ -128,15 +130,15 @@ public class Game {
             }
         }
 
-        if (!turn.validGame(numTiles, player, npcQueue)) {
-            Company winner = turn.winner(numTiles, player, npcQueue);
-            if(winner == null) {
-                System.out.println("Game ended! no player won.");
-            } else {
+        Company winner = turn.winner(numTiles, player, npcQueue);
+        if (turn.boardFull(numTiles, player, npcQueue) || winner != null) {
+            if (winner != null) {
                 System.out.println(winner.getName() + " wins!");
+            } else {
+                System.out.println("Game ended! no player won.");
             }
             // TODO: GAME ENDS
-       }
+        }
     }
 
     /**
