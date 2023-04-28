@@ -27,7 +27,7 @@ public class UserCompany extends Company {
     @Override
     public void initializeStats() {
         this.stats.put(DataType.PRICE, 50);
-        this.stats.put(DataType.MULTIPLIER, 1);
+        this.stats.put(DataType.MULTIPLIER, 0);
         this.stats.put(DataType.CAPACITY, 15);
         this.stats.put(DataType.COST, 30);
         this.stats.put(DataType.CASH, 500);
@@ -77,6 +77,7 @@ public class UserCompany extends Company {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
     @Override
+
     public List<Stack> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }

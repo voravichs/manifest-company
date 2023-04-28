@@ -1,7 +1,6 @@
 package mc.manifestcompany;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 
 public class TurnImpl implements Turn {
