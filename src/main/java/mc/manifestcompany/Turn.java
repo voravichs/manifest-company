@@ -30,7 +30,7 @@ public interface Turn {
      * @param npcQueue queue of npcs in the game
      * @return whether the game is still a valid game
      */
-    boolean validGame(int numTiles, Company player, Queue<Company> npcQueue);
+    boolean boardFull(int numTiles, Company player, Queue<Company> npcQueue);
 
     /**
      * gets the winner of the game - a player wins if it has more than half of the tiles
