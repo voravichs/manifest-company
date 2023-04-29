@@ -1,5 +1,6 @@
 package mc.manifestcompany;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -84,5 +85,16 @@ public abstract class Company {
      * @return
      */
     public abstract List<Stack> getFinancialHistory();
+
+    public static Comparator<Company> comparatorBy(DataType dataType) {
+        return new Comparator<Company>() {
+            @Override
+            public int compare(Company o1, Company o2) {
+                return o2.getStats().get(dataType) - o1.getStats().get(dataType);
+            }
+        };
+    }
+
+
 
 }
