@@ -3,8 +3,7 @@ package mc.manifestcompany;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Manages the non-GUI, logical components of the game.
@@ -25,6 +24,9 @@ public class Game {
 
     private static int marketDemand = 30;  // market demand for how much a company can sell, could change if an event happens
     private static int marketPrice = 100; // market price for the goods, could change if an event happens
+
+    static int[] rowOffset = {-1, 0, 1, 0};
+    static int[] colOffset = { 0, 1, 0, -1 };
 
 
     public Game(int xSize, int ySize) {
@@ -93,6 +95,7 @@ public class Game {
      * @return the 2D grid of tiles
      */
     public Tile[][] getTileGrid() {
+
         return tileGrid;
     }
 
@@ -189,6 +192,52 @@ public class Game {
                 break;
         }
 
+    }
+
+    private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType) {
+        Queue<Point2D> q = new LinkedList<>();
+        boolean[][] visited = new boolean[this.xSize][this.ySize];
+
+        q.add(new Point2D(startingX, startingY));
+
+        while (!q.isEmpty()) {
+            Point2D currCoor = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int adjX = (int)currCoor.getX() + rowOffset[i];
+                int adjY = (int)currCoor.getY() + colOffset[i];
+
+                //check if it's in bound
+                if (adjX < 0 || adjY < 0 || adjX >= this.xSize || adjY >= this.ySize || visited[adjX][adjY]) {
+                    continue;
+                }
+
+                // in bound, create a
+                Tile adjTile = tileGrid[adjX][adjY];
+                //if the current tile's neighbor is also a tile of the current player
+                if (adjTile.getType() == playerType) {
+                    Point2D adj = new Point2D(adjX, adjY);
+                    q.add(adj);
+                    visited[adjX][adjY] = true;
+
+                    //if the current tile(already occupied by the player) has an empty neighbor return it!
+                } else if (adjTile.getType() == Tile.TileType.EMPTY) {
+                    return new Point2D(adjX, adjY);
+                }
+
+            }
+        }
+
+        return new Point2D(-1, -1);
+
+    }
+
+    public List<Company> sortCompaniesBy(DataType dataType) {
+        List<Company> companyList = new ArrayList<>(npcQueue);
+        companyList.add(player);
+        companyList.sort(Company.comparatorBy(dataType));
+
+        return companyList;
     }
 
 }

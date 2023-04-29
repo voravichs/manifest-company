@@ -81,4 +81,18 @@ public class UserCompany extends Company {
         return Arrays.asList(revenue, cogs, profit);
     }
 
+    //comparators
+//    public static Comparator<UserCompany> comparatorByCash() {
+//        return new Comparator<UserCompany>() {
+//            @Override
+//            public int compare(UserCompany o1, UserCompany o2) {
+//                return o2.stats.get(DataType.CASH) - o1.stats.get(DataType.CASH);
+//            }
+//        };
+//    }
+
+
+
+
+
 }
