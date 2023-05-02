@@ -34,9 +34,9 @@ public class UserCompany extends Company {
         this.stats.put(DataType.TILES, 1);
     }
     @Override
-    public void invest(int num, String sector) {
+    public void invest(int amount, String sector) {
         System.out.println("Investing in " + this.name);
-        actions.invest(num, sector, this);
+        actions.invest(amount, sector, this);
     }
 
     @Override
