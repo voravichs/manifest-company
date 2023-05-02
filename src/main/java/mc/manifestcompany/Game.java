@@ -113,7 +113,10 @@ public class Game {
         Turn turn = new TurnImpl(marketDemand, marketPrice);
         int numGoods = turn.randomGoodsSold();
 
-        // TODO: NPC MAKES INVESTMENT DECISIONS & TILE DECISIONS;
+        for (Company npc : npcQueue) {
+            NPCCompany npcCompany = (NPCCompany) npc;
+            npcCompany.getActions().performRandomAction(npcCompany);
+        }
 
         turn.turn(numGoods, player);
         for (Company npc: npcQueue) {

@@ -115,7 +115,7 @@ public class NPCAction extends CompanyActionImpl {
             System.out.println(" Failed to " + method + " " + numTile +
                     "tiles for company: " + company.getName());
         } else {
-            System.out.println("Success!");
+            System.out.println("Success!" + "\n");
         }
         company.setStats(this.NPCstats);
     }
