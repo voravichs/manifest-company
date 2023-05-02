@@ -1,7 +1,6 @@
 package mc.manifestcompany;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -19,6 +18,8 @@ import javafx.scene.text.TextFlow;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -72,11 +73,11 @@ public class GameController {
 
     /* Instance Variables */
     private final Game game;
-    private Stack<Text> textStack;
+    private Queue<Text> textQueue;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
-        this.textStack = new Stack<>();
+        this.textQueue = new LinkedList<>();
     }
 
     /**
@@ -87,9 +88,7 @@ public class GameController {
         initSidebar();
         updateGrid();
         initSpinners();
-        Text startext = new Text("Welcome to Manifest Company!\n");
-        textBox.getChildren().add(startext);
-        textStack.push(startext);
+        addText("Welcome to Manifest Company!\n");
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
@@ -112,6 +111,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Initializes the listeners for the actions pane.
+     */
     @FXML
     protected void initSpinners() {
         // Spinner value factory for investing increments/decrements by 1000
@@ -177,7 +179,8 @@ public class GameController {
      * Updates the company stats at the sidebar.
      * @param row row of the company to update
      */
-    public void updateCompanyStats(int row) {
+    @FXML
+    protected void updateCompanyStats(int row) {
         // TODO: REAL STATS
         TextFlow tf = new TextFlow();
         tf.setPadding(new Insets(20,20,20,20));
@@ -207,6 +210,43 @@ public class GameController {
         }
     }
 
+    /**
+     * Advances to the next turn
+     */
+    @FXML
+    protected void advanceTurn() {
+        // Add text to the box showing the turn has advanced
+        addText("Advancing Turn...\n");
+
+        // go to next turn, changing the board, then update the grid
+        //this.game.nextTurn();
+        updateGrid();
+    }
+
+    /**
+     * Adds text to the textQueue, and removes text from the front
+     * once it reaches max capacity (10 texts)
+     * @param text the text to add to the queue
+     */
+    @FXML
+    protected void addText(String text) {
+        // text stack only stores 10 most recent texts
+        if (textQueue.size() < 10) {
+            Text nextText = new Text(text);
+            textBox.getChildren().add(nextText);
+            textQueue.add(nextText);
+        } else {
+            Text poppedText = textQueue.remove();
+            textBox.getChildren().remove(poppedText);
+            // Call this again to add the text
+            addText(text);
+        }
+    }
+
+    @FXML
+    protected void invest() {
+
+    }
 
     /**
      * Removes all shapes from the GUI
@@ -220,6 +260,8 @@ public class GameController {
             }
         }
     }
+
+    /* ***** SHOW/HIDE PANES ****** */
 
     /**
      * Shows the data pane.
@@ -246,6 +288,13 @@ public class GameController {
     protected void showActions() {
         gamePane.setOpacity(0.3);
         actionPane.setVisible(true);
+
+        // Reset the spinners
+        marketSpinner.getValueFactory().setValue(0);
+        rdSpinner.getValueFactory().setValue(0);
+        goodSpinner.getValueFactory().setValue(0);
+        hrSpinner.getValueFactory().setValue(0);
+        tileSpinner.getValueFactory().setValue(0);
     }
 
     /**
@@ -256,26 +305,5 @@ public class GameController {
         gamePane.setOpacity(1);
         actionPane.setVisible(false);
     }
-
-    /**
-     * Advances to the next turn
-     */
-    @FXML
-    protected void advanceTurn() {
-        // Add text to the box showing the turn has advanced
-        Text advanceText = new Text("Advancing Turn...\n");
-        textBox.getChildren().add(advanceText);
-        textStack.push(advanceText);
-
-        // go to next turn, changing the board, then update the grid
-        this.game.nextTurn();
-        updateGrid();
-    }
-
-    @FXML
-    protected void invest() {
-
-    }
-
 
 }
