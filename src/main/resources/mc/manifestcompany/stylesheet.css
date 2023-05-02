@@ -12,10 +12,6 @@
     -fx-font-size: 25;
 }
 
-.label:hover {
-    -fx-text-fill: goldenrod;
-}
-
 .stats-text {
     -fx-font-family: 'DotGothic16';
     -fx-font-size: 15;
@@ -24,4 +20,9 @@
 .date-text {
     -fx-font-family: 'DotGothic16';
     -fx-font-size: 25;
+}
+
+.action-text {
+    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 20;
 }

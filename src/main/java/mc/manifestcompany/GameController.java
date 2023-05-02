@@ -1,10 +1,12 @@
 package mc.manifestcompany;
 
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -38,9 +40,23 @@ public class GameController {
     @FXML
     private Pane actionPane;
     @FXML
-    private Pane investPane;
-    @FXML
     private Pane transitionPane;
+
+    // Action/Spinner Elements
+    @FXML
+    private Spinner<Integer> marketSpinner;
+    @FXML
+    private Spinner<Integer> rdSpinner;
+    @FXML
+    private Spinner<Integer> goodSpinner;
+    @FXML
+    private Spinner<Integer> hrSpinner;
+    @FXML
+    private Spinner<Integer> tileSpinner;
+    @FXML
+    private Text totalInvest;
+    @FXML
+    private Text possibleToInvest;
 
     // Changing Graphical Elements
     @FXML
@@ -70,6 +86,7 @@ public class GameController {
     protected void init() throws FileNotFoundException {
         initSidebar();
         updateGrid();
+        initSpinners();
         Text startext = new Text("Welcome to Manifest Company!\n");
         textBox.getChildren().add(startext);
         textStack.push(startext);
@@ -93,6 +110,40 @@ public class GameController {
                 dataChart.add(new Label("0"), 1+i,1+j);
             }
         }
+    }
+
+    @FXML
+    protected void initSpinners() {
+        // Spinner value factory for investing increments/decrements by 1000
+        SpinnerValueFactory<Integer> investMarketFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investRDFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investGoodsFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investHRFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+
+        // Spinner value factory for investing increments/decrements by 1000
+        SpinnerValueFactory<Integer> buyTileFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,0);
+
+        // Set factories for each spinner
+        marketSpinner.setValueFactory(investMarketFactory);
+        rdSpinner.setValueFactory(investRDFactory);
+        goodSpinner.setValueFactory(investGoodsFactory);
+        hrSpinner.setValueFactory(investHRFactory);
+        tileSpinner.setValueFactory(buyTileFactory);
+
+        // Update the total when spinners change value
+        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) ->
+                totalInvest.setText("$" +
+                        (marketSpinner.getValue() + rdSpinner.getValue() +
+                        goodSpinner.getValue() + hrSpinner.getValue()));
+        marketSpinner.valueProperty().addListener(totalUpdate);
+        rdSpinner.valueProperty().addListener(totalUpdate);
+        goodSpinner.valueProperty().addListener(totalUpdate);
+        hrSpinner.valueProperty().addListener(totalUpdate);
     }
 
     /**
@@ -207,24 +258,6 @@ public class GameController {
     }
 
     /**
-     * Shows investing pane.
-     */
-    @FXML
-    protected void showInvest() {
-        actionPane.setOpacity(0.3);
-        investPane.setVisible(true);
-    }
-
-    /**
-     * Closes investing pane.
-     */
-    @FXML
-    protected void closeInvest() {
-        actionPane.setOpacity(1);
-        investPane.setVisible(false);
-    }
-
-    /**
      * Advances to the next turn
      */
     @FXML
@@ -240,26 +273,8 @@ public class GameController {
     }
 
     @FXML
-    protected void invest(ActionEvent event) {
-        Node node = (Node) event.getSource();
-        String data = node.getId();
-        switch (data) {
-            case "button1":
-                game.investIn(1);
-                break;
-            case "button2":
-                game.investIn(2);
-                break;
-            case "button3":
-                game.investIn(3);
-                break;
-            case "button4":
-                game.investIn(4);
-                break;
-            default:
-                System.out.println("error");
-                break;
-        }
+    protected void invest() {
+
     }
 
 
