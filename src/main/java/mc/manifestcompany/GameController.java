@@ -18,6 +18,7 @@ import javafx.scene.text.TextFlow;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -94,17 +95,19 @@ public class GameController {
         gamePane.setVisible(true);
 
         // Init chart parameters
-        // TODO: Get company names dynamically
-        dataChart.add(new Label("User Company"), 0, 1);
-        dataChart.add(new Label("WcMonalds"), 0, 2);
-        dataChart.add(new Label("Queso Queen"), 0, 3);
-        dataChart.add(new Label("Pizza Shack"), 0, 4);
+        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyStats = game.getCompanyStats();
+        int i = 1;
+        for (Company company:
+             companyStats.keySet()) {
+            dataChart.add(new Label(company.getName()), 0, i);
+            i++;
+        }
         dataChart.add(new Label("Net Worth"), 1,0);
         dataChart.add(new Label("Profit"), 2,0);
         dataChart.add(new Label("Profit %"), 3,0);
         dataChart.add(new Label("Goods"), 4,0);
 
-        for (int i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 dataChart.add(new Label("0"), 1+i,1+j);
             }
@@ -219,7 +222,7 @@ public class GameController {
         addText("Advancing Turn...\n");
 
         // go to next turn, changing the board, then update the grid
-        //this.game.nextTurn();
+        this.game.nextTurn();
         updateGrid();
     }
 
