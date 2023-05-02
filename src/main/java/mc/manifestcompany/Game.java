@@ -72,9 +72,9 @@ public class Game {
 
         // TODO: Add actual company names
         this.player = new UserCompany("player", new CompanyActionImpl());
-        Company npc1 = new NPCompany("NPC1", new CompanyActionImpl());
-        Company npc2 = new NPCompany("NPC2", new CompanyActionImpl());
-        Company npc3 = new NPCompany("NPC3", new CompanyActionImpl());
+        Company npc1 = new NPCCompany("NPC1", new NPCAction());
+        Company npc2 = new NPCCompany("NPC2", new NPCAction());
+        Company npc3 = new NPCCompany("NPC3", new NPCAction());
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
@@ -113,7 +113,10 @@ public class Game {
         Turn turn = new TurnImpl(marketDemand, marketPrice);
         int numGoods = turn.randomGoodsSold();
 
-        // TODO: NPC MAKES INVESTMENT DECISIONS & TILE DECISIONS;
+        for (Company npc : npcQueue) {
+            NPCCompany npcCompany = (NPCCompany) npc;
+            npcCompany.getActions().performRandomAction(npcCompany);
+        }
 
         turn.turn(numGoods, player);
         for (Company npc: npcQueue) {
