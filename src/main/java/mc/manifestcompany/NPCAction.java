@@ -120,8 +120,12 @@ public class NPCAction extends CompanyActionImpl {
         company.setStats(this.NPCstats);
     }
 
-    @Override
-    public boolean handleCash(int amount) {
+    /**
+     * Handles changes to cash on hand
+     * @param amount increase or decrease in cash based on whether amount passed in is + or -
+     * @return whether the action was successful
+     */
+    private boolean handleCash(int amount) {
         int cash = this.NPCstats.get(DataType.CASH);
         if(amount < 0 && cash < -amount) {
             return false;
@@ -131,8 +135,12 @@ public class NPCAction extends CompanyActionImpl {
         return true;
     }
 
-    @Override
-    public boolean investMarketing(int amount) {
+    /**
+     * handles marketing investment
+     * @param amount amount to invest - each $100 leads to a 10% multiplier increase
+     * @return whether the action was successful
+     */
+    private boolean investMarketing(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
@@ -141,9 +149,12 @@ public class NPCAction extends CompanyActionImpl {
         this.NPCstats.put(DataType.MULTIPLIER, multiplier + increase);
         return true;
     }
-
-    @Override
-    public boolean investRD(int amount) {
+    /**
+     * handles R&D investment
+     * @param amount amount to invest - each $100 leads to a $10 price increase
+     * @return whether the action was successful
+     */
+    private boolean investRD(int amount) {
 
         if(!handleCash(-amount)) {
             return false;
@@ -154,19 +165,26 @@ public class NPCAction extends CompanyActionImpl {
         return true;
     }
 
-    @Override
-    public boolean investGoods(int amount) {
+    /**
+     * handles Raw Goods investment
+     * @param amount amount to invest - each $100 leads to 1 unit capacity increase
+     * @return whether the action was successful
+     */
+    private boolean investGoods(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
         int increase = amount / 100;
         int capacity = this.NPCstats.get(DataType.CAPACITY);
-        this.NPCstats.put(DataType.MULTIPLIER, capacity + increase);
+        this.NPCstats.put(DataType.CAPACITY, capacity + increase);
         return true;
     }
-
-    @Override
-    public boolean investHumanCapital(int amount) {
+    /**
+     * handles Human Capital investment
+     * @param amount amount to invest - each $100 leads to $3 cost decrease
+     * @return whether the action was successful
+     */
+    private boolean investHumanCapital(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
@@ -176,8 +194,12 @@ public class NPCAction extends CompanyActionImpl {
         return true;
     }
 
-    @Override
-    public boolean purchaseTiles(int numTiles) {
+    /**
+     * handles purchasing of tiles
+     * @param numTiles number of tiles to purchase - each tile is $300
+     * @return whether action was successful
+     */
+    private boolean purchaseTiles(int numTiles) {
         int cost = numTiles * TILE_COST;
         if(!handleCash(-cost)) {
             return false;
@@ -187,8 +209,12 @@ public class NPCAction extends CompanyActionImpl {
         return true;
     }
 
-    @Override
-    public boolean sellTiles(int numTiles) {
+    /**
+     * handles selling of tiles
+     * @param numTiles number of tiles to sell - each tile is worth $100
+     * @return whether action was successful
+     */
+    private boolean sellTiles(int numTiles) {
         if (this.NPCstats.get(DataType.TILES) < numTiles) {
             return false;
         }
