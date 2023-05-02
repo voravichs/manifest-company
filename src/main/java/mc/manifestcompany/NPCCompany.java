@@ -10,7 +10,7 @@ import java.util.Stack;
  * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM USER
  * @author Team Manifest Company
  */
-public class NPCompany extends Company {
+public class NPCCompany extends Company {
     private String name;
     private CompanyAction actions;
     private Stack<Integer> revenue;
@@ -18,7 +18,7 @@ public class NPCompany extends Company {
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
 
-    public NPCompany(String name, CompanyAction actions) {
+    public NPCCompany(String name, CompanyAction actions) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
