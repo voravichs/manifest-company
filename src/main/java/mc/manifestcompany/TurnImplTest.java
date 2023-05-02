@@ -17,9 +17,9 @@ public class TurnImplTest {
     public void setUp() throws Exception {
         this.turn = new TurnImpl(30, 100);
         this.company = new UserCompany("company", new CompanyActionImpl());
-        Company npc1 = new NPCCompany("NPC1", new NPCAction());
-        Company npc2 = new NPCCompany("NPC2", new NPCAction());
-        Company npc3 = new NPCCompany("NPC3", new NPCAction());
+        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl());
+        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl());
+        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl());
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);

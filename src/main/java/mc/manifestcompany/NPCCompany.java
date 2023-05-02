@@ -12,13 +12,13 @@ import java.util.Stack;
  */
 public class NPCCompany extends Company {
     private String name;
-    private NPCAction actions;
+    private NPCActionImpl actions;
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
 
-    public NPCCompany(String name, NPCAction actions) {
+    public NPCCompany(String name, NPCActionImpl actions) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
@@ -60,7 +60,7 @@ public class NPCCompany extends Company {
         return this.name;
     }
 
-    public NPCAction getActions() {
+    public NPCActionImpl getActions() {
         return this.actions;
     }
 

@@ -1,18 +1,13 @@
 package mc.manifestcompany;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class NPCAction extends CompanyActionImpl {
-    private HashMap<Enum<DataType>, Integer> NPCstats;
+public class NPCActionImpl extends CompanyActionImpl {
     private Random random;
 
-    private static final int TILE_COST = 300;
-    private static final int TILE_VALUE = 100;
-
-    public NPCAction() {
+    public NPCActionImpl() {
         random = new Random();
     }
 
@@ -70,7 +65,6 @@ public class NPCAction extends CompanyActionImpl {
         }
     }
 
-    //@Override
     public void invest(int amount, String sector, NPCCompany company) {
         int randomAmount = getRandomAmount(company);
         String randomSector = getRandomSector();
@@ -78,7 +72,7 @@ public class NPCAction extends CompanyActionImpl {
         System.out.println("NPC DECISION: INVESTING: " + randomAmount +
                 ", in sector: " + randomSector +
                 ", of company: " + company.getName());
-        this.NPCstats = company.getStats();
+        this.stats = company.getStats();
 
         boolean success = switch (randomSector) {
             case "Marketing" -> investMarketing(randomAmount);
@@ -95,16 +89,15 @@ public class NPCAction extends CompanyActionImpl {
         } else {
             System.out.println("Success!" + "\n");
         }
-        company.setStats(this.NPCstats);
+        company.setStats(this.stats);
     }
 
-    //@Override
     public void tiles(int numTile, String method, NPCCompany company) {
         int randomTileCount = getRandomTileCount(company);
 
         System.out.println("NPC DECISION: " + method + " " + randomTileCount +
                 " tiles for company: " + company.getName());
-        this.NPCstats = company.getStats();
+        this.stats = company.getStats();
 
         boolean success = switch (method) {
             case "Purchase" -> purchaseTiles(numTile);
@@ -117,7 +110,7 @@ public class NPCAction extends CompanyActionImpl {
         } else {
             System.out.println("Success!" + "\n");
         }
-        company.setStats(this.NPCstats);
+        company.setStats(this.stats);
     }
 
     /**
@@ -126,12 +119,12 @@ public class NPCAction extends CompanyActionImpl {
      * @return whether the action was successful
      */
     private boolean handleCash(int amount) {
-        int cash = this.NPCstats.get(DataType.CASH);
+        int cash = this.stats.get(DataType.CASH);
         if(amount < 0 && cash < -amount) {
             return false;
         }
         cash += amount;
-        this.NPCstats.put(DataType.CASH, cash);
+        this.stats.put(DataType.CASH, cash);
         return true;
     }
 
@@ -145,8 +138,8 @@ public class NPCAction extends CompanyActionImpl {
             return false;
         }
         int increase = amount / 100;
-        int multiplier = this.NPCstats.get(DataType.MULTIPLIER);
-        this.NPCstats.put(DataType.MULTIPLIER, multiplier + increase);
+        int multiplier = this.stats.get(DataType.MULTIPLIER);
+        this.stats.put(DataType.MULTIPLIER, multiplier + increase);
         return true;
     }
     /**
@@ -160,8 +153,8 @@ public class NPCAction extends CompanyActionImpl {
             return false;
         }
         int increase = amount / 100;
-        int price = this.NPCstats.get(DataType.PRICE);
-        this.NPCstats.put(DataType.PRICE, price + (increase * 10));
+        int price = this.stats.get(DataType.PRICE);
+        this.stats.put(DataType.PRICE, price + (increase * 10));
         return true;
     }
 
@@ -175,8 +168,8 @@ public class NPCAction extends CompanyActionImpl {
             return false;
         }
         int increase = amount / 100;
-        int capacity = this.NPCstats.get(DataType.CAPACITY);
-        this.NPCstats.put(DataType.CAPACITY, capacity + increase);
+        int capacity = this.stats.get(DataType.CAPACITY);
+        this.stats.put(DataType.CAPACITY, capacity + increase);
         return true;
     }
     /**
@@ -189,8 +182,8 @@ public class NPCAction extends CompanyActionImpl {
             return false;
         }
         int decrease = amount / 100;
-        int cost = this.NPCstats.get(DataType.COST);
-        this.NPCstats.put(DataType.COST, cost - (decrease * 3));
+        int cost = this.stats.get(DataType.COST);
+        this.stats.put(DataType.COST, cost - (decrease * 3));
         return true;
     }
 
@@ -204,7 +197,7 @@ public class NPCAction extends CompanyActionImpl {
         if(!handleCash(-cost)) {
             return false;
         }
-        this.NPCstats.put(DataType.TILES, this.NPCstats.get(DataType.TILES) + numTiles);
+        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
         // TODO: TILE HANDLING - BFS to add a new tile
         return true;
     }
@@ -215,12 +208,12 @@ public class NPCAction extends CompanyActionImpl {
      * @return whether action was successful
      */
     private boolean sellTiles(int numTiles) {
-        if (this.NPCstats.get(DataType.TILES) < numTiles) {
+        if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
         int profit = numTiles * TILE_VALUE;
         handleCash(profit);
-        this.NPCstats.put(DataType.TILES, this.NPCstats.get(DataType.TILES) - numTiles);
+        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
         // TODO: TILE HANDLING - remove most recent tile
         return true;
     }
