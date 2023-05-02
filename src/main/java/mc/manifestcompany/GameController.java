@@ -1,10 +1,11 @@
 package mc.manifestcompany;
 
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -17,6 +18,9 @@ import javafx.scene.text.TextFlow;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -38,9 +42,23 @@ public class GameController {
     @FXML
     private Pane actionPane;
     @FXML
-    private Pane investPane;
-    @FXML
     private Pane transitionPane;
+
+    // Action/Spinner Elements
+    @FXML
+    private Spinner<Integer> marketSpinner;
+    @FXML
+    private Spinner<Integer> rdSpinner;
+    @FXML
+    private Spinner<Integer> goodSpinner;
+    @FXML
+    private Spinner<Integer> hrSpinner;
+    @FXML
+    private Spinner<Integer> tileSpinner;
+    @FXML
+    private Text totalInvest;
+    @FXML
+    private Text possibleToInvest;
 
     // Changing Graphical Elements
     @FXML
@@ -56,11 +74,11 @@ public class GameController {
 
     /* Instance Variables */
     private final Game game;
-    private Stack<Text> textStack;
+    private Queue<Text> textQueue;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
-        this.textStack = new Stack<>();
+        this.textQueue = new LinkedList<>();
     }
 
     /**
@@ -70,29 +88,67 @@ public class GameController {
     protected void init() throws FileNotFoundException {
         initSidebar();
         updateGrid();
-        Text startext = new Text("Welcome to Manifest Company!\n");
-        textBox.getChildren().add(startext);
-        textStack.push(startext);
+        initSpinners();
+        addText("Welcome to Manifest Company!\n");
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
 
         // Init chart parameters
-        // TODO: Get company names dynamically
-        dataChart.add(new Label("User Company"), 0, 1);
-        dataChart.add(new Label("WcMonalds"), 0, 2);
-        dataChart.add(new Label("Queso Queen"), 0, 3);
-        dataChart.add(new Label("Pizza Shack"), 0, 4);
+        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyStats = game.getCompanyStats();
+        int i = 1;
+        for (Company company:
+             companyStats.keySet()) {
+            dataChart.add(new Label(company.getName()), 0, i);
+            i++;
+        }
         dataChart.add(new Label("Net Worth"), 1,0);
         dataChart.add(new Label("Profit"), 2,0);
         dataChart.add(new Label("Profit %"), 3,0);
         dataChart.add(new Label("Goods"), 4,0);
 
-        for (int i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 dataChart.add(new Label("0"), 1+i,1+j);
             }
         }
+    }
+
+    /**
+     * Initializes the listeners for the action pane.
+     */
+    @FXML
+    protected void initSpinners() {
+        // Spinner value factory for investing increments/decrements by 1000
+        SpinnerValueFactory<Integer> investMarketFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investRDFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investGoodsFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+        SpinnerValueFactory<Integer> investHRFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+
+        // Spinner value factory for investing increments/decrements by 1000
+        SpinnerValueFactory<Integer> buyTileFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,0);
+
+        // Set factories for each spinner
+        marketSpinner.setValueFactory(investMarketFactory);
+        rdSpinner.setValueFactory(investRDFactory);
+        goodSpinner.setValueFactory(investGoodsFactory);
+        hrSpinner.setValueFactory(investHRFactory);
+        tileSpinner.setValueFactory(buyTileFactory);
+
+        // Update the total when spinners change value
+        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) ->
+                totalInvest.setText("$" +
+                        (marketSpinner.getValue() + rdSpinner.getValue() +
+                        goodSpinner.getValue() + hrSpinner.getValue()));
+        marketSpinner.valueProperty().addListener(totalUpdate);
+        rdSpinner.valueProperty().addListener(totalUpdate);
+        goodSpinner.valueProperty().addListener(totalUpdate);
+        hrSpinner.valueProperty().addListener(totalUpdate);
     }
 
     /**
@@ -126,7 +182,8 @@ public class GameController {
      * Updates the company stats at the sidebar.
      * @param row row of the company to update
      */
-    public void updateCompanyStats(int row) {
+    @FXML
+    protected void updateCompanyStats(int row) {
         // TODO: REAL STATS
         TextFlow tf = new TextFlow();
         tf.setPadding(new Insets(20,20,20,20));
@@ -156,6 +213,43 @@ public class GameController {
         }
     }
 
+    /**
+     * Advances to the next turn
+     */
+    @FXML
+    protected void advanceTurn() {
+        // Add text to the box showing the turn has advanced
+        addText("Advancing Turn...\n");
+
+        // go to next turn, changing the board, then update the grid
+        this.game.nextTurn();
+        updateGrid();
+    }
+
+    /**
+     * Adds text to the textQueue, and removes text from the front
+     * once it reaches max capacity (10 texts)
+     * @param text the text to add to the queue
+     */
+    @FXML
+    protected void addText(String text) {
+        // text stack only stores 10 most recent texts
+        if (textQueue.size() < 10) {
+            Text nextText = new Text(text);
+            textBox.getChildren().add(nextText);
+            textQueue.add(nextText);
+        } else {
+            Text poppedText = textQueue.remove();
+            textBox.getChildren().remove(poppedText);
+            // Call this again to add the text
+            addText(text);
+        }
+    }
+
+    @FXML
+    protected void invest() {
+
+    }
 
     /**
      * Removes all shapes from the GUI
@@ -169,6 +263,8 @@ public class GameController {
             }
         }
     }
+
+    /* ***** SHOW/HIDE PANES ****** */
 
     /**
      * Shows the data pane.
@@ -195,6 +291,13 @@ public class GameController {
     protected void showActions() {
         gamePane.setOpacity(0.3);
         actionPane.setVisible(true);
+
+        // Reset the spinners
+        marketSpinner.getValueFactory().setValue(0);
+        rdSpinner.getValueFactory().setValue(0);
+        goodSpinner.getValueFactory().setValue(0);
+        hrSpinner.getValueFactory().setValue(0);
+        tileSpinner.getValueFactory().setValue(0);
     }
 
     /**
@@ -205,62 +308,5 @@ public class GameController {
         gamePane.setOpacity(1);
         actionPane.setVisible(false);
     }
-
-    /**
-     * Shows investing pane.
-     */
-    @FXML
-    protected void showInvest() {
-        actionPane.setOpacity(0.3);
-        investPane.setVisible(true);
-    }
-
-    /**
-     * Closes investing pane.
-     */
-    @FXML
-    protected void closeInvest() {
-        actionPane.setOpacity(1);
-        investPane.setVisible(false);
-    }
-
-    /**
-     * Advances to the next turn
-     */
-    @FXML
-    protected void advanceTurn() {
-        // Add text to the box showing the turn has advanced
-        Text advanceText = new Text("Advancing Turn...\n");
-        textBox.getChildren().add(advanceText);
-        textStack.push(advanceText);
-
-        // go to next turn, changing the board, then update the grid
-        this.game.nextTurn();
-        updateGrid();
-    }
-
-    @FXML
-    protected void invest(ActionEvent event) {
-        Node node = (Node) event.getSource();
-        String data = node.getId();
-        switch (data) {
-            case "button1":
-                game.investIn(1);
-                break;
-            case "button2":
-                game.investIn(2);
-                break;
-            case "button3":
-                game.investIn(3);
-                break;
-            case "button4":
-                game.investIn(4);
-                break;
-            default:
-                System.out.println("error");
-                break;
-        }
-    }
-
 
 }

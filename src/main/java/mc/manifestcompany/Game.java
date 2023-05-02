@@ -22,9 +22,12 @@ public class Game {
     private UserCompany player;
     private Queue<Company> npcQueue;
 
-    private static int marketDemand = 30;  // market demand for how much a company can sell, could change if an event happens
-    private static int marketPrice = 100; // market price for the goods, could change if an event happens
+    // market demand for how much a company can sell, could change if an event happens
+    private static int marketDemand = 30;
+    // market price for the goods, could change if an event happens
+    private static int marketPrice = 100;
 
+    // Direction vectors for BFS
     static int[] rowOffset = {-1, 0, 1, 0};
     static int[] colOffset = { 0, 1, 0, -1 };
 
@@ -72,9 +75,9 @@ public class Game {
 
         // TODO: Add actual company names
         this.player = new UserCompany("player", new CompanyActionImpl());
-        Company npc1 = new NPCCompany("NPC1", new NPCAction());
-        Company npc2 = new NPCCompany("NPC2", new NPCAction());
-        Company npc3 = new NPCCompany("NPC3", new NPCAction());
+        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl());
+        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl());
+        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl());
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
@@ -95,8 +98,21 @@ public class Game {
      * @return the 2D grid of tiles
      */
     public Tile[][] getTileGrid() {
-
         return tileGrid;
+    }
+
+    /**
+     * @return the map of the company stats
+     */
+    public HashMap<Company, HashMap<Enum<DataType>, Integer>> getCompanyStats() {
+        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyMap =
+                new HashMap<>();
+        companyMap.put(player, player.getStats());
+        for (Company npCompany:
+             npcQueue) {
+            companyMap.put(npCompany, npCompany.getStats());
+        }
+        return companyMap;
     }
 
     /**

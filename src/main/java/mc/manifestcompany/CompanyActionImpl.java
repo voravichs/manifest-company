@@ -8,9 +8,9 @@ import java.util.HashMap;
  */
 public class CompanyActionImpl implements CompanyAction {
 
-    private HashMap<Enum<DataType>, Integer> stats;
-    private static final int TILE_COST = 300;
-    private static final int TILE_VALUE = 100;
+    protected HashMap<Enum<DataType>, Integer> stats;
+    protected static final int TILE_COST = 300;
+    protected static final int TILE_VALUE = 100;
 
     @Override
     public void invest(int amount, String sector, Company company) {
