@@ -10,15 +10,15 @@ import java.util.Stack;
  * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM USER
  * @author Team Manifest Company
  */
-public class NPCompany extends Company {
+public class NPCCompany extends Company {
     private String name;
-    private CompanyAction actions;
+    private NPCAction actions;
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
 
-    public NPCompany(String name, CompanyAction actions) {
+    public NPCCompany(String name, NPCAction actions) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
@@ -58,6 +58,10 @@ public class NPCompany extends Company {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    public NPCAction getActions() {
+        return this.actions;
     }
 
     @Override
