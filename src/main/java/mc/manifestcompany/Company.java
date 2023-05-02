@@ -80,7 +80,7 @@ public abstract class Company {
     public abstract List<Integer> getFinancials();
 
     /**
-     * return a list of stack the contain all the past finanical data
+     * return a list of stack that contains all the past finanical data
      * in the order of: revenue, cogs, profit
      * @return
      */
