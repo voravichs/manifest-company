@@ -115,7 +115,7 @@ public class GameController {
     }
 
     /**
-     * Initializes the listeners for the actions pane.
+     * Initializes the listeners for the action pane.
      */
     @FXML
     protected void initSpinners() {
