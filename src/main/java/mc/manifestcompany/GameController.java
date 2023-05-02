@@ -152,7 +152,6 @@ public class GameController {
             for (Tile tile : tiles) {
                 Rectangle currTile = tile.getSquare();
                 gameBoard.getChildren().add(currTile);
-
             }
         }
     }
@@ -242,7 +241,7 @@ public class GameController {
 
     @FXML
     protected void invest(ActionEvent event) {
-        Node node = (Node) event.getSource() ;
+        Node node = (Node) event.getSource();
         String data = node.getId();
         switch (data) {
             case "button1":

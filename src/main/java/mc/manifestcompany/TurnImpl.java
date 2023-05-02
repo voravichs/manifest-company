@@ -1,7 +1,6 @@
 package mc.manifestcompany;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 
 public class TurnImpl implements Turn {
@@ -38,7 +37,7 @@ public class TurnImpl implements Turn {
 
     @Override
     public boolean validCompany(Company company) {
-        return (company.getStats().get(DataType.CASH) < 0 && company.getStats().get(DataType.TILES) < 0);
+        return (company.getStats().get(DataType.CASH) > 0 && company.getStats().get(DataType.TILES) > 0);
     }
 
     @Override

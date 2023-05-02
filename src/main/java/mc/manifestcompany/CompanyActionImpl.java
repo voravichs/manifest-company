@@ -9,16 +9,14 @@ import java.util.HashMap;
 public class CompanyActionImpl implements CompanyAction {
 
     private HashMap<Enum<DataType>, Integer> stats;
-
-
     private static final int TILE_COST = 300;
     private static final int TILE_VALUE = 100;
 
     @Override
     public void invest(int amount, String sector, Company company) {
         System.out.println("INVESTING: " + amount +
-                ", in sector: " + sector +
-                ", of company: " + company.getName());
+                " in sector: " + sector +
+                " of company: " + company.getName());
         this.stats = company.getStats();
         boolean success = switch (sector) {
             case "Marketing" -> investMarketing(amount);
@@ -41,7 +39,7 @@ public class CompanyActionImpl implements CompanyAction {
     public void tiles(int numTile, String method, Company company) {
         this.stats = company.getStats();
         System.out.println(method + " " + numTile +
-                "tiles for company: " + company.getName());
+                " tiles for company: " + company.getName());
         boolean success = switch (method) {
             case "Purchase" -> purchaseTiles(numTile);
             case "Sell" -> sellTiles(numTile);
@@ -55,8 +53,15 @@ public class CompanyActionImpl implements CompanyAction {
         }
         company.setStats(stats);
     }
-    @Override
-    public boolean handleCash(int amount) {
+
+
+
+    /**
+     * Handles changes to cash on hand
+     * @param amount increase or decrease in cash based on whether amount passed in is + or -
+     * @return whether the action was successful
+     */
+    private boolean handleCash(int amount) {
         int cash = this.stats.get(DataType.CASH);
         if(amount < 0 && cash < -amount) {
             return false;
@@ -66,8 +71,12 @@ public class CompanyActionImpl implements CompanyAction {
         return true;
     }
 
-    @Override
-    public boolean investMarketing(int amount) {
+    /**
+     * handles marketing investment
+     * @param amount amount to invest - each $100 leads to a 10% multiplier increase
+     * @return whether the action was successful
+     */
+    private boolean investMarketing(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
@@ -76,9 +85,12 @@ public class CompanyActionImpl implements CompanyAction {
         this.stats.put(DataType.MULTIPLIER, multiplier + increase);
         return true;
     }
-
-    @Override
-    public boolean investRD(int amount) {
+    /**
+     * handles R&D investment
+     * @param amount amount to invest - each $100 leads to a $10 price increase
+     * @return whether the action was successful
+     */
+    private boolean investRD(int amount) {
 
         if(!handleCash(-amount)) {
             return false;
@@ -89,19 +101,26 @@ public class CompanyActionImpl implements CompanyAction {
         return true;
     }
 
-    @Override
-    public boolean investGoods(int amount) {
+    /**
+     * handles Raw Goods investment
+     * @param amount amount to invest - each $100 leads to 1 unit capacity increase
+     * @return whether the action was successful
+     */
+    private boolean investGoods(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
         int increase = amount / 100;
         int capacity = this.stats.get(DataType.CAPACITY);
-        this.stats.put(DataType.MULTIPLIER, capacity + increase);
+        this.stats.put(DataType.CAPACITY, capacity + increase);
         return true;
     }
-
-    @Override
-    public boolean investHumanCapital(int amount) {
+    /**
+     * handles Human Capital investment
+     * @param amount amount to invest - each $100 leads to $3 cost decrease
+     * @return whether the action was successful
+     */
+    private boolean investHumanCapital(int amount) {
         if(!handleCash(-amount)) {
             return false;
         }
@@ -111,8 +130,12 @@ public class CompanyActionImpl implements CompanyAction {
         return true;
     }
 
-    @Override
-    public boolean purchaseTiles(int numTiles) {
+    /**
+     * handles purchasing of tiles
+     * @param numTiles number of tiles to purchase - each tile is $300
+     * @return whether action was successful
+     */
+    private boolean purchaseTiles(int numTiles) {
         int cost = numTiles * TILE_COST;
         if(!handleCash(-cost)) {
             return false;
@@ -122,8 +145,12 @@ public class CompanyActionImpl implements CompanyAction {
         return true;
     }
 
-    @Override
-    public boolean sellTiles(int numTiles) {
+    /**
+     * handles selling of tiles
+     * @param numTiles number of tiles to sell - each tile is worth $100
+     * @return whether action was successful
+     */
+    private boolean sellTiles(int numTiles) {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
