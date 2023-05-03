@@ -11,9 +11,9 @@
         <center>
             <BorderPane prefHeight="500.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                 <center>
-                    <Pane prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
+                    <Pane prefHeight="700.0" prefWidth="600.0" style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
                         <children>
-                            <Pane fx:id="gameBoard" layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" />
+                            <Pane fx:id="gameBoard" layoutX="102.0" layoutY="52.0" prefHeight="400.0" prefWidth="400.0" />
                      <TextFlow layoutX="2.0" layoutY="452.0" prefHeight="100.0" prefWidth="600.0" textAlignment="CENTER">
                         <children>
                            <Text fx:id="date" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="date-text" text="Date">
@@ -34,10 +34,10 @@
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints maxHeight="137.5" minHeight="137.5" prefHeight="137.5" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="137.5" minHeight="137.5" percentHeight="25.0" prefHeight="137.5" vgrow="SOMETIMES" />
                             <RowConstraints maxHeight="137.5" minHeight="137.5" percentHeight="25.0" prefHeight="137.5" vgrow="SOMETIMES" />
                             <RowConstraints maxHeight="125.0" minHeight="10.0" percentHeight="25.0" prefHeight="125.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="137.5" minHeight="137.5" prefHeight="137.5" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="137.5" minHeight="137.5" percentHeight="25.0" prefHeight="137.5" vgrow="SOMETIMES" />
                         </rowConstraints>
                   <children>
                      <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -53,33 +53,38 @@
                 </left>
             </BorderPane>
         </center>
-        <bottom>
-            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1200.0" spacing="50.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                <children>
-                    <Button mnemonicParsing="false" onAction="#showData" text="Data">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Button>
-                    <Button mnemonicParsing="false" onAction="#showActions" text="ACTIONS">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Button>
-                    <Button mnemonicParsing="false" onAction="#advanceTurn" text="NEXT TURN">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Button>
-                </children></HBox>
-        </bottom>
-        <right>
-            <TextFlow fx:id="textBox" lineSpacing="10.0" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: lightblue;" styleClass="text-class" stylesheets="@css/textBox.css" BorderPane.alignment="CENTER">
-                <padding>
-                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                </padding>
-            </TextFlow>
-        </right>
+      <right>
+         <BorderPane prefHeight="700.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+            <center>
+                  <TextFlow fx:id="textBox" lineSpacing="10.0" prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: lightblue;" styleClass="text-class" stylesheets="@css/textBox.css" BorderPane.alignment="CENTER">
+                      <padding>
+                          <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                      </padding>
+                  </TextFlow>
+            </center>
+            <bottom>
+               <VBox alignment="CENTER" prefHeight="250.0" prefWidth="300.0" spacing="20.0" BorderPane.alignment="CENTER">
+                  <children>
+                          <Button mnemonicParsing="false" onAction="#showData" text="DATA">
+                              <font>
+                                  <Font size="30.0" />
+                              </font>
+                          </Button>
+                          <Button mnemonicParsing="false" onAction="#showActions" text="ACTIONS">
+                              <font>
+                                  <Font size="30.0" />
+                              </font>
+                          </Button>
+                          <Button mnemonicParsing="false" onAction="#advanceTurn" text="NEXT TURN">
+                              <font>
+                                  <Font size="30.0" />
+                              </font>
+                          </Button>
+                  </children>
+               </VBox>
+            </bottom>
+         </BorderPane>
+      </right>
     </BorderPane>
    <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0" visible="false">
       <children>
