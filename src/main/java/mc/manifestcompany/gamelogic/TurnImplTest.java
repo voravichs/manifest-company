@@ -2,6 +2,7 @@ package mc.manifestcompany.gamelogic;
 
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
+import mc.manifestcompany.gui.Tile;
 import org.junit.*;
 
 import java.util.ArrayDeque;
@@ -18,10 +19,10 @@ public class TurnImplTest {
     @Before
     public void setUp() throws Exception {
         this.turn = new TurnImpl(30, 100);
-        this.company = new UserCompany("company", new CompanyActionImpl());
-        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl());
-        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl());
-        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl());
+        this.company = new UserCompany("company", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
+        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl(), Tile.TileType.CLAIMED_P2);
+        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl(), Tile.TileType.CLAIMED_P3);
+        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl(), Tile.TileType.CLAIMED_P4);
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);

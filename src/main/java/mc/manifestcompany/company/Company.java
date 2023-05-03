@@ -1,6 +1,7 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public abstract class Company {
      * @param numTiles number of tiles to buy or sell
      * @param method "Purchase" or "Sell" tiles
      */
-    public abstract void tiles(int numTiles, String method);
+    public abstract void tiles(int numTiles, String method, Tile[][] grid);
 
 
     /**
@@ -87,6 +88,8 @@ public abstract class Company {
      * @return
      */
     public abstract List<Stack> getFinancialHistory();
+
+    public abstract Tile.TileType getTileType();
 
     public static Comparator<Company> comparatorBy(DataType dataType) {
         return new Comparator<Company>() {

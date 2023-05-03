@@ -1,6 +1,7 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,10 +12,13 @@ public class CompanyActionImplTest {
     private Company company;
 
     private CompanyAction actions;
+
+    private Tile[][] grid;
     @Before
     public void setUp() throws Exception {
         this.actions = new CompanyActionImpl();
-        this.company = new UserCompany("company", this.actions);
+        this.company = new UserCompany("company", this.actions, Tile.TileType.CLAIMED_P1);
+
 
     }
 
@@ -48,13 +52,13 @@ public class CompanyActionImplTest {
 
     @Test
     public void tiles() {
-        this.actions.tiles(1, "Purchase", this.company);
+        this.actions.tiles(1, "Purchase", this.company, grid);
         int tiles = this.company.getStats().get(DataType.TILES);
         int cash = this.company.getStats().get(DataType.CASH);
         assertEquals(2, tiles);
         assertEquals(200, cash);
 
-        this.actions.tiles(1, "Sell", this.company);
+        this.actions.tiles(1, "Sell", this.company, grid);
         tiles = this.company.getStats().get(DataType.TILES);
         cash = this.company.getStats().get(DataType.CASH);
         assertEquals(1, tiles);
