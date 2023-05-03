@@ -194,7 +194,17 @@
          </GridPane>
       </children>
    </Pane>
-   <Pane fx:id="transitionPane" prefHeight="700.0" prefWidth="1200.0">
+   <Pane fx:id="transitionPane" layoutX="10.0" layoutY="10.0" onMouseClicked="#closeTransition" prefHeight="700.0" prefWidth="1200.0" visible="false">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="700.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
+         <Label fx:id="turnText" layoutX="555.0" layoutY="328.0" styleClass="hover-text" text="Turn X" textFill="WHITE">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Label>
+      </children>
+   </Pane>
+   <Pane fx:id="startPane" prefHeight="700.0" prefWidth="1200.0">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="700.0" onMouseClicked="#init" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
          <Label layoutX="450.0" layoutY="328.0" onMouseClicked="#init" styleClass="hover-text" text="Click anywhere to start" textFill="WHITE">

@@ -1,17 +1,16 @@
 package mc.manifestcompany.gui;
 
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -47,6 +46,8 @@ public class GameController {
     private Pane actionPane;
     @FXML
     private Pane transitionPane;
+    @FXML
+    private Pane startPane;
 
     // Action/Spinner Elements
     @FXML
@@ -85,18 +86,22 @@ public class GameController {
     private Text date;
     @FXML
     private GridPane dataChart;
+    @FXML
+    private Label turnText;
 
     /* Instance Variables */
     private final Game game;
     private final Queue<Text> textQueue;
+    private int turnNum;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
         this.textQueue = new LinkedList<>();
+
     }
 
     /**
-     * Initializes the game and hides the transition pane.
+     * Initializes the game and hides the start pane.
      */
     @FXML
     protected void init() throws FileNotFoundException {
@@ -107,8 +112,9 @@ public class GameController {
         updateGrid();
         addText("Open the ACTIONS menu to start investing.\n");
         date.setText("January 1970");
-        transitionPane.setVisible(false);
+        startPane.setVisible(false);
         gamePane.setVisible(true);
+        this.turnNum = 1;
     }
 
     /**
@@ -214,8 +220,10 @@ public class GameController {
             tf.getStyleClass().add("stats-text");
             Text text = new Text(
                     company.getName() + "\n" +
-                    "Cash: " + company.getStats().get(DataType.CASH));
-            // TODO: UPDATE CASH WHEN A NEW TURN ARRIVES
+                    "Cash: $" + company.getStats().get(DataType.CASH));
+            transitionPane.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> text.setText(company.getName() + "\n" +
+                        "Cash: $" + company.getStats().get(DataType.CASH)));
 
             tf.getChildren().add(text);
 
@@ -324,6 +332,11 @@ public class GameController {
         this.game.nextTurn();
         updateChart();
         updateGrid();
+
+        // show the transition pane, set the text for the turn
+        transitionPane.setVisible(true);
+        turnNum++;
+        turnText.setText("Turn " + turnNum);
     }
 
     /**
@@ -432,4 +445,11 @@ public class GameController {
         actionPane.setVisible(false);
     }
 
+    /**
+     * Closes the transition pane.
+     */
+    @FXML
+    protected void closeTransition() {
+        transitionPane.setVisible(false);
+    }
 }
