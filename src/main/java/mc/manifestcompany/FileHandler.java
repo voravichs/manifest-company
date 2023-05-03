@@ -3,9 +3,7 @@ package mc.manifestcompany;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gui.Tile;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,5 +47,14 @@ public class FileHandler {
         }
 
         writer.close();
+    }
+
+    public static void load(String saveName) throws IOException {
+        // Init files and writer
+        String filePath = "saveFiles/" + saveName + ".txt";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+
+        reader.close();
     }
 }
