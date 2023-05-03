@@ -94,6 +94,21 @@ public class UserCompany extends Company {
         return tileType;
     }
 
+    /**
+     * Checks whether an investment is valid.
+     * Compares the amount of cash on hand and the current amount of tiles.
+     * @param amount increase or decrease in cash based on whether amount passed in is + or -
+     * @param tiles amount of tiles to SELL (+ sell, - buy)
+     * @return whether the action was successful
+     */
+    public boolean checkValidInvest(int amount, int tiles) {
+        // Have enough cash to cover all expenses
+        boolean enoughCash = -amount >= 0 && this.stats.get(DataType.CASH) >= -amount;
+        // Can only sell until you have 1 tile left
+        boolean enoughTiles = tiles >= 0 && this.stats.get(DataType.TILES) - tiles >= 1;
+        return enoughTiles && enoughCash;
+    }
+
     //comparators
 //    public static Comparator<UserCompany> comparatorByCash() {
 //        return new Comparator<UserCompany>() {
