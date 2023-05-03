@@ -75,6 +75,11 @@ public abstract class Company {
      */
     public abstract void setProfit(int amount);
 
+    /**
+     * gets the image link of this company
+     * @return String image link
+     */
+    public abstract String getImageLink();
 
     /**
      * return a list of current financial data in the order:

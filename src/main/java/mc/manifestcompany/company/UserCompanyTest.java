@@ -17,7 +17,7 @@ public class UserCompanyTest {
     private Tile[][] grid;
     @Before
     public void setUp() throws Exception {
-        this.company = new UserCompany("company", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
+        this.company = new UserCompany("company", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
     }
 
     @Test

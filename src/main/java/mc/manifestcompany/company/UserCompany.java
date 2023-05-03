@@ -13,6 +13,7 @@ import java.util.*;
 public class UserCompany extends Company {
     private String name;
     private CompanyAction actions;
+    private String imageLink;
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
@@ -21,9 +22,11 @@ public class UserCompany extends Company {
 
     private Tile.TileType tileType;
 
-    public UserCompany(String name, CompanyAction actions, Tile.TileType tileType) {
+    public UserCompany(String name, CompanyAction actions, Tile.TileType tileType,
+                       String imageLink) {
         this.name = name;
         this.actions = actions;
+        this.imageLink = imageLink;
         this.stats = new HashMap<>();
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
@@ -72,8 +75,10 @@ public class UserCompany extends Company {
     public void setStats(HashMap<Enum<DataType>, Integer> stats) {
         this.stats = stats;
     }
+
     @Override
     public void setRevenue(int amount) { revenue.push(amount); }
+
     @Override
     public void setCogs(int amount) { cogs.push(amount); }
 
@@ -81,9 +86,15 @@ public class UserCompany extends Company {
     public void setProfit(int amount) { profit.push(amount); }
 
     @Override
+    public String getImageLink() {
+        return this.imageLink;
+    }
+
+    @Override
     public List getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
+
     @Override
     public List<Stack> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
@@ -108,7 +119,6 @@ public class UserCompany extends Company {
         boolean enoughTiles = tiles >= 0 && this.stats.get(DataType.TILES) - tiles >= 1;
         return enoughTiles && enoughCash;
     }
-
 
     //comparators
 //    public static Comparator<UserCompany> comparatorByCash() {

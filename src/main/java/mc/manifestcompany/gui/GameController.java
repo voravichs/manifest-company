@@ -208,33 +208,35 @@ public class GameController {
         companyList.add(game.getPlayer());
         companyList.addAll(game.getNPCs());
 
-//        // Loop through the list
-//        for (Company company:
-//             companyList) {
-//            // Image
-//            URL imagePath = App.class.getResource(level.getImageLink());
-//            assert imagePath != null;
-//            Image image = new Image(new FileInputStream(imagePath.getPath()));
-//            ImageView imageView = new ImageView(image);
-//            imageView.setFitHeight(100);
-//            imageView.setFitWidth(100);
-//            imageView.setTranslateX(18.75);
-//            sideBar.add(imageView,0,i);
-//
-//            // init company stats
-//            // TODO: FILL THESE IN WITH THE REAL STATS
-//            TextFlow tf = new TextFlow();
-//            tf.setPadding(new Insets(20,20,20,20));
-//            tf.getStyleClass().add("stats-text");
-//            Text text = new Text(
-//                    level.getName() + "\n" +
-//                    "PLACEHOLDER: 0");
-//            tf.getChildren().add(text);
-//
-//            sideBar.add(tf,1,i);
-//
-//            i++;
-//        }
+        // Loop through the list
+        for (Company company:
+             companyList) {
+            // Image
+            URL imagePath = App.class.getResource(company.getImageLink());
+            assert imagePath != null;
+            Image image = new Image(new FileInputStream(imagePath.getPath()));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
+            imageView.setTranslateX(18.75);
+            sideBar.add(imageView,0,i);
+
+            // init company stats
+            TextFlow tf = new TextFlow();
+            tf.setPadding(new Insets(20,20,20,20));
+            tf.getStyleClass().add("stats-text");
+            Text text = new Text(
+                    company.getName() + "\n" +
+                    "Cash: " + company.getStats().get(DataType.CASH));
+            // TODO: UPDATE CASH WHEN A NEW TURN ARRIVES
+
+            tf.getChildren().add(text);
+
+
+            sideBar.add(tf,1,i);
+
+            i++;
+        }
     }
 
     /**
