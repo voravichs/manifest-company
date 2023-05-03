@@ -58,6 +58,16 @@ public class GameController {
     @FXML
     private Spinner<Integer> tileSpinner;
     @FXML
+    private Text marketTotal;
+    @FXML
+    private Text rdTotal;
+    @FXML
+    private Text goodsTotal;
+    @FXML
+    private Text hrTotal;
+    @FXML
+    private Text tileTotal;
+    @FXML
     private Text totalInvest;
     @FXML
     private Text possibleToInvest;
@@ -123,34 +133,69 @@ public class GameController {
     protected void initSpinners() {
         // Spinner value factory for investing increments/decrements by 1000
         SpinnerValueFactory<Integer> investMarketFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investRDFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investGoodsFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investHRFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
 
         // Spinner value factory for investing increments/decrements by 1000
-        SpinnerValueFactory<Integer> buyTileFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,0);
+        SpinnerValueFactory<Integer> tileFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(-100,100,0);
 
         // Set factories for each spinner
         marketSpinner.setValueFactory(investMarketFactory);
         rdSpinner.setValueFactory(investRDFactory);
         goodSpinner.setValueFactory(investGoodsFactory);
         hrSpinner.setValueFactory(investHRFactory);
-        tileSpinner.setValueFactory(buyTileFactory);
+        tileSpinner.setValueFactory(tileFactory);
 
         // Update the total when spinners change value
-        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) ->
-                totalInvest.setText("$" +
-                        (marketSpinner.getValue() + rdSpinner.getValue() +
-                        goodSpinner.getValue() + hrSpinner.getValue()));
+        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) -> {
+            int total = marketSpinner.getValue() + rdSpinner.getValue() +
+                        goodSpinner.getValue() + hrSpinner.getValue() +
+                        (1000 * tileSpinner.getValue());
+            totalInvest.setText("$" + total);
+            if (total < 0) {
+                totalInvest.setStyle("-fx-fill: green;");
+            } else {
+                totalInvest.setStyle("-fx-fill: red;");
+            }
+            // Update possible to buy
+            if (game.getPlayer().checkCash(-1 * total)) {
+                possibleToInvest.setText("Investment possible!");
+                possibleToInvest.setStyle("-fx-fill: green;");
+            } else {
+                possibleToInvest.setText("Not enough cash!");
+                possibleToInvest.setStyle("-fx-fill: red;");
+            }
+        };
+
         marketSpinner.valueProperty().addListener(totalUpdate);
         rdSpinner.valueProperty().addListener(totalUpdate);
         goodSpinner.valueProperty().addListener(totalUpdate);
         hrSpinner.valueProperty().addListener(totalUpdate);
+        tileSpinner.valueProperty().addListener(totalUpdate);
+
+        // Update individual totals
+        marketSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                marketTotal.setText("$" + marketSpinner.getValue()));
+        rdSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                rdTotal.setText("$" + rdSpinner.getValue()));
+        goodSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                goodsTotal.setText("$" + goodSpinner.getValue()));
+        hrSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                hrTotal.setText("$" + hrSpinner.getValue()));
+        tileSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            tileTotal.setText("$" + 1000 * tileSpinner.getValue());
+            if (tileSpinner.getValue() < 0) {
+                tileTotal.setStyle("-fx-fill: green;");
+            } else {
+                tileTotal.setStyle("-fx-fill: red;");
+            }
+        });
     }
 
     /**

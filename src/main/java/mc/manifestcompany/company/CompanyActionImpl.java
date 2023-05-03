@@ -56,8 +56,6 @@ public class CompanyActionImpl implements CompanyAction {
         company.setStats(stats);
     }
 
-
-
     /**
      * Handles changes to cash on hand
      * @param amount increase or decrease in cash based on whether amount passed in is + or -

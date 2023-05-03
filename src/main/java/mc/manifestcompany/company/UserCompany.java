@@ -84,6 +84,16 @@ public class UserCompany extends Company {
         return Arrays.asList(revenue, cogs, profit);
     }
 
+    /**
+     * Checks cash on hand against a value without changing the actual amount of cash
+     * @param amount increase or decrease in cash based on whether amount passed in is + or -
+     * @return whether the action was successful
+     */
+    public boolean checkCash(int amount) {
+        int cash = this.stats.get(DataType.CASH);
+        return amount >= 0 || cash >= -amount;
+    }
+
     //comparators
 //    public static Comparator<UserCompany> comparatorByCash() {
 //        return new Comparator<UserCompany>() {

@@ -26,9 +26,9 @@ public class Game {
     private Queue<Company> npcQueue;
 
     // market demand for how much a company can sell, could change if an event happens
-    private static int marketDemand = 30;
+    private int marketDemand = 30;
     // market price for the goods, could change if an event happens
-    private static int marketPrice = 100;
+    private int marketPrice = 100;
 
     // Direction vectors for BFS
     static int[] rowOffset = {-1, 0, 1, 0};
@@ -164,6 +164,15 @@ public class Game {
             }
             // TODO: GAME ENDS
         }
+
+        Event event = new EventImpl();
+        Event.EventType eventType = event.randomEvent();
+        // TODO: eventType helps NPC make decisions
+        if (eventType != Event.EventType.NONE) {
+            int [] updated = event.updateMarket(eventType, marketDemand, marketPrice);
+            this.marketDemand = updated[0];
+            this.marketPrice = updated[1];
+        }
     }
 
     /**
@@ -213,7 +222,6 @@ public class Game {
                 player.tiles(amount, "Sell");
                 break;
         }
-
     }
 
     private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType) {
@@ -260,6 +268,10 @@ public class Game {
         companyList.sort(Company.comparatorBy(dataType));
 
         return companyList;
+    }
+
+    public UserCompany getPlayer() {
+        return this.player;
     }
 
 }
