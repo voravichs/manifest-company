@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mc.manifestcompany.gui.GameController">
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mc.manifestcompany.gui.GameController">
     <BorderPane fx:id="gamePane">
         <center>
             <BorderPane prefHeight="500.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -74,7 +74,7 @@
                 </children></HBox>
         </bottom>
         <right>
-            <TextFlow fx:id="textBox" lineSpacing="10.0" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: lightblue;" styleClass="text-class" stylesheets="@textBox.css" BorderPane.alignment="CENTER">
+            <TextFlow fx:id="textBox" lineSpacing="10.0" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: lightblue;" styleClass="text-class" stylesheets="@css/textBox.css" BorderPane.alignment="CENTER">
                 <padding>
                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                 </padding>
@@ -83,9 +83,11 @@
     </BorderPane>
    <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0" visible="false">
       <children>
-         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" prefHeight="550.0" prefWidth="1200.0" style="-fx-background-color: lightgrey;">
+         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" prefHeight="550.0" prefWidth="1200.0" style="-fx-background-color: lightgrey;" stylesheets="@css/chart.css">
            <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="0.0" prefWidth="1089.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="19.0" prefWidth="1089.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
@@ -98,18 +100,12 @@
              <RowConstraints maxHeight="448.0" minHeight="10.0" percentHeight="20.0" prefHeight="369.0" vgrow="SOMETIMES" />
                <RowConstraints maxHeight="448.0" minHeight="10.0" percentHeight="20.0" prefHeight="369.0" vgrow="SOMETIMES" />
            </rowConstraints>
-            <children>
-               <Label alignment="CENTER" contentDisplay="CENTER" text="DATA WIP" />
-            </children>
          </GridPane>
-         <Pane layoutX="554.0" layoutY="551.0" prefHeight="149.0" prefWidth="150.0" style="-fx-background-color: lightgrey;">
-            <children>
-               <Button layoutX="44.0" layoutY="49.0" mnemonicParsing="false" onAction="#closeData" text=" X ">
-                  <font>
-                     <Font size="25.0" />
-                  </font>
-               </Button>
-            </children></Pane>
+         <Button layoutX="564.0" layoutY="598.0" mnemonicParsing="false" onAction="#closeData" text=" X ">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Button>
       </children></Pane>
    <Pane fx:id="actionPane" prefHeight="200.0" prefWidth="200.0" visible="false">
       <children>
@@ -206,7 +202,7 @@
                <Font size="30.0" />
             </font>
          </Label>
-         <Label layoutX="383.0" layoutY="257.0" onMouseClicked="#init" text="Welcome to the company, manager!" textFill="WHITE">
+         <Label layoutX="383.0" layoutY="257.0" onMouseClicked="#init" text="Welcome to the company, Manager!" textFill="WHITE">
             <font>
                <Font size="30.0" />
             </font>

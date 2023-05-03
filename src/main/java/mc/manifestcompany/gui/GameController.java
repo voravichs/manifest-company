@@ -1,8 +1,12 @@
 package mc.manifestcompany.gui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -97,31 +101,14 @@ public class GameController {
     @FXML
     protected void init() throws FileNotFoundException {
         initSidebar();
-        updateGrid();
         initSpinners();
+        initChart();
+        updateChart();
+        updateGrid();
         addText("Open the ACTIONS menu to start investing.\n");
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
-
-        // Init chart parameters
-        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyStats = game.getCompanyStats();
-        int i = 1;
-        for (Company company:
-             companyStats.keySet()) {
-            dataChart.add(new Label(company.getName()), 0, i);
-            i++;
-        }
-        dataChart.add(new Label("Net Worth"), 1,0);
-        dataChart.add(new Label("Profit"), 2,0);
-        dataChart.add(new Label("Profit %"), 3,0);
-        dataChart.add(new Label("Goods"), 4,0);
-
-        for (i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                dataChart.add(new Label("0"), 1 + i,1 + j);
-            }
-        }
     }
 
     /**
@@ -239,6 +226,77 @@ public class GameController {
         }
     }
 
+    @FXML
+    protected void initChart() {
+        Text tiles = new Text("Tiles");
+        GridPane.setHalignment(tiles, HPos.CENTER);
+        dataChart.add(tiles, 2,0);
+
+        Text cash = new Text("Cash");
+        GridPane.setHalignment(cash, HPos.CENTER);
+        dataChart.add(cash, 3,0);
+
+        Text price = new Text("Price of\nGoods");
+        GridPane.setHalignment(price, HPos.CENTER);
+        dataChart.add(price, 4,0);
+
+        Text goods = new Text("Available\nGoods");
+        GridPane.setHalignment(goods, HPos.CENTER);
+        dataChart.add(goods, 5,0);
+
+        Text cost = new Text("Operation\nCost");
+        GridPane.setHalignment(cost, HPos.CENTER);
+        dataChart.add(cost, 6,0);
+    }
+
+    @FXML
+    protected void updateChart() {
+        // Clear previous chart values
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 6; j++) {
+                for (Node node : dataChart.getChildren()) {
+                    if (node instanceof Text &&
+                            GridPane.getRowIndex(node) == i && GridPane.getColumnIndex(node) == j) {
+                        dataChart.getChildren().remove(node);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Init chart parameters
+        List<Company> companyList = game.sortCompaniesBy(DataType.TILES);
+        int i = 1;
+        for (Company company:
+                companyList) {
+            // Name
+            Text name = new Text(company.getName());
+            GridPane.setHalignment(name, HPos.CENTER);
+            dataChart.add(name, 1, i);
+            // Tiles
+            Label tiles = new Label(Integer.toString(company.getStats().get(DataType.TILES)));
+            GridPane.setHalignment(tiles, HPos.CENTER);
+            dataChart.add(tiles, 2, i);
+            // Cash
+            Label cash = new Label(Integer.toString(company.getStats().get(DataType.CASH)));
+            GridPane.setHalignment(cash, HPos.CENTER);
+            dataChart.add(cash, 3, i);
+            // Price
+            Label price = new Label(Integer.toString(company.getStats().get(DataType.PRICE)));
+            GridPane.setHalignment(price, HPos.CENTER);
+            dataChart.add(price, 4, i);
+            // Goods
+            Label goods = new Label(Integer.toString(company.getStats().get(DataType.CAPACITY)));
+            GridPane.setHalignment(goods, HPos.CENTER);
+            dataChart.add(goods, 5, i);
+            // Cost
+            Label cost = new Label(Integer.toString(company.getStats().get(DataType.COST)));
+            GridPane.setHalignment(cost, HPos.CENTER);
+            dataChart.add(cost, 6, i);
+            i++;
+        }
+    }
+
     /**
      * Visually updates the grid using the game's tile
      */
@@ -335,7 +393,7 @@ public class GameController {
      */
     @FXML
     protected void showData() {
-        gamePane.setOpacity(0.3);
+        gamePane.setOpacity(0.0);
         dataPane.setVisible(true);
     }
 
