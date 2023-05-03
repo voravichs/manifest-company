@@ -80,10 +80,10 @@ public class Game {
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // TODO: Add actual company names
-        this.player = new UserCompany("player", new CompanyActionImpl());
-        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl());
-        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl());
-        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl());
+        this.player = new UserCompany("player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
+        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl(), Tile.TileType.CLAIMED_P2);
+        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl(), Tile.TileType.CLAIMED_P3);
+        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl(), Tile.TileType.CLAIMED_P4);
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
@@ -218,11 +218,11 @@ public class Game {
         switch (num) {
             case 1:
                 System.out.println(1);
-                player.tiles(amount, "Purchase");
+                player.tiles(amount, "Purchase", this.tileGrid);
                 break;
             case 2:
                 System.out.println(2);
-                player.tiles(amount, "Sell");
+                player.tiles(amount, "Sell", this.tileGrid);
                 break;
         }
     }

@@ -1,6 +1,7 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 
 import java.util.*;
 
@@ -16,14 +17,19 @@ public class UserCompany extends Company {
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
+    private Stack<Tile> tileStack;
 
-    public UserCompany(String name, CompanyAction actions) {
+    private Tile.TileType tileType;
+
+    public UserCompany(String name, CompanyAction actions, Tile.TileType tileType) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
         this.profit = new Stack <>();
+        this.tileStack = new Stack <>();
+        this.tileType = tileType;
         initializeStats();
     }
     @Override
@@ -42,9 +48,9 @@ public class UserCompany extends Company {
     }
 
     @Override
-    public void tiles(int num, String method) {
+    public void tiles(int num, String method, Tile[][] grid) {
         System.out.println("Purchasing/Selling tiles in " + this.name);
-        actions.tiles(num, method, this);
+        actions.tiles(num, method, this, grid);
     }
 
     @Override
@@ -79,26 +85,14 @@ public class UserCompany extends Company {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
     @Override
-
     public List<Stack> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }
 
-    /**
-     * Checks whether an investment is valid.
-     * Compares the amount of cash on hand and the current amount of tiles.
-     * @param amount increase or decrease in cash based on whether amount passed in is + or -
-     * @param tiles amount of tiles to SELL (+ sell, - buy)
-     * @return whether the action was successful
-     */
-    public boolean checkValidInvest(int amount, int tiles) {
-        // Have enough cash to cover all expenses
-        boolean enoughCash = -amount >= 0 && this.stats.get(DataType.CASH) >= -amount;
-        // Can only sell until you have 1 tile left
-        boolean enoughTiles = tiles >= 0 && this.stats.get(DataType.TILES) - tiles >= 1;
-        return enoughTiles && enoughCash;
+    @Override
+    public Tile.TileType getTileType() {
+        return tileType;
     }
-
 
     //comparators
 //    public static Comparator<UserCompany> comparatorByCash() {
