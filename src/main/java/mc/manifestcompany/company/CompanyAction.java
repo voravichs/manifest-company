@@ -1,5 +1,7 @@
 package mc.manifestcompany.company;
 
+import mc.manifestcompany.gui.Tile;
+
 /**
  * Interface for interacting with Companies.
  * Defines the actions which companies can perform.
@@ -22,7 +24,7 @@ public interface CompanyAction {
      * @param method purchase or sell
      * @param company the company performing the action
      */
-    void tiles(int numTile, String method, Company company);
+    void tiles(int numTile, String method, Company company, Tile[][] grid);
 
 
 }

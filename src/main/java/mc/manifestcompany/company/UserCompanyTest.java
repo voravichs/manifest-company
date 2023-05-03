@@ -1,6 +1,7 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,9 +13,11 @@ import static org.junit.Assert.*;
 
 public class UserCompanyTest {
     private Company company;
+
+    private Tile[][] grid;
     @Before
     public void setUp() throws Exception {
-        this.company = new UserCompany("company", new CompanyActionImpl());
+        this.company = new UserCompany("company", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
     }
 
     @Test
@@ -60,13 +63,13 @@ public class UserCompanyTest {
 
     @Test
     public void tiles() {
-        this.company.tiles(1, "Purchase");
+        this.company.tiles(1, "Purchase", grid);
         int tiles = this.company.getStats().get(DataType.TILES);
         int cash = this.company.getStats().get(DataType.CASH);
         assertEquals(2, tiles);
         assertEquals(200, cash);
 
-        this.company.tiles(1, "Sell");
+        this.company.tiles(1, "Sell", grid);
         tiles = this.company.getStats().get(DataType.TILES);
         cash = this.company.getStats().get(DataType.CASH);
         assertEquals(1, tiles);

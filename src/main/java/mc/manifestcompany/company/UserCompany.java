@@ -1,6 +1,7 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 
 import java.util.*;
 
@@ -16,14 +17,19 @@ public class UserCompany extends Company {
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
+    private Stack<Tile> tileStack;
 
-    public UserCompany(String name, CompanyAction actions) {
+    private Tile.TileType tileType;
+
+    public UserCompany(String name, CompanyAction actions, Tile.TileType tileType) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
         this.profit = new Stack <>();
+        this.tileStack = new Stack <>();
+        this.tileType = tileType;
         initializeStats();
     }
     @Override
@@ -42,9 +48,9 @@ public class UserCompany extends Company {
     }
 
     @Override
-    public void tiles(int num, String method) {
+    public void tiles(int num, String method, Tile[][] grid) {
         System.out.println("Purchasing/Selling tiles in " + this.name);
-        actions.tiles(num, method, this);
+        actions.tiles(num, method, this, grid);
     }
 
     @Override
@@ -79,9 +85,13 @@ public class UserCompany extends Company {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
     @Override
-
     public List<Stack> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
+    }
+
+    @Override
+    public Tile.TileType getTileType() {
+        return tileType;
     }
 
     //comparators
