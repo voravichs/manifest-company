@@ -17,14 +17,17 @@ public class Game {
     public static final int GRID_SIZE_X = 400;
 
     /* Instance Variables */
+    // TileGrid
     private Tile[][] tileGrid;
     private final int xSize, ySize;
     private final double squareSize;
     private final int numTiles;
 
+    // Players and NPCS
     private UserCompany player;
     private Queue<Company> npcQueue;
 
+    // Market demand/price
     // market demand for how much a company can sell, could change if an event happens
     private int marketDemand = 30;
     // market price for the goods, could change if an event happens
@@ -272,6 +275,10 @@ public class Game {
 
     public UserCompany getPlayer() {
         return this.player;
+    }
+
+    public Queue<Company> getNPCs() {
+        return this.npcQueue;
     }
 
 }

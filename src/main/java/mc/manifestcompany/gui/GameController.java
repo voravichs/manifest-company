@@ -21,9 +21,7 @@ import mc.manifestcompany.gamelogic.Game;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Controls the GUI elements of the game screen.
@@ -205,44 +203,38 @@ public class GameController {
     protected void initSidebar() throws FileNotFoundException {
         int i = 0;
 
-        for (FastFoodLevel level:
-             FastFoodLevel.values()) {
-            // Image
-            URL imagePath = App.class.getResource(level.getImageLink());
-            assert imagePath != null;
-            Image image = new Image(new FileInputStream(imagePath.getPath()));
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(100);
-            imageView.setFitWidth(100);
-            imageView.setTranslateX(18.75);
-            sideBar.add(imageView,0,i);
+        // Add all players and npcs to a list
+        List<Company> companyList = new ArrayList<>();
+        companyList.add(game.getPlayer());
+        companyList.addAll(game.getNPCs());
 
-            // init company stats
-            // TODO: FILL THESE IN WITH THE REAL STATS
-            updateCompanyStats(i);
-
-            i++;
-        }
-    }
-
-    /**
-     * Updates the company stats at the sidebar.
-     * @param row row of the company to update
-     */
-    @FXML
-    protected void updateCompanyStats(int row) {
-        // TODO: REAL STATS
-        TextFlow tf = new TextFlow();
-        tf.setPadding(new Insets(20,20,20,20));
-        tf.getStyleClass().add("stats-text");
-        Text text = new Text(
-                "Name\n" +
-                "Net Worth: 0\n" +
-                "Profit: 0\n" +
-                "PLACEHOLDER: 0");
-        tf.getChildren().add(text);
-
-        sideBar.add(tf,1,row);
+//        // Loop through the list
+//        for (Company company:
+//             companyList) {
+//            // Image
+//            URL imagePath = App.class.getResource(level.getImageLink());
+//            assert imagePath != null;
+//            Image image = new Image(new FileInputStream(imagePath.getPath()));
+//            ImageView imageView = new ImageView(image);
+//            imageView.setFitHeight(100);
+//            imageView.setFitWidth(100);
+//            imageView.setTranslateX(18.75);
+//            sideBar.add(imageView,0,i);
+//
+//            // init company stats
+//            // TODO: FILL THESE IN WITH THE REAL STATS
+//            TextFlow tf = new TextFlow();
+//            tf.setPadding(new Insets(20,20,20,20));
+//            tf.getStyleClass().add("stats-text");
+//            Text text = new Text(
+//                    level.getName() + "\n" +
+//                    "PLACEHOLDER: 0");
+//            tf.getChildren().add(text);
+//
+//            sideBar.add(tf,1,i);
+//
+//            i++;
+//        }
     }
 
     /**
