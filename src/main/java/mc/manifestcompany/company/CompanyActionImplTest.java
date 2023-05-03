@@ -17,7 +17,8 @@ public class CompanyActionImplTest {
     @Before
     public void setUp() throws Exception {
         this.actions = new CompanyActionImpl();
-        this.company = new UserCompany("company", this.actions, Tile.TileType.CLAIMED_P1);
+        this.company = new UserCompany("company", this.actions,
+                Tile.TileType.CLAIMED_P1,"images/playerfastfood.png");
 
 
     }

@@ -16,6 +16,7 @@ import java.util.Stack;
 public class NPCCompany extends Company {
     private String name;
     private NPCActionImpl actions;
+    private String imageLink;
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
@@ -24,9 +25,10 @@ public class NPCCompany extends Company {
 
     private Stack<Tile> tileStack;
 
-    public NPCCompany(String name, NPCActionImpl actions, Tile.TileType tileType) {
+    public NPCCompany(String name, NPCActionImpl actions, Tile.TileType tileType, String imageLink) {
         this.name = name;
         this.actions = actions;
+        this.imageLink = imageLink;
         this.stats = new HashMap<>();
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
@@ -81,20 +83,34 @@ public class NPCCompany extends Company {
     public void setStats(HashMap<Enum<DataType>, Integer> stats) {
         this.stats = stats;
     }
-    @Override
-    public void setRevenue(int amount) { revenue.push(amount); }
-    @Override
-    public void setCogs(int amount) { cogs.push(amount); }
 
     @Override
-    public void setProfit(int amount) { profit.push(amount); }
+    public void setRevenue(int amount) {
+        revenue.push(amount);
+    }
 
     @Override
-    public List getFinancials() {
+    public void setCogs(int amount) {
+        cogs.push(amount);
+    }
+
+    @Override
+    public void setProfit(int amount) {
+        profit.push(amount);
+    }
+
+    @Override
+    public String getImageLink() {
+        return this.imageLink;
+    }
+
+    @Override
+    public List<Integer> getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
+
     @Override
-    public List<Stack> getFinancialHistory() {
+    public List<Stack<Integer>> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }
 

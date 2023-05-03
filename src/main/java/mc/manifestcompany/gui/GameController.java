@@ -1,25 +1,34 @@
 package mc.manifestcompany.gui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import mc.manifestcompany.*;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gamelogic.Game;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -42,7 +51,13 @@ public class GameController {
     @FXML
     private Pane actionPane;
     @FXML
+    private Pane saveNamePane;
+    @FXML
+    private Pane exitConfirmPane;
+    @FXML
     private Pane transitionPane;
+    @FXML
+    private Pane startPane;
 
     // Action/Spinner Elements
     @FXML
@@ -81,47 +96,38 @@ public class GameController {
     private Text date;
     @FXML
     private GridPane dataChart;
+    @FXML
+    private Label turnText;
+    @FXML
+    private TextField saveNameEntry;
 
     /* Instance Variables */
     private final Game game;
-    private Queue<Text> textQueue;
+    private final Queue<Text> textQueue;
+    private int turnNum;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
         this.textQueue = new LinkedList<>();
+
     }
 
     /**
-     * Initializes the game and hides the transition pane.
+     * Initializes the game and hides the start pane.
      */
     @FXML
     protected void init() throws FileNotFoundException {
         initSidebar();
-        updateGrid();
         initSpinners();
-        addText("Welcome to Manifest Company!\n");
+        initChart();
+        updateChart();
+        updateGrid();
+        addText("Open the ACTIONS menu to\n");
+        addText("start investing.\n");
         date.setText("January 1970");
-        transitionPane.setVisible(false);
+        startPane.setVisible(false);
         gamePane.setVisible(true);
-
-        // Init chart parameters
-        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyStats = game.getCompanyStats();
-        int i = 1;
-        for (Company company:
-             companyStats.keySet()) {
-            dataChart.add(new Label(company.getName()), 0, i);
-            i++;
-        }
-        dataChart.add(new Label("Net Worth"), 1,0);
-        dataChart.add(new Label("Profit"), 2,0);
-        dataChart.add(new Label("Profit %"), 3,0);
-        dataChart.add(new Label("Goods"), 4,0);
-
-        for (i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                dataChart.add(new Label("0"), 1+i,1+j);
-            }
-        }
+        this.turnNum = 1;
     }
 
     /**
@@ -154,8 +160,8 @@ public class GameController {
         ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) -> {
             int total = marketSpinner.getValue() + rdSpinner.getValue() +
                         goodSpinner.getValue() + hrSpinner.getValue() +
-                        (1000 * tileSpinner.getValue());
-            totalInvest.setText("$" + total);
+                        (300 * tileSpinner.getValue());
+            totalInvest.setText("$" + -total);
             if (total < 0) {
                 totalInvest.setStyle("-fx-fill: green;");
             } else {
@@ -179,15 +185,15 @@ public class GameController {
 
         // Update individual totals
         marketSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                marketTotal.setText("$" + marketSpinner.getValue()));
+                marketTotal.setText("$" + -marketSpinner.getValue()));
         rdSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                rdTotal.setText("$" + rdSpinner.getValue()));
+                rdTotal.setText("$" + -rdSpinner.getValue()));
         goodSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                goodsTotal.setText("$" + goodSpinner.getValue()));
+                goodsTotal.setText("$" + -goodSpinner.getValue()));
         hrSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                hrTotal.setText("$" + hrSpinner.getValue()));
+                hrTotal.setText("$" + -hrSpinner.getValue()));
         tileSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            tileTotal.setText("$" + 1000 * tileSpinner.getValue());
+            tileTotal.setText("$" + -300 * tileSpinner.getValue());
             if (tileSpinner.getValue() < 0) {
                 tileTotal.setStyle("-fx-fill: green;");
             } else {
@@ -208,33 +214,108 @@ public class GameController {
         companyList.add(game.getPlayer());
         companyList.addAll(game.getNPCs());
 
-//        // Loop through the list
-//        for (Company company:
-//             companyList) {
-//            // Image
-//            URL imagePath = App.class.getResource(level.getImageLink());
-//            assert imagePath != null;
-//            Image image = new Image(new FileInputStream(imagePath.getPath()));
-//            ImageView imageView = new ImageView(image);
-//            imageView.setFitHeight(100);
-//            imageView.setFitWidth(100);
-//            imageView.setTranslateX(18.75);
-//            sideBar.add(imageView,0,i);
-//
-//            // init company stats
-//            // TODO: FILL THESE IN WITH THE REAL STATS
-//            TextFlow tf = new TextFlow();
-//            tf.setPadding(new Insets(20,20,20,20));
-//            tf.getStyleClass().add("stats-text");
-//            Text text = new Text(
-//                    level.getName() + "\n" +
-//                    "PLACEHOLDER: 0");
-//            tf.getChildren().add(text);
-//
-//            sideBar.add(tf,1,i);
-//
-//            i++;
-//        }
+        // Loop through the list
+        for (Company company:
+             companyList) {
+            // Image
+            URL imagePath = App.class.getResource(company.getImageLink());
+            assert imagePath != null;
+            Image image = new Image(new FileInputStream(imagePath.getPath()));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
+            imageView.setTranslateX(18.75);
+            sideBar.add(imageView,0,i);
+
+            // init company stats
+            TextFlow tf = new TextFlow();
+            tf.setPadding(new Insets(50,20,20,10));
+            tf.getStyleClass().add("stats-text");
+            Text text = new Text(
+                    company.getName() + "\n" +
+                    "Cash: $" + company.getStats().get(DataType.CASH));
+            transitionPane.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> text.setText(company.getName() + "\n" +
+                        "Cash: $" + company.getStats().get(DataType.CASH)));
+
+            tf.getChildren().add(text);
+
+
+            sideBar.add(tf,1,i);
+
+            i++;
+        }
+    }
+
+    @FXML
+    protected void initChart() {
+        Text tiles = new Text("Tiles");
+        GridPane.setHalignment(tiles, HPos.CENTER);
+        dataChart.add(tiles, 2,0);
+
+        Text cash = new Text("Cash");
+        GridPane.setHalignment(cash, HPos.CENTER);
+        dataChart.add(cash, 3,0);
+
+        Text price = new Text("Price of\nGoods");
+        GridPane.setHalignment(price, HPos.CENTER);
+        dataChart.add(price, 4,0);
+
+        Text goods = new Text("Available\nGoods");
+        GridPane.setHalignment(goods, HPos.CENTER);
+        dataChart.add(goods, 5,0);
+
+        Text cost = new Text("Operation\nCost");
+        GridPane.setHalignment(cost, HPos.CENTER);
+        dataChart.add(cost, 6,0);
+    }
+
+    @FXML
+    protected void updateChart() {
+        // Clear previous chart values
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 6; j++) {
+                for (Node node : dataChart.getChildren()) {
+                    if ((node instanceof Text || node instanceof Label) &&
+                            GridPane.getRowIndex(node) == i && GridPane.getColumnIndex(node) == j) {
+                        dataChart.getChildren().remove(node);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Init chart parameters
+        List<Company> companyList = game.sortCompaniesBy(DataType.TILES);
+        int i = 1;
+        for (Company company:
+                companyList) {
+            // Name
+            Text name = new Text(company.getName());
+            GridPane.setHalignment(name, HPos.CENTER);
+            dataChart.add(name, 1, i);
+            // Tiles
+            Label tiles = new Label(Integer.toString(company.getStats().get(DataType.TILES)));
+            GridPane.setHalignment(tiles, HPos.CENTER);
+            dataChart.add(tiles, 2, i);
+            // Cash
+            Label cash = new Label(Integer.toString(company.getStats().get(DataType.CASH)));
+            GridPane.setHalignment(cash, HPos.CENTER);
+            dataChart.add(cash, 3, i);
+            // Price
+            Label price = new Label(Integer.toString(company.getStats().get(DataType.PRICE)));
+            GridPane.setHalignment(price, HPos.CENTER);
+            dataChart.add(price, 4, i);
+            // Goods
+            Label goods = new Label(Integer.toString(company.getStats().get(DataType.CAPACITY)));
+            GridPane.setHalignment(goods, HPos.CENTER);
+            dataChart.add(goods, 5, i);
+            // Cost
+            Label cost = new Label(Integer.toString(company.getStats().get(DataType.COST)));
+            GridPane.setHalignment(cost, HPos.CENTER);
+            dataChart.add(cost, 6, i);
+            i++;
+        }
     }
 
     /**
@@ -257,12 +338,18 @@ public class GameController {
      */
     @FXML
     protected void advanceTurn() {
-        // Add text to the box showing the turn has advanced
-        addText("Advancing Turn...\n");
-
         // go to next turn, changing the board, then update the grid
         this.game.nextTurn();
+        updateChart();
         updateGrid();
+
+        // show the transition pane, set the text for the turn
+        transitionPane.setVisible(true);
+        turnNum++;
+        turnText.setText("Turn " + turnNum);
+
+        // Add text to the box showing the turn has advanced
+        addText("[TURN " + turnNum + "]\n");
     }
 
     /**
@@ -273,7 +360,7 @@ public class GameController {
     @FXML
     protected void addText(String text) {
         // text stack only stores 10 most recent texts
-        if (textQueue.size() < 10) {
+        if (textQueue.size() < 9) {
             Text nextText = new Text(text);
             textBox.getChildren().add(nextText);
             textQueue.add(nextText);
@@ -285,9 +372,35 @@ public class GameController {
         }
     }
 
+    /**
+     * From the action menu, confirms a player's investing decisions,
+     * invests into the chosen sectors, and buys/sells the chosen
+     * number of tiles if valid.
+     */
     @FXML
     protected void invest() {
+        if (possibleToInvest.getText().equals("Investment possible!")) {
+            // Invest values from spinners
+            game.getPlayer().invest(marketSpinner.getValue(), "Marketing");
+            game.getPlayer().invest(rdSpinner.getValue(), "R&D");
+            game.getPlayer().invest(goodSpinner.getValue(), "Goods");
+            game.getPlayer().invest(hrSpinner.getValue(), "HR");
 
+            if (tileSpinner.getValue() > 0) {
+                // (+) Buy Tiles
+                game.getPlayer().tiles(tileSpinner.getValue(), "Purchase", game.getTileGrid());
+            } else if (tileSpinner.getValue() < 0) {
+                // (-) Sell Tiles
+                game.getPlayer().tiles(tileSpinner.getValue(), "Sell", game.getTileGrid());
+            }
+
+            addText("Player Investing \n");
+            addText("decision recorded!\n");
+            addText("Press NEXT TURN \n");
+            addText("to continue.\n");
+
+            closeActions();
+        }
     }
 
     /**
@@ -301,6 +414,26 @@ public class GameController {
                 gameBoard.getChildren().remove(tile.getSquare());
             }
         }
+    }
+
+    /**
+     * Takes the data from the game and saves it to a file
+     */
+    @FXML
+    protected void save() throws IOException {
+        FileHandler.save(game.getTileGrid(), game.getCompanyList(), saveNameEntry.getText());
+    }
+
+    /**
+     * Exits to the main menu
+     */
+    @FXML
+    protected void exit(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /* ***** SHOW/HIDE PANES ****** */
@@ -348,4 +481,54 @@ public class GameController {
         actionPane.setVisible(false);
     }
 
+    /**
+     * Closes the transition pane.
+     */
+    @FXML
+    protected void closeTransition() {
+        transitionPane.setVisible(false);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void showSaveName() {
+        gamePane.setOpacity(0.3);
+        saveNamePane.setVisible(true);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void closeSaveName() {
+        gamePane.setOpacity(1);
+        saveNamePane.setVisible(false);
+        try {
+            save();
+            addText("Save successful!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void showExitConfirm() {
+        gamePane.setOpacity(0.3);
+        exitConfirmPane.setVisible(true);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void closeExitConfirm() {
+        gamePane.setOpacity(1);
+        exitConfirmPane.setVisible(false);
+    }
 }

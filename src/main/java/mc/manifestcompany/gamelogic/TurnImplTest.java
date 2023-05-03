@@ -19,10 +19,10 @@ public class TurnImplTest {
     @Before
     public void setUp() throws Exception {
         this.turn = new TurnImpl(30, 100);
-        this.company = new UserCompany("company", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
-        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl(), Tile.TileType.CLAIMED_P2);
-        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl(), Tile.TileType.CLAIMED_P3);
-        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl(), Tile.TileType.CLAIMED_P4);
+        this.company = new UserCompany("Player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
+        Company npc1 = new NPCCompany("WacMondalds", new NPCActionImpl(), Tile.TileType.CLAIMED_P2, "images/wacmonalds.png");
+        Company npc2 = new NPCCompany("Queso Queen", new NPCActionImpl(), Tile.TileType.CLAIMED_P3, "images/quesoqueen.png");
+        Company npc3 = new NPCCompany("Pizza Shack", new NPCActionImpl(), Tile.TileType.CLAIMED_P4, "images/pizzashack.png");
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);

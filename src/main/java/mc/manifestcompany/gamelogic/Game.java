@@ -79,11 +79,11 @@ public class Game {
         claimTile(arrayEndIdx,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
-        // TODO: Add actual company names
-        this.player = new UserCompany("player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1);
-        Company npc1 = new NPCCompany("NPC1", new NPCActionImpl(), Tile.TileType.CLAIMED_P2);
-        Company npc2 = new NPCCompany("NPC2", new NPCActionImpl(), Tile.TileType.CLAIMED_P3);
-        Company npc3 = new NPCCompany("NPC3", new NPCActionImpl(), Tile.TileType.CLAIMED_P4);
+        // TODO: DYNAMIC NAMES AND LINKS
+        this.player = new UserCompany("Player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
+        Company npc1 = new NPCCompany("WacMondalds", new NPCActionImpl(), Tile.TileType.CLAIMED_P2, "images/wacmonalds.png");
+        Company npc2 = new NPCCompany("Queso Queen", new NPCActionImpl(), Tile.TileType.CLAIMED_P3, "images/quesoqueen.png");
+        Company npc3 = new NPCCompany("Pizza Shack", new NPCActionImpl(), Tile.TileType.CLAIMED_P4, "images/pizzashack.png");
         this.npcQueue = new ArrayDeque<>();
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
@@ -108,17 +108,12 @@ public class Game {
     }
 
     /**
-     * @return the map of the company stats
+     * @return the list of companies
      */
-    public HashMap<Company, HashMap<Enum<DataType>, Integer>> getCompanyStats() {
-        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyMap =
-                new HashMap<>();
-        companyMap.put(player, player.getStats());
-        for (Company npCompany:
-             npcQueue) {
-            companyMap.put(npCompany, npCompany.getStats());
-        }
-        return companyMap;
+    public List<Company> getCompanyList() {
+        List<Company> companyList = new ArrayList<>(npcQueue);
+        companyList.add(player);
+        return companyList;
     }
 
     /**
@@ -266,8 +261,7 @@ public class Game {
     }
 
     public List<Company> sortCompaniesBy(DataType dataType) {
-        List<Company> companyList = new ArrayList<>(npcQueue);
-        companyList.add(player);
+        List<Company> companyList = getCompanyList();
         companyList.sort(Company.comparatorBy(dataType));
 
         return companyList;
