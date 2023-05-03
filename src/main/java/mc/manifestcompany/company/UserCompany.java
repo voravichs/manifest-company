@@ -109,6 +109,7 @@ public class UserCompany extends Company {
         return enoughTiles && enoughCash;
     }
 
+
     //comparators
 //    public static Comparator<UserCompany> comparatorByCash() {
 //        return new Comparator<UserCompany>() {
