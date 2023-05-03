@@ -21,9 +21,7 @@ import mc.manifestcompany.gamelogic.Game;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Controls the GUI elements of the game screen.
@@ -57,6 +55,16 @@ public class GameController {
     private Spinner<Integer> hrSpinner;
     @FXML
     private Spinner<Integer> tileSpinner;
+    @FXML
+    private Text marketTotal;
+    @FXML
+    private Text rdTotal;
+    @FXML
+    private Text goodsTotal;
+    @FXML
+    private Text hrTotal;
+    @FXML
+    private Text tileTotal;
     @FXML
     private Text totalInvest;
     @FXML
@@ -123,34 +131,69 @@ public class GameController {
     protected void initSpinners() {
         // Spinner value factory for investing increments/decrements by 1000
         SpinnerValueFactory<Integer> investMarketFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investRDFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investGoodsFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
         SpinnerValueFactory<Integer> investHRFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,1000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,1000000,0,100);
 
         // Spinner value factory for investing increments/decrements by 1000
-        SpinnerValueFactory<Integer> buyTileFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,0);
+        SpinnerValueFactory<Integer> tileFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(-100,100,0);
 
         // Set factories for each spinner
         marketSpinner.setValueFactory(investMarketFactory);
         rdSpinner.setValueFactory(investRDFactory);
         goodSpinner.setValueFactory(investGoodsFactory);
         hrSpinner.setValueFactory(investHRFactory);
-        tileSpinner.setValueFactory(buyTileFactory);
+        tileSpinner.setValueFactory(tileFactory);
 
         // Update the total when spinners change value
-        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) ->
-                totalInvest.setText("$" +
-                        (marketSpinner.getValue() + rdSpinner.getValue() +
-                        goodSpinner.getValue() + hrSpinner.getValue()));
+        ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) -> {
+            int total = marketSpinner.getValue() + rdSpinner.getValue() +
+                        goodSpinner.getValue() + hrSpinner.getValue() +
+                        (1000 * tileSpinner.getValue());
+            totalInvest.setText("$" + total);
+            if (total < 0) {
+                totalInvest.setStyle("-fx-fill: green;");
+            } else {
+                totalInvest.setStyle("-fx-fill: red;");
+            }
+            // Update possible to buy
+            if (game.getPlayer().checkValidInvest(-1 * total, -1 * tileSpinner.getValue())) {
+                possibleToInvest.setText("Investment possible!");
+                possibleToInvest.setStyle("-fx-fill: green;");
+            } else {
+                possibleToInvest.setText("Invalid investment! \n (not enough money or tiles)");
+                possibleToInvest.setStyle("-fx-fill: red;");
+            }
+        };
+
         marketSpinner.valueProperty().addListener(totalUpdate);
         rdSpinner.valueProperty().addListener(totalUpdate);
         goodSpinner.valueProperty().addListener(totalUpdate);
         hrSpinner.valueProperty().addListener(totalUpdate);
+        tileSpinner.valueProperty().addListener(totalUpdate);
+
+        // Update individual totals
+        marketSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                marketTotal.setText("$" + marketSpinner.getValue()));
+        rdSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                rdTotal.setText("$" + rdSpinner.getValue()));
+        goodSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                goodsTotal.setText("$" + goodSpinner.getValue()));
+        hrSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                hrTotal.setText("$" + hrSpinner.getValue()));
+        tileSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            tileTotal.setText("$" + 1000 * tileSpinner.getValue());
+            if (tileSpinner.getValue() < 0) {
+                tileTotal.setStyle("-fx-fill: green;");
+            } else {
+                tileTotal.setStyle("-fx-fill: red;");
+            }
+        });
     }
 
     /**
@@ -160,44 +203,38 @@ public class GameController {
     protected void initSidebar() throws FileNotFoundException {
         int i = 0;
 
-        for (FastFoodLevel level:
-             FastFoodLevel.values()) {
-            // Image
-            URL imagePath = App.class.getResource(level.getImageLink());
-            assert imagePath != null;
-            Image image = new Image(new FileInputStream(imagePath.getPath()));
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(100);
-            imageView.setFitWidth(100);
-            imageView.setTranslateX(18.75);
-            sideBar.add(imageView,0,i);
+        // Add all players and npcs to a list
+        List<Company> companyList = new ArrayList<>();
+        companyList.add(game.getPlayer());
+        companyList.addAll(game.getNPCs());
 
-            // init company stats
-            // TODO: FILL THESE IN WITH THE REAL STATS
-            updateCompanyStats(i);
-
-            i++;
-        }
-    }
-
-    /**
-     * Updates the company stats at the sidebar.
-     * @param row row of the company to update
-     */
-    @FXML
-    protected void updateCompanyStats(int row) {
-        // TODO: REAL STATS
-        TextFlow tf = new TextFlow();
-        tf.setPadding(new Insets(20,20,20,20));
-        tf.getStyleClass().add("stats-text");
-        Text text = new Text(
-                "Name\n" +
-                "Net Worth: 0\n" +
-                "Profit: 0\n" +
-                "PLACEHOLDER: 0");
-        tf.getChildren().add(text);
-
-        sideBar.add(tf,1,row);
+//        // Loop through the list
+//        for (Company company:
+//             companyList) {
+//            // Image
+//            URL imagePath = App.class.getResource(level.getImageLink());
+//            assert imagePath != null;
+//            Image image = new Image(new FileInputStream(imagePath.getPath()));
+//            ImageView imageView = new ImageView(image);
+//            imageView.setFitHeight(100);
+//            imageView.setFitWidth(100);
+//            imageView.setTranslateX(18.75);
+//            sideBar.add(imageView,0,i);
+//
+//            // init company stats
+//            // TODO: FILL THESE IN WITH THE REAL STATS
+//            TextFlow tf = new TextFlow();
+//            tf.setPadding(new Insets(20,20,20,20));
+//            tf.getStyleClass().add("stats-text");
+//            Text text = new Text(
+//                    level.getName() + "\n" +
+//                    "PLACEHOLDER: 0");
+//            tf.getChildren().add(text);
+//
+//            sideBar.add(tf,1,i);
+//
+//            i++;
+//        }
     }
 
     /**
