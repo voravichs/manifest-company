@@ -56,27 +56,17 @@
         <bottom>
             <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1200.0" spacing="50.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                 <children>
-                    <Button mnemonicParsing="false" onAction="#updateGrid" text="updateGrid">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Button>
-                    <Button mnemonicParsing="false" onAction="#clearBoard" text="clearGrid">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Button>
                     <Button mnemonicParsing="false" onAction="#showData" text="Data">
                         <font>
                             <Font size="30.0" />
                         </font>
                     </Button>
-                    <Button mnemonicParsing="false" onAction="#showActions" text="Actions">
+                    <Button mnemonicParsing="false" onAction="#showActions" text="ACTIONS">
                         <font>
                             <Font size="30.0" />
                         </font>
                     </Button>
-                    <Button mnemonicParsing="false" onAction="#advanceTurn" text="ADVANCE">
+                    <Button mnemonicParsing="false" onAction="#advanceTurn" text="NEXT TURN">
                         <font>
                             <Font size="30.0" />
                         </font>

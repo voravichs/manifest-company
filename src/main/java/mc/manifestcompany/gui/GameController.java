@@ -84,7 +84,7 @@ public class GameController {
 
     /* Instance Variables */
     private final Game game;
-    private Queue<Text> textQueue;
+    private final Queue<Text> textQueue;
 
     public GameController() {
         this.game = new Game(X_SIZE, Y_SIZE);
@@ -99,7 +99,7 @@ public class GameController {
         initSidebar();
         updateGrid();
         initSpinners();
-        addText("Welcome to Manifest Company!\n");
+        addText("Welcome to the company, manager!\nOpen the ACTIONS menu to start investing.");
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
@@ -119,7 +119,7 @@ public class GameController {
 
         for (i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                dataChart.add(new Label("0"), 1+i,1+j);
+                dataChart.add(new Label("0"), 1 + i,1 + j);
             }
         }
     }
@@ -155,7 +155,7 @@ public class GameController {
             int total = marketSpinner.getValue() + rdSpinner.getValue() +
                         goodSpinner.getValue() + hrSpinner.getValue() +
                         (1000 * tileSpinner.getValue());
-            totalInvest.setText("$" + total);
+            totalInvest.setText("$" + -total);
             if (total < 0) {
                 totalInvest.setStyle("-fx-fill: green;");
             } else {
@@ -179,15 +179,15 @@ public class GameController {
 
         // Update individual totals
         marketSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                marketTotal.setText("$" + marketSpinner.getValue()));
+                marketTotal.setText("$" + -marketSpinner.getValue()));
         rdSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                rdTotal.setText("$" + rdSpinner.getValue()));
+                rdTotal.setText("$" + -rdSpinner.getValue()));
         goodSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                goodsTotal.setText("$" + goodSpinner.getValue()));
+                goodsTotal.setText("$" + -goodSpinner.getValue()));
         hrSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
-                hrTotal.setText("$" + hrSpinner.getValue()));
+                hrTotal.setText("$" + -hrSpinner.getValue()));
         tileSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            tileTotal.setText("$" + 1000 * tileSpinner.getValue());
+            tileTotal.setText("$" + -1000 * tileSpinner.getValue());
             if (tileSpinner.getValue() < 0) {
                 tileTotal.setStyle("-fx-fill: green;");
             } else {
@@ -275,7 +275,7 @@ public class GameController {
     @FXML
     protected void addText(String text) {
         // text stack only stores 10 most recent texts
-        if (textQueue.size() < 10) {
+        if (textQueue.size() < 5) {
             Text nextText = new Text(text);
             textBox.getChildren().add(nextText);
             textQueue.add(nextText);
@@ -287,9 +287,32 @@ public class GameController {
         }
     }
 
+    /**
+     * From the action menu, confirms a player's investing decisions,
+     * invests into the chosen sectors, and buys/sells the chosen
+     * number of tiles if valid.
+     */
     @FXML
     protected void invest() {
+        if (possibleToInvest.getText().equals("Investment possible!")) {
+            // Invest values from spinners
+            game.getPlayer().invest(marketSpinner.getValue(), "Marketing");
+            game.getPlayer().invest(rdSpinner.getValue(), "R&D");
+            game.getPlayer().invest(goodSpinner.getValue(), "Goods");
+            game.getPlayer().invest(hrSpinner.getValue(), "HR");
 
+            if (tileSpinner.getValue() > 0) {
+                // (+) Buy Tiles
+                game.getPlayer().tiles(tileSpinner.getValue(), "Purchase", game.getTileGrid());
+            } else if (tileSpinner.getValue() < 0) {
+                // (-) Sell Tiles
+                game.getPlayer().tiles(tileSpinner.getValue(), "Sell", game.getTileGrid());
+            }
+
+            addText("Player Investing decision recorded!\nPress NEXT TURN to continue.\n");
+
+            closeActions();
+        }
     }
 
     /**
