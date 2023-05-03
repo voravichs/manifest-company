@@ -1,13 +1,17 @@
 package mc.manifestcompany.gui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -17,12 +21,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import mc.manifestcompany.*;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gamelogic.Game;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -44,6 +50,10 @@ public class GameController {
     private Pane dataPane;
     @FXML
     private Pane actionPane;
+    @FXML
+    private Pane saveNamePane;
+    @FXML
+    private Pane exitConfirmPane;
     @FXML
     private Pane transitionPane;
     @FXML
@@ -88,6 +98,8 @@ public class GameController {
     private GridPane dataChart;
     @FXML
     private Label turnText;
+    @FXML
+    private TextField saveNameEntry;
 
     /* Instance Variables */
     private final Game game;
@@ -217,7 +229,7 @@ public class GameController {
 
             // init company stats
             TextFlow tf = new TextFlow();
-            tf.setPadding(new Insets(20,20,20,20));
+            tf.setPadding(new Insets(50,20,20,10));
             tf.getStyleClass().add("stats-text");
             Text text = new Text(
                     company.getName() + "\n" +
@@ -404,6 +416,26 @@ public class GameController {
         }
     }
 
+    /**
+     * Takes the data from the game and saves it to a file
+     */
+    @FXML
+    protected void save() throws IOException {
+        FileHandler.save(game.getTileGrid(), game.getCompanyList(), saveNameEntry.getText());
+    }
+
+    /**
+     * Exits to the main menu
+     */
+    @FXML
+    protected void exit(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     /* ***** SHOW/HIDE PANES ****** */
 
     /**
@@ -455,5 +487,48 @@ public class GameController {
     @FXML
     protected void closeTransition() {
         transitionPane.setVisible(false);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void showSaveName() {
+        gamePane.setOpacity(0.3);
+        saveNamePane.setVisible(true);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void closeSaveName() {
+        gamePane.setOpacity(1);
+        saveNamePane.setVisible(false);
+        try {
+            save();
+            addText("Save successful!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void showExitConfirm() {
+        gamePane.setOpacity(0.3);
+        exitConfirmPane.setVisible(true);
+    }
+
+    /**
+     * Shows the exit confirmation pane.
+     */
+    @FXML
+    protected void closeExitConfirm() {
+        gamePane.setOpacity(1);
+        exitConfirmPane.setVisible(false);
     }
 }

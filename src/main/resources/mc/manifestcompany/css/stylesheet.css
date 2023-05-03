@@ -2,28 +2,39 @@
     src: url("DotGothic16-Regular.ttf");
 }
 
-.label {
+* {
     -fx-font-family: 'DotGothic16';
+}
+
+.label {
     -fx-font-size: 30;
 }
 
 .button {
-    -fx-font-family: 'DotGothic16';
     -fx-font-size: 25;
 }
 
+.game-button {
+    -fx-font-size: 30;
+}
+
+.save-load-button {
+    -fx-font-size: 20;
+}
+
 .stats-text {
-    -fx-font-family: 'DotGothic16';
     -fx-font-size: 20;
 }
 
 .date-text {
-    -fx-font-family: 'DotGothic16';
     -fx-font-size: 25;
 }
 
 .action-text {
-    -fx-font-family: 'DotGothic16';
+    -fx-font-size: 20;
+}
+
+.text-field {
     -fx-font-size: 20;
 }
 

@@ -108,17 +108,12 @@ public class Game {
     }
 
     /**
-     * @return the map of the company stats
+     * @return the list of companies
      */
-    public HashMap<Company, HashMap<Enum<DataType>, Integer>> getCompanyStats() {
-        HashMap<Company, HashMap<Enum<DataType>, Integer>> companyMap =
-                new HashMap<>();
-        companyMap.put(player, player.getStats());
-        for (Company npCompany:
-             npcQueue) {
-            companyMap.put(npCompany, npCompany.getStats());
-        }
-        return companyMap;
+    public List<Company> getCompanyList() {
+        List<Company> companyList = new ArrayList<>(npcQueue);
+        companyList.add(player);
+        return companyList;
     }
 
     /**
@@ -266,8 +261,7 @@ public class Game {
     }
 
     public List<Company> sortCompaniesBy(DataType dataType) {
-        List<Company> companyList = new ArrayList<>(npcQueue);
-        companyList.add(player);
+        List<Company> companyList = getCompanyList();
         companyList.sort(Company.comparatorBy(dataType));
 
         return companyList;
