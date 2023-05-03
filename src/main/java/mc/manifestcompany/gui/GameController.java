@@ -255,7 +255,7 @@ public class GameController {
         for (int i = 1; i <= 4; i++) {
             for (int j = 1; j <= 6; j++) {
                 for (Node node : dataChart.getChildren()) {
-                    if (node instanceof Text &&
+                    if ((node instanceof Text || node instanceof Label) &&
                             GridPane.getRowIndex(node) == i && GridPane.getColumnIndex(node) == j) {
                         dataChart.getChildren().remove(node);
                         break;
@@ -322,6 +322,7 @@ public class GameController {
 
         // go to next turn, changing the board, then update the grid
         this.game.nextTurn();
+        updateChart();
         updateGrid();
     }
 
