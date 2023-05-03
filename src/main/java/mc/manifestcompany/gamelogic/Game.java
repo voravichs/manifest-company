@@ -1,7 +1,10 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gamelogic;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
+import mc.manifestcompany.DataType;
+import mc.manifestcompany.company.*;
+import mc.manifestcompany.gui.Tile;
 
 import java.util.*;
 

@@ -1,5 +1,6 @@
-package mc.manifestcompany;
+package mc.manifestcompany.company;
 
+import mc.manifestcompany.DataType;
 import org.junit.Before;
 import org.junit.Test;
 

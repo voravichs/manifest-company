@@ -1,4 +1,4 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -14,6 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import mc.manifestcompany.*;
+import mc.manifestcompany.company.Company;
+import mc.manifestcompany.gamelogic.Game;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,7 +24,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 /**
  * Controls the GUI elements of the game screen.

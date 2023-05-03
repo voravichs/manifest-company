@@ -1,4 +1,4 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gui;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;

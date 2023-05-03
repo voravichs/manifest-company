@@ -1,4 +1,6 @@
-package mc.manifestcompany;
+package mc.manifestcompany.company;
+
+import mc.manifestcompany.DataType;
 
 import java.util.Comparator;
 import java.util.HashMap;

@@ -1,4 +1,6 @@
-package mc.manifestcompany;
+package mc.manifestcompany.company;
+
+import mc.manifestcompany.DataType;
 
 import java.util.ArrayList;
 import java.util.List;
