@@ -77,13 +77,19 @@ public class UserCompany extends Company {
     }
 
     @Override
-    public void setRevenue(int amount) { revenue.push(amount); }
+    public void setRevenue(int amount) {
+        revenue.push(amount);
+    }
 
     @Override
-    public void setCogs(int amount) { cogs.push(amount); }
+    public void setCogs(int amount) {
+        cogs.push(amount);
+    }
 
     @Override
-    public void setProfit(int amount) { profit.push(amount); }
+    public void setProfit(int amount) {
+        profit.push(amount);
+    }
 
     @Override
     public String getImageLink() {
@@ -91,12 +97,12 @@ public class UserCompany extends Company {
     }
 
     @Override
-    public List getFinancials() {
+    public List<Integer> getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
 
     @Override
-    public List<Stack> getFinancialHistory() {
+    public List<Stack<Integer>> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }
 
@@ -116,7 +122,7 @@ public class UserCompany extends Company {
         // Have enough cash to cover all expenses
         boolean enoughCash = -amount >= 0 && this.stats.get(DataType.CASH) >= -amount;
         // Can only sell until you have 1 tile left
-        boolean enoughTiles = tiles >= 0 && this.stats.get(DataType.TILES) - tiles >= 1;
+        boolean enoughTiles = tiles >= 0 || this.stats.get(DataType.TILES) - tiles >= 1;
         return enoughTiles && enoughCash;
     }
 

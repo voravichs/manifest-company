@@ -92,7 +92,7 @@ public abstract class Company {
      * in the order of: revenue, cogs, profit
      * @return
      */
-    public abstract List<Stack> getFinancialHistory();
+    public abstract List<Stack<Integer>> getFinancialHistory();
 
     public abstract Tile.TileType getTileType();
 

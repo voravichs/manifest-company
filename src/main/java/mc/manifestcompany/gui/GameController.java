@@ -99,7 +99,7 @@ public class GameController {
         initSidebar();
         updateGrid();
         initSpinners();
-        addText("Welcome to the company, manager!\nOpen the ACTIONS menu to start investing.");
+        addText("Open the ACTIONS menu to start investing.\n");
         date.setText("January 1970");
         transitionPane.setVisible(false);
         gamePane.setVisible(true);
@@ -154,7 +154,7 @@ public class GameController {
         ChangeListener<Object> totalUpdate = (observable, oldValue, newValue) -> {
             int total = marketSpinner.getValue() + rdSpinner.getValue() +
                         goodSpinner.getValue() + hrSpinner.getValue() +
-                        (1000 * tileSpinner.getValue());
+                        (300 * tileSpinner.getValue());
             totalInvest.setText("$" + -total);
             if (total < 0) {
                 totalInvest.setStyle("-fx-fill: green;");
@@ -187,7 +187,7 @@ public class GameController {
         hrSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
                 hrTotal.setText("$" + -hrSpinner.getValue()));
         tileSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            tileTotal.setText("$" + -1000 * tileSpinner.getValue());
+            tileTotal.setText("$" + -300 * tileSpinner.getValue());
             if (tileSpinner.getValue() < 0) {
                 tileTotal.setStyle("-fx-fill: green;");
             } else {

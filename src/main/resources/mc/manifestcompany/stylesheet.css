@@ -26,3 +26,7 @@
     -fx-font-family: 'DotGothic16';
     -fx-font-size: 20;
 }
+
+.hover-text:hover {
+    -fx-text-fill: "goldenrod";
+}

@@ -85,13 +85,19 @@ public class NPCCompany extends Company {
     }
 
     @Override
-    public void setRevenue(int amount) { revenue.push(amount); }
+    public void setRevenue(int amount) {
+        revenue.push(amount);
+    }
 
     @Override
-    public void setCogs(int amount) { cogs.push(amount); }
+    public void setCogs(int amount) {
+        cogs.push(amount);
+    }
 
     @Override
-    public void setProfit(int amount) { profit.push(amount); }
+    public void setProfit(int amount) {
+        profit.push(amount);
+    }
 
     @Override
     public String getImageLink() {
@@ -99,11 +105,12 @@ public class NPCCompany extends Company {
     }
 
     @Override
-    public List getFinancials() {
+    public List<Integer> getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
+
     @Override
-    public List<Stack> getFinancialHistory() {
+    public List<Stack<Integer>> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }
 

@@ -11,7 +11,7 @@ import mc.manifestcompany.gui.Tile;
 public interface CompanyAction {
 
     /**
-     * invests in a sector of a company. POSSIBLY SPLIT INTO MORE METHODS OR ANOTHER DESIGN PATTERN
+     * invests in a sector of a company.
      * @param num amount to invest
      * @param sector what sector to invest in
      * @param company the company performing the action

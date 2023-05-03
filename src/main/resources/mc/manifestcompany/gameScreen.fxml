@@ -166,7 +166,7 @@
                <Spinner fx:id="hrSpinner" layoutX="210.0" layoutY="190.0" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                <Text fx:id="totalInvest" layoutX="470.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" styleClass="action-text" text="\$0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                <Label layoutX="33.0" layoutY="85.0" text="INVEST" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-               <Text layoutX="300.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="action-text" text="Tile Price: $1000" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+               <Text layoutX="300.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="action-text" text="Tile Price: $300" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
                  <columnConstraints>
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
@@ -201,7 +201,12 @@
    <Pane fx:id="transitionPane" prefHeight="700.0" prefWidth="1200.0">
       <children>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="700.0" onMouseClicked="#init" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
-         <Label layoutX="450.0" layoutY="328.0" onMouseClicked="#init" text="Click anywhere to start" textFill="WHITE">
+         <Label layoutX="450.0" layoutY="328.0" onMouseClicked="#init" styleClass="hover-text" text="Click anywhere to start" textFill="WHITE">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Label>
+         <Label layoutX="383.0" layoutY="257.0" onMouseClicked="#init" text="Welcome to the company, manager!" textFill="WHITE">
             <font>
                <Font size="30.0" />
             </font>
