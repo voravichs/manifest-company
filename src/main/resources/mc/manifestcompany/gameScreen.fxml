@@ -125,8 +125,8 @@
       <children>
          <GridPane alignment="CENTER" layoutX="300.0" layoutY="25.0" prefHeight="650.0" prefWidth="600.0" style="-fx-background-color: white;">
            <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="35.0" prefWidth="100.0" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" percentWidth="40.0" prefWidth="248.0" />
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" percentWidth="45.0" prefWidth="248.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" percentWidth="25.0" prefWidth="248.0" />
            </columnConstraints>
            <rowConstraints>
@@ -175,7 +175,6 @@
                <Spinner fx:id="goodSpinner" layoutX="210.0" layoutY="135.0" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                <Spinner fx:id="hrSpinner" layoutX="210.0" layoutY="190.0" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                <Text fx:id="totalInvest" layoutX="470.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" styleClass="action-text" text="\$0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-               <Text fx:id="possibleToInvest" layoutX="470.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: green;" styleClass="action-text" text="Enter values to invest!" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
                <Label layoutX="33.0" layoutY="85.0" text="INVEST" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                <Text layoutX="300.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="action-text" text="Tile Price: $1000" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
@@ -204,6 +203,7 @@
                      <Text fx:id="tileTotal" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" styleClass="action-text" text="\$0" />
                   </children>
                </VBox>
+               <Text fx:id="possibleToInvest" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: green;" styleClass="action-text" text="Enter values to invest!" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
             </children>
          </GridPane>
       </children>

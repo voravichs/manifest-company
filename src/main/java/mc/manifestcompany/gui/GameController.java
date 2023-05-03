@@ -164,11 +164,11 @@ public class GameController {
                 totalInvest.setStyle("-fx-fill: red;");
             }
             // Update possible to buy
-            if (game.getPlayer().checkCash(-1 * total)) {
+            if (game.getPlayer().checkValidInvest(-1 * total, -1 * tileSpinner.getValue())) {
                 possibleToInvest.setText("Investment possible!");
                 possibleToInvest.setStyle("-fx-fill: green;");
             } else {
-                possibleToInvest.setText("Not enough cash!");
+                possibleToInvest.setText("Invalid investment! \n (not enough money or tiles)");
                 possibleToInvest.setStyle("-fx-fill: red;");
             }
         };
