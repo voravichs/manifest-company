@@ -88,7 +88,7 @@
     </BorderPane>
    <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0" visible="false">
       <children>
-         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" prefHeight="550.0" prefWidth="1200.0" style="-fx-background-color: lightgrey;" stylesheets="@css/chart.css">
+         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" layoutX="200.0" layoutY="111.0" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: lightgrey;" stylesheets="@css/chart.css">
            <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="0.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="19.0" prefWidth="1089.0" />
@@ -106,7 +106,7 @@
                <RowConstraints maxHeight="448.0" minHeight="10.0" percentHeight="20.0" prefHeight="369.0" vgrow="SOMETIMES" />
            </rowConstraints>
          </GridPane>
-         <Button layoutX="564.0" layoutY="598.0" mnemonicParsing="false" onAction="#closeData" text=" X ">
+         <Button layoutX="252.0" layoutY="131.0" mnemonicParsing="false" onAction="#closeData" text="x">
             <font>
                <Font size="25.0" />
             </font>

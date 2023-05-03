@@ -110,7 +110,8 @@ public class GameController {
         initChart();
         updateChart();
         updateGrid();
-        addText("Open the ACTIONS menu to start investing.\n");
+        addText("Open the ACTIONS menu to\n");
+        addText("start investing.\n");
         date.setText("January 1970");
         startPane.setVisible(false);
         gamePane.setVisible(true);
@@ -325,9 +326,6 @@ public class GameController {
      */
     @FXML
     protected void advanceTurn() {
-        // Add text to the box showing the turn has advanced
-        addText("Advancing Turn...\n");
-
         // go to next turn, changing the board, then update the grid
         this.game.nextTurn();
         updateChart();
@@ -337,6 +335,9 @@ public class GameController {
         transitionPane.setVisible(true);
         turnNum++;
         turnText.setText("Turn " + turnNum);
+
+        // Add text to the box showing the turn has advanced
+        addText("[TURN " + turnNum + "]\n");
     }
 
     /**
@@ -347,7 +348,7 @@ public class GameController {
     @FXML
     protected void addText(String text) {
         // text stack only stores 10 most recent texts
-        if (textQueue.size() < 5) {
+        if (textQueue.size() < 9) {
             Text nextText = new Text(text);
             textBox.getChildren().add(nextText);
             textQueue.add(nextText);
@@ -381,7 +382,10 @@ public class GameController {
                 game.getPlayer().tiles(tileSpinner.getValue(), "Sell", game.getTileGrid());
             }
 
-            addText("Player Investing decision recorded!\nPress NEXT TURN to continue.\n");
+            addText("Player Investing \n");
+            addText("decision recorded!\n");
+            addText("Press NEXT TURN \n");
+            addText("to continue.\n");
 
             closeActions();
         }
@@ -407,7 +411,7 @@ public class GameController {
      */
     @FXML
     protected void showData() {
-        gamePane.setOpacity(0.0);
+        gamePane.setOpacity(0.3);
         dataPane.setVisible(true);
     }
 

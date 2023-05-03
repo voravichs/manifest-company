@@ -6,3 +6,7 @@ Text {
     -fx-font-family: 'DotGothic16';
     -fx-font-size: 25;
 }
+
+.label {
+    -fx-font-size: 20;
+}
