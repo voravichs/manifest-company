@@ -1,24 +1,23 @@
-package mc.manifestcompany;
+package mc.manifestcompany.company;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import mc.manifestcompany.DataType;
+
+import java.util.*;
 
 /**
- * Subclass of Player that defines a Non-Playable Company (NPC).
- * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM USER
+ * Subclass of Player that defines a Playable Company of the user.
+ * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM NPC
  * @author Team Manifest Company
  */
-public class NPCCompany extends Company {
+public class UserCompany extends Company {
     private String name;
-    private NPCActionImpl actions;
+    private CompanyAction actions;
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
     private HashMap<Enum<DataType>, Integer> stats;
 
-    public NPCCompany(String name, NPCActionImpl actions) {
+    public UserCompany(String name, CompanyAction actions) {
         this.name = name;
         this.actions = actions;
         this.stats = new HashMap<>();
@@ -27,21 +26,19 @@ public class NPCCompany extends Company {
         this.profit = new Stack <>();
         initializeStats();
     }
-
     @Override
     public void initializeStats() {
         this.stats.put(DataType.PRICE, 50);
-        this.stats.put(DataType.MULTIPLIER, 1);
+        this.stats.put(DataType.MULTIPLIER, 0);
         this.stats.put(DataType.CAPACITY, 15);
         this.stats.put(DataType.COST, 30);
         this.stats.put(DataType.CASH, 500);
         this.stats.put(DataType.TILES, 1);
     }
-
     @Override
-    public void invest(int num, String sector) {
+    public void invest(int amount, String sector) {
         System.out.println("Investing in " + this.name);
-        actions.invest(num, sector, this);
+        actions.invest(amount, sector, this);
     }
 
     @Override
@@ -58,10 +55,6 @@ public class NPCCompany extends Company {
     @Override
     public String getName() {
         return this.name;
-    }
-
-    public NPCActionImpl getActions() {
-        return this.actions;
     }
 
     @Override
@@ -86,7 +79,23 @@ public class NPCCompany extends Company {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
     @Override
+
     public List<Stack> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);
     }
+
+    //comparators
+//    public static Comparator<UserCompany> comparatorByCash() {
+//        return new Comparator<UserCompany>() {
+//            @Override
+//            public int compare(UserCompany o1, UserCompany o2) {
+//                return o2.stats.get(DataType.CASH) - o1.stats.get(DataType.CASH);
+//            }
+//        };
+//    }
+
+
+
+
+
 }

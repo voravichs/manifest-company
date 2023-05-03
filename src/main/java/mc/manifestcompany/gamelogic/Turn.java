@@ -1,4 +1,6 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gamelogic;
+
+import mc.manifestcompany.company.Company;
 
 import java.util.Queue;
 

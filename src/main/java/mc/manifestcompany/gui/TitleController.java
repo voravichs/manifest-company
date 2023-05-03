@@ -1,4 +1,4 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gui;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import mc.manifestcompany.App;
 
 import java.io.IOException;
 

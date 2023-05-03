@@ -1,5 +1,7 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gamelogic;
 
+import mc.manifestcompany.DataType;
+import mc.manifestcompany.company.*;
 import org.junit.*;
 
 import java.util.ArrayDeque;

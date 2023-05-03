@@ -1,4 +1,7 @@
-package mc.manifestcompany;
+package mc.manifestcompany.gamelogic;
+
+import mc.manifestcompany.DataType;
+import mc.manifestcompany.company.Company;
 
 import java.util.HashMap;
 import java.util.Queue;

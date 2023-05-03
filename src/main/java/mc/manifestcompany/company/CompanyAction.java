@@ -1,4 +1,4 @@
-package mc.manifestcompany;
+package mc.manifestcompany.company;
 
 /**
  * Interface for interacting with Companies.
