@@ -38,10 +38,6 @@ import java.util.*;
  */
 public class GameController {
 
-    /* Final Variables */
-    public static final int X_SIZE = 20;
-    public static final int Y_SIZE = 20;
-
     /* FXML Variables */
     // StackPane Layers
     @FXML
@@ -102,14 +98,15 @@ public class GameController {
     private TextField saveNameEntry;
 
     /* Instance Variables */
-    private final Game game;
+    private Game game;
     private final Queue<Text> textQueue;
-    private int turnNum;
 
     public GameController() {
-        this.game = new Game(X_SIZE, Y_SIZE);
         this.textQueue = new LinkedList<>();
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     /**
@@ -122,12 +119,12 @@ public class GameController {
         initChart();
         updateChart();
         updateGrid();
+        addText("[TURN " + game.getTurnNum() + "]\n");
         addText("Open the ACTIONS menu to\n");
         addText("start investing.\n");
         date.setText("January 1970");
         startPane.setVisible(false);
         gamePane.setVisible(true);
-        this.turnNum = 1;
     }
 
     /**
@@ -345,11 +342,11 @@ public class GameController {
 
         // show the transition pane, set the text for the turn
         transitionPane.setVisible(true);
-        turnNum++;
-        turnText.setText("Turn " + turnNum);
+        game.setTurnNum(game.getTurnNum() + 1);
+        turnText.setText("Turn " + game.getTurnNum());
 
         // Add text to the box showing the turn has advanced
-        addText("[TURN " + turnNum + "]\n");
+        addText("[TURN " + game.getTurnNum() + "]\n");
     }
 
     /**
@@ -421,7 +418,7 @@ public class GameController {
      */
     @FXML
     protected void save() throws IOException {
-        FileHandler.save(game.getTileGrid(), game.getCompanyList(), saveNameEntry.getText());
+        FileHandler.save(game.getTileGrid(), game.getCompanyList(), game.getTurnNum(), saveNameEntry.getText());
     }
 
     /**
