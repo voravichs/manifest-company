@@ -1,5 +1,6 @@
 package mc.manifestcompany.company;
 
+import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gui.Tile;
 
@@ -104,6 +105,15 @@ public abstract class Company {
             }
         };
     }
+
+    public abstract Stack<Point2D> getTileStack();
+
+    public abstract void addToStack(Point2D newTile);
+
+    public abstract Point2D popFromStack();
+
+    //update tiles value
+
 
 
 

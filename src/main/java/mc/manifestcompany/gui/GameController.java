@@ -334,9 +334,9 @@ public class GameController {
      * Advances to the next turn
      */
     @FXML
-    protected void advanceTurn() {
+    protected void advanceTurn(Tile[][] grid) {
         // go to next turn, changing the board, then update the grid
-        this.game.nextTurn();
+        this.game.nextTurn(grid);
         updateChart();
         updateGrid();
 

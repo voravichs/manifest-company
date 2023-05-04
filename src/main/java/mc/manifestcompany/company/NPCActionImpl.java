@@ -1,10 +1,11 @@
 package mc.manifestcompany.company;
 
+import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gui.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class NPCActionImpl extends CompanyActionImpl {
     private Random random;
@@ -40,7 +41,7 @@ public class NPCActionImpl extends CompanyActionImpl {
         return random.nextInt(maxTiles) + 1;
     }
 
-    public void performRandomAction(NPCCompany company) {
+    public void performRandomAction(NPCCompany company, Tile[][] grid) {
         int availableCash = company.getStats().get(DataType.CASH);
         boolean canInvest = availableCash > 0;
         boolean canBuyTiles = availableCash >= TILE_COST;
@@ -60,10 +61,10 @@ public class NPCActionImpl extends CompanyActionImpl {
             if (actionChoice == 0) {
                 invest(0, "", company);
             } else if (actionChoice == 1) {
-                tiles(0, "Purchase", company);
+                tiles(0, "Purchase", company, grid);
             }
         } else if (availableTiles > 0) {
-            tiles(0, "Sell", company);
+            tiles(0, "Sell", company, grid);
         }
     }
 
@@ -94,7 +95,7 @@ public class NPCActionImpl extends CompanyActionImpl {
         company.setStats(this.stats);
     }
 
-    public void tiles(int numTile, String method, NPCCompany company) {
+    public void tiles(int numTile, String method, NPCCompany company, Tile[][] grid) {
         int randomTileCount = getRandomTileCount(company);
 
         System.out.println("NPC DECISION: " + method + " " + randomTileCount +
@@ -102,8 +103,8 @@ public class NPCActionImpl extends CompanyActionImpl {
         this.stats = company.getStats();
 
         boolean success = switch (method) {
-            case "Purchase" -> purchaseTiles(numTile);
-            case "Sell" -> sellTiles(numTile);
+            case "Purchase" -> purchaseTiles(numTile, grid, company.getTileType(), company);
+            case "Sell" -> sellTiles(numTile, grid, company);
             default -> false;
         };
         if (!success) {
@@ -194,13 +195,75 @@ public class NPCActionImpl extends CompanyActionImpl {
      * @param numTiles number of tiles to purchase - each tile is $300
      * @return whether action was successful
      */
-    private boolean purchaseTiles(int numTiles) {
+    private boolean purchaseTiles(int numTiles, Tile[][] grid, Tile.TileType tileType, Company company) {
         int cost = numTiles * TILE_COST;
         if(!handleCash(-cost)) {
             return false;
         }
-        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
+
+        //handle below
+//        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
+
         // TODO: TILE HANDLING - BFS to add a new tile
+
+        int gridSize = grid.length;
+
+        int startX = 0;
+        int startY = 0;
+
+        //check which npc this is by tileType
+        if (tileType == Tile.TileType.CLAIMED_P2) {
+            startX = 1;
+            startY = 0;
+        } else if (tileType == Tile.TileType.CLAIMED_P3) {
+            startX = 0;
+            startY = 1;
+        } else if (tileType == Tile.TileType.CLAIMED_P4) {
+            startX = 1;
+            startY = 1;
+        }
+
+        int tilesPurchased = 0;
+
+        for (int i = 0; i < numTiles; i++) {
+            Point2D newTile = findTheNextTile(startX, startY, tileType, grid);
+
+            //find an adjacent tile
+            if (newTile.getX() != -1) {
+                tilesPurchased++;
+
+                grid[(int)newTile.getX()][(int)newTile.getY()].setType(tileType);
+
+                //add the tile to the company's stack
+                company.addToStack(newTile);
+
+                //no adjacent tiles available, iterate over the grid to find an empty tile
+            } else {
+                boolean findAnAvailableTile = false;
+                for (int j = 0; j < gridSize; j++) {
+                    for (int k = 0; k < gridSize; k++) {
+                        if (grid[j][k].getType() == Tile.TileType.EMPTY) {
+                            grid[j][k].setType(tileType);
+
+                            //add the tile to the company's stack
+                            company.addToStack(newTile);
+                            findAnAvailableTile = true;
+                        }
+                    }
+                }
+
+                //grid is already full
+                if (!findAnAvailableTile) {
+                    int tilesForTheCompany = this.stats.get(DataType.TILES);
+                    this.stats.put(DataType.TILES, tilesForTheCompany + tilesPurchased);
+                    return false;
+                }
+            }
+        }
+
+        //desired number of tiles purchased
+        int tilesForTheCompany = this.stats.get(DataType.TILES);
+        this.stats.put(DataType.TILES, tilesForTheCompany + numTiles);
         return true;
     }
 
@@ -209,7 +272,7 @@ public class NPCActionImpl extends CompanyActionImpl {
      * @param numTiles number of tiles to sell - each tile is worth $100
      * @return whether action was successful
      */
-    private boolean sellTiles(int numTiles) {
+    private boolean sellTiles(int numTiles, Tile[][] grid, Company company) {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
@@ -217,7 +280,49 @@ public class NPCActionImpl extends CompanyActionImpl {
         handleCash(profit);
         this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
         // TODO: TILE HANDLING - remove most recent tile
+        for (int i = 0; i < numTiles; i++) {
+            Point2D tileToBeRemoved = company.popFromStack();
+            grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.LOST);
+        }
         return true;
+    }
+
+    private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType, Tile[][] grid) {
+        Queue<Point2D> q = new LinkedList<>();
+        boolean[][] visited = new boolean[grid.length][grid.length];
+
+        q.add(new Point2D(startingX, startingY));
+
+        while (!q.isEmpty()) {
+            Point2D currCoor = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int adjX = (int)currCoor.getX() + rowOffset[i];
+                int adjY = (int)currCoor.getY() + colOffset[i];
+
+                //check if it's in bound
+                if (adjX < 0 || adjY < 0 || adjX >= grid.length || adjY >= grid.length || visited[adjX][adjY]) {
+                    continue;
+                }
+
+                // in bound, create a
+                Tile adjTile = grid[adjX][adjY];
+                //if the current tile's neighbor is also a tile of the current player
+                if (adjTile.getType() == playerType) {
+                    Point2D adj = new Point2D(adjX, adjY);
+                    q.add(adj);
+                    visited[adjX][adjY] = true;
+
+                    //if the current tile(already occupied by the player) has an empty neighbor return it!
+                } else if (adjTile.getType() == Tile.TileType.EMPTY) {
+                    return new Point2D(adjX, adjY);
+                }
+
+            }
+        }
+
+        return new Point2D(-1, -1);
+
     }
 
 }
