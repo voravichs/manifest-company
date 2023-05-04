@@ -1,5 +1,6 @@
 package mc.manifestcompany.company;
 
+import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gui.Tile;
 
@@ -23,7 +24,7 @@ public class NPCCompany extends Company {
     private HashMap<Enum<DataType>, Integer> stats;
     private Tile.TileType tileType;
 
-    private Stack<Tile> tileStack;
+    private Stack<Point2D> tileStack;
 
     public NPCCompany(String name, NPCActionImpl actions, Tile.TileType tileType, String imageLink) {
         this.name = name;
@@ -119,7 +120,17 @@ public class NPCCompany extends Company {
         return tileType;
     }
 
-    public Stack<Tile> getTileStack() {
+    @Override
+    public Stack<Point2D> getTileStack() {
         return this.tileStack;
+    }
+
+    @Override
+    public void addToStack(Point2D newTile) {
+        this.tileStack.push(newTile);
+    }
+    @Override
+    public Point2D popFromStack() {
+        return this.tileStack.pop();
     }
 }

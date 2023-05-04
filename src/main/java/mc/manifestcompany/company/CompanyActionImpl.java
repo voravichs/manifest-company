@@ -50,8 +50,8 @@ public class CompanyActionImpl implements CompanyAction {
         System.out.println(method + " " + numTile +
                 " tiles for company: " + company.getName());
         boolean success = switch (method) {
-            case "Purchase" -> purchaseTiles(numTile, grid, company.getTileType());
-            case "Sell" -> sellTiles(numTile, grid);
+            case "Purchase" -> purchaseTiles(numTile, grid, company.getTileType(), company);
+            case "Sell" -> sellTiles(numTile, grid, company);
             default -> false;
         };
         if (!success) {
@@ -142,29 +142,60 @@ public class CompanyActionImpl implements CompanyAction {
      * @param numTiles number of tiles to purchase - each tile is $300
      * @return whether action was successful
      */
-    private boolean purchaseTiles(int numTiles, Tile[][] grid, Tile.TileType tileType) {
+    private boolean purchaseTiles(int numTiles, Tile[][] grid, Tile.TileType tileType, Company company) {
         int gridSize = grid.length;
         int cost = numTiles * TILE_COST;
         if(!handleCash(-cost)) {
             return false;
         }
-        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
+//        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
         // TODO: TILE HANDLING - BFS to add a new tile
 
         int startX = 0;
         int startY = 0;
 
+        int tilesPurchased = 0;
+
 
         for (int i = 0; i < numTiles; i++) {
             Point2D newTile = findTheNextTile(startX, startY, tileType, grid);
 
+            //find an adjacent tile
             if (newTile.getX() != -1) {
-//                grid[(int)newTile.getX()][(int)newTile.getY()] = new Tile(newTile, );
+                tilesPurchased++;
+
+                grid[(int)newTile.getX()][(int)newTile.getY()].setType(tileType);
+
+                //add the tile to the company's stack
+                company.addToStack(newTile);
+
+                //no adjacent tiles available, iterate over the grid to find an empty tile
+            } else {
+                boolean findAnAvailableTile = false;
+                for (int j = 0; j < gridSize; j++) {
+                    for (int k = 0; k < gridSize; k++) {
+                        if (grid[j][k].getType() == Tile.TileType.EMPTY) {
+                            grid[j][k].setType(tileType);
+
+                            //add the tile to the company's stack
+                            company.addToStack(newTile);
+                            findAnAvailableTile = true;
+                        }
+                    }
+                }
+
+                //grid is already full
+                if (!findAnAvailableTile) {
+                    int tilesForTheCompany = this.stats.get(DataType.TILES);
+                    this.stats.put(DataType.TILES, tilesForTheCompany + tilesPurchased);
+                    return false;
+                }
             }
         }
 
-
-
+        //desired number of tiles purchased
+        int tilesForTheCompany = this.stats.get(DataType.TILES);
+        this.stats.put(DataType.TILES, tilesForTheCompany + numTiles);
         return true;
     }
 
@@ -173,7 +204,7 @@ public class CompanyActionImpl implements CompanyAction {
      * @param numTiles number of tiles to sell - each tile is worth $100
      * @return whether action was successful
      */
-    private boolean sellTiles(int numTiles, Tile[][] grid) {
+    private boolean sellTiles(int numTiles, Tile[][] grid, Company company) {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
@@ -181,6 +212,12 @@ public class CompanyActionImpl implements CompanyAction {
         handleCash(profit);
         this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
         // TODO: TILE HANDLING - remove most recent tile
+
+        for (int i = 0; i < numTiles; i++) {
+            Point2D tileToBeRemoved = company.popFromStack();
+            grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.EMPTY);
+        }
+
         return true;
     }
 
