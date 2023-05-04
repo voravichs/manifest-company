@@ -111,7 +111,7 @@ public class Game {
     /**
      * Updates all the necessary components when user advances the turn
      */
-    public void nextTurn() {
+    public void nextTurn(Tile[][] grid) {
 //         TODO: PLACEHOLDER: claim hardcoded tiles
 //        int arrayEndIdx = (int) squareSize - 1;
 //        claimTile(0,1, Tile.TileType.CLAIMED_P1);
@@ -124,7 +124,7 @@ public class Game {
 
         for (Company npc : npcQueue) {
             NPCCompany npcCompany = (NPCCompany) npc;
-            npcCompany.getActions().performRandomAction(npcCompany);
+            npcCompany.getActions().performRandomAction(npcCompany, grid);
         }
 
         turn.turn(numGoods, player);

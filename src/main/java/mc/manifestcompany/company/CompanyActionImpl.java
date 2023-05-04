@@ -215,7 +215,7 @@ public class CompanyActionImpl implements CompanyAction {
 
         for (int i = 0; i < numTiles; i++) {
             Point2D tileToBeRemoved = company.popFromStack();
-            grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.EMPTY);
+            grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.LOST);
         }
 
         return true;
