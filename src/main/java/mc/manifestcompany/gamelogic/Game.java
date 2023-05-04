@@ -15,6 +15,8 @@ import java.util.*;
 public class Game {
     /* Final Variables */
     public static final int GRID_SIZE_X = 400;
+    public static final int X_SIZE = 20;
+    public static final int Y_SIZE = 20;
 
     /* Instance Variables */
     // TileGrid
@@ -37,6 +39,8 @@ public class Game {
     static int[] rowOffset = {-1, 0, 1, 0};
     static int[] colOffset = { 0, 1, 0, -1 };
 
+    // Turns
+    private int turnNum;
 
     public Game(int xSize, int ySize) {
         // Creates a tile array of x*y size
@@ -51,6 +55,9 @@ public class Game {
 
         // initializes the players
         initPlayers();
+
+        // set the turn number
+        this.turnNum = 1;
     }
 
     /**
@@ -100,21 +107,6 @@ public class Game {
         tileGrid[x][y].setType(playerType);
     }
 
-    /**
-     * @return the 2D grid of tiles
-     */
-    public Tile[][] getTileGrid() {
-        return tileGrid;
-    }
-
-    /**
-     * @return the list of companies
-     */
-    public List<Company> getCompanyList() {
-        List<Company> companyList = new ArrayList<>(npcQueue);
-        companyList.add(player);
-        return companyList;
-    }
 
     /**
      * Updates all the necessary components when user advances the turn
@@ -267,6 +259,8 @@ public class Game {
         return companyList;
     }
 
+    /* ***** GETTERS/SETTERS ***** */
+
     public UserCompany getPlayer() {
         return this.player;
     }
@@ -275,4 +269,35 @@ public class Game {
         return this.npcQueue;
     }
 
+
+    /**
+     * @return the 2D grid of tiles
+     */
+    public Tile[][] getTileGrid() {
+        return tileGrid;
+    }
+
+    /**
+     * Sets the tile grid from a loaded save file
+     */
+    public void loadTileGrid(Tile[][] tileGrid) {
+        this.tileGrid = tileGrid;
+    }
+
+    /**
+     * @return the list of companies
+     */
+    public List<Company> getCompanyList() {
+        List<Company> companyList = new ArrayList<>(npcQueue);
+        companyList.add(player);
+        return companyList;
+    }
+
+    public int getTurnNum() {
+        return turnNum;
+    }
+
+    public void setTurnNum(int turnNum) {
+        this.turnNum = turnNum;
+    }
 }

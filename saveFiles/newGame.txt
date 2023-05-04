@@ -1,0 +1,28 @@
+tileMap 20 20
+1 E E E E E E E E E E E E E E E E E E 2 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+3 E E E E E E E E E E E E E E E E E E 4 
+companies
+50 1 15 30 500 1 
+50 1 15 30 500 1 
+50 1 15 30 500 1 
+50 0 15 30 500 1 
+turn 
+1

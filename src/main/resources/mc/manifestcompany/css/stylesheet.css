@@ -38,6 +38,10 @@
     -fx-font-size: 20;
 }
 
+.load-text {
+    -fx-font-size: 25;
+}
+
 .hover-text:hover {
     -fx-text-fill: "goldenrod";
 }
