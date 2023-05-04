@@ -88,8 +88,8 @@ public class FileHandler {
         // init a new tileGrid to load into
         Tile[][] tileGrid = new Tile[xSize][ySize];
         // Loop through the save file's grid
-        int y = 0;
-        for (int x = 0; x < xSize; x++) {
+        int x = 0;
+        for (int y = 0; y < xSize; y++) {
             String line = reader.readLine();
             String[] splitLine = line.split(" ");
             for (String tile: splitLine) {
@@ -108,9 +108,9 @@ public class FileHandler {
                         new Rectangle(squareSize,squareSize),
                         new Point2D(x * squareSize, y * squareSize),
                         type);
-                y++;
+                x++;
             }
-            y = 0;
+            x = 0;
         }
         // Load the tileGrid, overwriting the default one
         game.loadTileGrid(tileGrid);
