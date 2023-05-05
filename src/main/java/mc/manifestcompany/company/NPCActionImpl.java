@@ -3,6 +3,7 @@ package mc.manifestcompany.company;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
 
 import java.util.*;
@@ -212,15 +213,15 @@ public class NPCActionImpl extends CompanyActionImpl {
         int startY = 0;
 
         //check which npc this is by tileType
+        double squareSize = (double) Game.GRID_SIZE_X / Game.X_SIZE;
+        int arrayEndIdx = (int) squareSize - 1;
         if (tileType == Tile.TileType.CLAIMED_P2) {
-            startX = 1;
-            startY = 0;
+            startX = arrayEndIdx;
         } else if (tileType == Tile.TileType.CLAIMED_P3) {
-            startX = 0;
-            startY = 1;
+            startY = arrayEndIdx;
         } else if (tileType == Tile.TileType.CLAIMED_P4) {
-            startX = 1;
-            startY = 1;
+            startX = arrayEndIdx;
+            startY = arrayEndIdx;
         }
 
         int tilesPurchased = 0;
