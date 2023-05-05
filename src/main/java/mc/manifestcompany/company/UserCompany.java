@@ -120,10 +120,10 @@ public class UserCompany extends Company {
      * @return whether the action was successful
      */
     public boolean checkValidInvest(int amount, int tiles) {
-        // Have enough cash to cover all expenses
-        boolean enoughCash = -amount >= 0 && this.stats.get(DataType.CASH) >= -amount;
-        // Can only sell until you have 1 tile left
-        boolean enoughTiles = tiles >= 0 || this.stats.get(DataType.TILES) - tiles >= 1;
+        // Have enough cash to cover all expenses, always have enough when selling
+        boolean enoughCash = -amount >= 0 || this.stats.get(DataType.CASH) >= -amount;
+        // Can only sell until you have 1 tile left, can always buy if you have money (checked above)
+        boolean enoughTiles = -tiles >= 0 || this.stats.get(DataType.TILES) - tiles >= 1;
         return enoughTiles && enoughCash;
     }
 
