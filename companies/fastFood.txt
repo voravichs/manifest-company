@@ -1,0 +1,4 @@
+Player,images/playerfastfood.png
+WacMondalds,images/wacmonalds.png
+Queso Queen,images/quesoqueen.png
+Pizza Shack,images/pizzashack.png

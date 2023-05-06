@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 public class Tile extends FXShape {
 
     private TileType type;
+
     public Tile(Rectangle square, Point2D location, TileType type) {
         super(square, location);
         this.type = type;

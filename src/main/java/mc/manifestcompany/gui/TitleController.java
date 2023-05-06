@@ -9,10 +9,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import mc.manifestcompany.App;
@@ -35,18 +37,32 @@ public class TitleController {
     @FXML
     private Pane loadPane;
     @FXML
+    private Pane levelSelectPane;
+    @FXML
+    private Pane companyNamePane;
+    @FXML
+    private TextField companyNameInput;
+    @FXML
     private FlowPane loadFiles;
+
+    private Level levelChosen;
+
+    @FXML
+    protected void startNewGame(ActionEvent event) throws IOException {
+        String playerCompanyName = companyNameInput.getText();
+        switchToGameScreen(event, playerCompanyName);
+    }
 
     /**
      * Switches to the game screen.
      * @param event click event
      * @throws IOException IO exception thrown if fxml file cannot be found
      */
-    public void switchToGameScreen(ActionEvent event) throws IOException {
+    private void switchToGameScreen(ActionEvent event, String playerCompanyName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("gameScreen.fxml"));
         Parent root = fxmlLoader.load();
         GameController controller = fxmlLoader.getController();
-        controller.setGame(new Game(Game.X_SIZE,Game.Y_SIZE));
+        controller.setGame(new Game(Game.X_SIZE,Game.Y_SIZE, playerCompanyName, levelChosen.file));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1200, 700);
         stage.setScene(scene);
@@ -96,6 +112,9 @@ public class TitleController {
         loadPane.setVisible(false);
     }
 
+    /**
+     * Loads the list of save files stored in the saveFile directory.
+     */
     private void loadSaveFiles() {
         // Clear previous files
         ObservableList<Node> files = loadFiles.getChildren();
@@ -120,72 +139,36 @@ public class TitleController {
         }
     }
 
-//    /**
-//     * Called upon clicking the program at the start.
-//     */
-//    @FXML
-//    protected void start() {
-//        if (!started) {
-//            started = true;
-//            centerTitlePane.getChildren().remove(startBox);
-//
-//            // GridPane
-//            GridPane gridPane = new GridPane();
-//            gridPane.setPrefSize(600, 300);
-//            gridPane.setVgap(40);
-//            gridPane.setHgap(40);
-//            gridPane.setAlignment(Pos.CENTER);
-//            centerTitlePane.setCenter(gridPane);
-//
-//            // Buttons
-//            Button b1 = new Button("New Game");
-//            b1.setFont(new Font(30));
-//            Button b2 = new Button("Load");
-//            b2.setFont(new Font(30));
-//            Button b3 = new Button("Options");
-//            b3.setFont(new Font(30));
-//            Button b4 = new Button("Quit");
-//            b4.setFont(new Font(30));
-//            gridPane.add(b1,0,0);
-//            gridPane.add(b2, 1,0);
-//            gridPane.add(b3,0,1);
-//            gridPane.add(b4,1,1);
-//
-//            titleAnimation();
-//        }
-//    }
+    @FXML
+    protected void showLevelSelect() {
+        levelSelectPane.setVisible(true);
+    }
 
-//    private void titleAnimation() {
-//        List<Rectangle> rectList = new ArrayList<>();
-//        Boolean[][] blockArray = new Boolean[6][14];
-//        while (true) {
-//            int randOffset = (int) (Math.random() * 6);
-//            Rectangle rect = new Rectangle(50 * randOffset, 0, 50, 50);
-//            rect.setFill(Color.WHITE);
-//            rect.setStroke(Color.BLACK);
-//            leftTitlePane.getChildren().add(rect);
-//
-//            // Keyframe
-//            KeyFrame kf = new KeyFrame(Duration.millis(50),
-//                    (ActionEvent e) -> dropBlock(rect, randOffset, blockArray));
-//
-//            Timeline tl = new Timeline(kf);
-//
-//            tl.setCycleCount(20);
-//            tl.play();
-//        }
-//    }
+    @FXML
+    protected void closeLevelSelect() {
+        levelSelectPane.setVisible(false);
+    }
 
-//    private void dropBlock(Rectangle rect, int offset, Boolean[][] blockArray) {
-//
-//        for (int i = 0; i < 14; i++) {
-//            if (blockArray[offset][i]) {
-//
-//            }
-//        }
-//        if (rect.getY() + 50 < 700) {
-//            rect.setY(rect.getY() + 50);
-//        }
-//
-//    }
+    @FXML
+    protected void showCompanyName() {
+        levelSelectPane.setOpacity(0.3);
+        mainMenuPane.setOpacity(0.0);
+        companyNamePane.setVisible(true);
+    }
+
+    @FXML
+    protected void loadFastFoodLevel() {
+        showCompanyName();
+        levelChosen = Level.FAST_FOOD;
+    }
+
+    public enum Level {
+        FAST_FOOD("companies/fastFood.txt");
+
+        private final String file;
+
+        Level(String file) {
+            this.file = file;
+        }
+    }
 }

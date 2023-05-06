@@ -22,7 +22,4 @@ abstract class FXShape {
         return this.square;
     }
 
-    public Point2D getLocation() {
-        return this.location;
-    }
 }

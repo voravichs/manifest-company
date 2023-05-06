@@ -6,6 +6,9 @@ import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
 import mc.manifestcompany.gui.Tile;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -13,10 +16,14 @@ import java.util.*;
  * @author Team Manifest Company
  */
 public class Game {
-    /* Final Variables */
+    /* Final Static Variables */
     public static final int GRID_SIZE_X = 400;
     public static final int X_SIZE = 20;
     public static final int Y_SIZE = 20;
+
+    // Direction vectors for BFS
+    public static int[] ROW_OFFSET = {-1, 0, 1, 0};
+    public static int[] COL_OFFSET = { 0, 1, 0, -1 };
 
     /* Instance Variables */
     // TileGrid
@@ -35,14 +42,13 @@ public class Game {
     // market price for the goods, could change if an event happens
     private int marketPrice = 100;
 
-    // Direction vectors for BFS
-    static int[] rowOffset = {-1, 0, 1, 0};
-    static int[] colOffset = { 0, 1, 0, -1 };
-
     // Turns
     private int turnNum;
 
-    public Game(int xSize, int ySize) {
+    // Inputs from new game
+    private final String playerCompanyName;
+
+    public Game(int xSize, int ySize, String playerCompanyName, String levelChosen) {
         // Creates a tile array of x*y size
         tileGrid = new Tile[xSize][ySize];
         this.xSize = xSize;
@@ -53,8 +59,17 @@ public class Game {
         // Initializes the tileGrid
         initTileGrid();
 
+        // initializes the level
+        HashMap<String, String> levelCompanies;
+        try {
+            levelCompanies = initLevel(levelChosen);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         // initializes the players
-        initPlayers();
+        this.playerCompanyName = playerCompanyName;
+        initPlayers(levelCompanies);
 
         // set the turn number
         this.turnNum = 1;
@@ -78,7 +93,7 @@ public class Game {
     /**
      * Initializes the players by granting initial tiles and stats.
      */
-    public void initPlayers() {
+    public void initPlayers(HashMap<String, String> levelCompanies) {
         // Set the corner squares to players
         int arrayEndIdx = (int) squareSize - 1;
         claimTile(0,0, Tile.TileType.CLAIMED_P1);
@@ -86,15 +101,37 @@ public class Game {
         claimTile(arrayEndIdx,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
-        // TODO: DYNAMIC NAMES AND LINKS
-        this.player = new UserCompany("Player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
-        Company npc1 = new NPCCompany("WacMondalds", new NPCActionImpl(), Tile.TileType.CLAIMED_P2, "images/wacmonalds.png");
-        Company npc2 = new NPCCompany("Queso Queen", new NPCActionImpl(), Tile.TileType.CLAIMED_P3, "images/quesoqueen.png");
-        Company npc3 = new NPCCompany("Pizza Shack", new NPCActionImpl(), Tile.TileType.CLAIMED_P4, "images/pizzashack.png");
+        // Set user player
+        String playerImagePath = levelCompanies.get("Player");
+        this.player = new UserCompany(playerCompanyName, new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, playerImagePath);
+
+        // Set npcs
         this.npcQueue = new ArrayDeque<>();
-        this.npcQueue.add(npc1);
-        this.npcQueue.add(npc2);
-        this.npcQueue.add(npc3);
+        for (String company:
+             levelCompanies.keySet()) {
+            if (company.equals("Player")) {
+                continue;
+            }
+            Company npc = new NPCCompany(company, new NPCActionImpl(), Tile.TileType.CLAIMED_P2, levelCompanies.get(company));
+            this.npcQueue.add(npc);
+        }
+    }
+
+    public HashMap<String, String> initLevel(String levelChosen) throws IOException {
+        // Read in company names and images into a map
+        HashMap<String, String> levelCompanies = new HashMap<>();
+        BufferedReader reader = new BufferedReader(new FileReader(levelChosen));
+
+        // Read lines until end
+        String line = reader.readLine();
+        while (line != null) {
+            String[] splitLine = line.split(",");
+            String name = splitLine[0];
+            String imagePath = splitLine[1];
+            levelCompanies.put(name,imagePath);
+            line = reader.readLine();
+        }
+        return levelCompanies;
     }
 
     /**
@@ -112,13 +149,6 @@ public class Game {
      * Updates all the necessary components when user advances the turn
      */
     public void nextTurn(Tile[][] grid) {
-//         TODO: PLACEHOLDER: claim hardcoded tiles
-//        int arrayEndIdx = (int) squareSize - 1;
-//        claimTile(0,1, Tile.TileType.CLAIMED_P1);
-//        claimTile(0,arrayEndIdx - 1, Tile.TileType.CLAIMED_P2);
-//        claimTile(arrayEndIdx - 1,0, Tile.TileType.CLAIMED_P3);
-//        claimTile(arrayEndIdx - 1,arrayEndIdx, Tile.TileType.CLAIMED_P4);
-
         Turn turn = new TurnImpl(marketDemand, marketPrice);
         int numGoods = turn.randomGoodsSold();
 
@@ -166,35 +196,6 @@ public class Game {
     }
 
     /**
-     * Called by game controller when user chooses to invest
-     * @param num number to dictate user option
-     */
-    public void investIn(int num) {
-        int amount = 0; // TODO: MISSING INVESTMENT AMOUNT INPUT FROM GUI
-        switch (num) {
-            case 1:
-                System.out.println(1);
-                player.invest(amount, "Marketing");
-                break;
-            case 2:
-                System.out.println(2);
-                player.invest(amount, "R&D");
-                break;
-            case 3:
-                System.out.println(3);
-                player.invest(amount, "Goods");
-                break;
-            case 4:
-                System.out.println(4);
-                player.invest(amount, "HR");
-                break;
-            default:
-                System.out.println(1);
-                break;
-        }
-    }
-
-    /**
      * called by game controller when user chooses to buy or sell tiles
      * @param num number to dictate user option
      */
@@ -203,53 +204,15 @@ public class Game {
         // selects to buy or sell tiles
         int amount = 0; // TODO: MISSING NUM TILES INPUT FROM GUI
         switch (num) {
-            case 1:
+            case 1 -> {
                 System.out.println(1);
                 player.tiles(amount, "Purchase", this.tileGrid);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 System.out.println(2);
                 player.tiles(amount, "Sell", this.tileGrid);
-                break;
-        }
-    }
-
-    private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType) {
-        Queue<Point2D> q = new LinkedList<>();
-        boolean[][] visited = new boolean[this.xSize][this.ySize];
-
-        q.add(new Point2D(startingX, startingY));
-
-        while (!q.isEmpty()) {
-            Point2D currCoor = q.poll();
-
-            for (int i = 0; i < 4; i++) {
-                int adjX = (int)currCoor.getX() + rowOffset[i];
-                int adjY = (int)currCoor.getY() + colOffset[i];
-
-                //check if it's in bound
-                if (adjX < 0 || adjY < 0 || adjX >= this.xSize || adjY >= this.ySize || visited[adjX][adjY]) {
-                    continue;
-                }
-
-                // in bound, create a
-                Tile adjTile = tileGrid[adjX][adjY];
-                //if the current tile's neighbor is also a tile of the current player
-                if (adjTile.getType() == playerType) {
-                    Point2D adj = new Point2D(adjX, adjY);
-                    q.add(adj);
-                    visited[adjX][adjY] = true;
-
-                    //if the current tile(already occupied by the player) has an empty neighbor return it!
-                } else if (adjTile.getType() == Tile.TileType.EMPTY) {
-                    return new Point2D(adjX, adjY);
-                }
-
             }
         }
-
-        return new Point2D(-1, -1);
-
     }
 
     public List<Company> sortCompaniesBy(DataType dataType) {

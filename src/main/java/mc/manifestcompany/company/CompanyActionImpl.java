@@ -2,8 +2,10 @@ package mc.manifestcompany.company;
 
 import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,12 +16,9 @@ import java.util.Queue;
  */
 public class CompanyActionImpl implements CompanyAction {
 
-    protected HashMap<Enum<DataType>, Integer> stats;
+    protected EnumMap<DataType, Integer> stats;
     protected static final int TILE_COST = 300;
     protected static final int TILE_VALUE = 100;
-
-    static int[] rowOffset = {-1, 0, 1, 0};
-    static int[] colOffset = { 0, 1, 0, -1 };
 
     @Override
     public void invest(int amount, String sector, Company company) {
@@ -172,10 +171,10 @@ public class CompanyActionImpl implements CompanyAction {
                 //no adjacent tiles available, iterate over the grid to find an empty tile
             } else {
                 boolean findAnAvailableTile = false;
-                for (int j = 0; j < gridSize; j++) {
+                for (Tile[] tiles : grid) {
                     for (int k = 0; k < gridSize; k++) {
-                        if (grid[j][k].getType() == Tile.TileType.EMPTY) {
-                            grid[j][k].setType(tileType);
+                        if (tiles[k].getType() == Tile.TileType.EMPTY) {
+                            tiles[k].setType(tileType);
 
                             //add the tile to the company's stack
                             company.addToStack(newTile);
@@ -231,8 +230,8 @@ public class CompanyActionImpl implements CompanyAction {
             Point2D currCoor = q.poll();
 
             for (int i = 0; i < 4; i++) {
-                int adjX = (int)currCoor.getX() + rowOffset[i];
-                int adjY = (int)currCoor.getY() + colOffset[i];
+                int adjX = (int)currCoor.getX() + Game.ROW_OFFSET[i];
+                int adjY = (int)currCoor.getY() + Game.COL_OFFSET[i];
 
                 //check if it's in bound
                 if (adjX < 0 || adjY < 0 || adjX >= grid.length || adjY >= grid.length || visited[adjX][adjY]) {

@@ -2,7 +2,6 @@ package mc.manifestcompany;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -34,7 +33,8 @@ public class App extends Application {
             fxmlLoader = new FXMLLoader(App.class.getResource("gameScreen.fxml"));
             Parent root = fxmlLoader.load();
             GameController controller = fxmlLoader.getController();
-            controller.setGame(new Game(Game.X_SIZE,Game.Y_SIZE));
+            controller.setGame(
+                    new Game(Game.X_SIZE,Game.Y_SIZE, "testing", "companies/fastFood.txt"));
             Scene scene = new Scene(root, 1200, 700);
             stage.setTitle("Manifest Company");
             stage.setScene(scene);

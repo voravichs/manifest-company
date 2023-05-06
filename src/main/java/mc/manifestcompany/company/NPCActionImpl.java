@@ -1,7 +1,6 @@
 package mc.manifestcompany.company;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
@@ -298,8 +297,8 @@ public class NPCActionImpl extends CompanyActionImpl {
             Point2D currCoor = q.poll();
 
             for (int i = 0; i < 4; i++) {
-                int adjX = (int)currCoor.getX() + rowOffset[i];
-                int adjY = (int)currCoor.getY() + colOffset[i];
+                int adjX = (int)currCoor.getX() + Game.ROW_OFFSET[i];
+                int adjY = (int)currCoor.getY() + Game.COL_OFFSET[i];
 
                 //check if it's in bound
                 if (adjX < 0 || adjY < 0 || adjX >= grid.length || adjY >= grid.length || visited[adjX][adjY]) {

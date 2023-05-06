@@ -8,7 +8,6 @@ import java.util.*;
 
 /**
  * Subclass of Player that defines a Playable Company of the user.
- * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM NPC
  * @author Team Manifest Company
  */
 public class UserCompany extends Company {
@@ -18,7 +17,7 @@ public class UserCompany extends Company {
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
-    private HashMap<Enum<DataType>, Integer> stats;
+    private EnumMap<DataType, Integer> stats;
     private Stack<Point2D> tileStack;
 
     private Tile.TileType tileType;
@@ -28,7 +27,7 @@ public class UserCompany extends Company {
         this.name = name;
         this.actions = actions;
         this.imageLink = imageLink;
-        this.stats = new HashMap<>();
+        this.stats = new EnumMap<>(DataType.class);
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
         this.profit = new Stack <>();
@@ -68,12 +67,12 @@ public class UserCompany extends Company {
     }
 
     @Override
-    public HashMap<Enum<DataType>, Integer> getStats() {
+    public EnumMap<DataType, Integer> getStats() {
         return this.stats;
     }
 
     @Override
-    public void setStats(HashMap<Enum<DataType>, Integer> stats) {
+    public void setStats(EnumMap<DataType, Integer> stats) {
         this.stats = stats;
     }
 
@@ -120,9 +119,11 @@ public class UserCompany extends Company {
      * @return whether the action was successful
      */
     public boolean checkValidInvest(int amount, int tiles) {
-        // Have enough cash to cover all expenses, always have enough when selling
-        boolean enoughCash = -amount >= 0 || this.stats.get(DataType.CASH) >= -amount;
-        // Can only sell until you have 1 tile left, can always buy if you have money (checked above)
+        // Have enough cash to cover all expenses,
+        // always have enough when selling (+ amount)
+        boolean enoughCash = amount >= 0 || this.stats.get(DataType.CASH) >= -amount;
+        // Can only sell until you have 1 tile left,
+        // can always buy (- tiles) if you have money (checked above)
         boolean enoughTiles = -tiles >= 0 || this.stats.get(DataType.TILES) - tiles >= 1;
         return enoughTiles && enoughCash;
     }

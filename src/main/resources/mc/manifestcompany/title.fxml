@@ -36,22 +36,22 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" onAction="#switchToGameScreen" text="New Game">
+                        <Button mnemonicParsing="false" onAction="#showLevelSelect" styleClass="title-button" text="New Game">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Button>
-                        <Button layoutX="95.0" layoutY="53.0" mnemonicParsing="false" text="Options" GridPane.rowIndex="1">
+                        <Button layoutX="95.0" layoutY="53.0" mnemonicParsing="false" styleClass="title-button" text="Options" GridPane.rowIndex="1">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Button>
-                        <Button layoutX="395.0" layoutY="53.0" mnemonicParsing="false" onAction="#showLoad" text="Load Game" GridPane.columnIndex="1">
+                        <Button layoutX="395.0" layoutY="53.0" mnemonicParsing="false" onAction="#showLoad" styleClass="title-button" text="Load Game" GridPane.columnIndex="1">
                            <font>
                               <Font size="30.0" />
                            </font>
                         </Button>
-                        <Button layoutX="95.0" layoutY="53.0" mnemonicParsing="false" onAction="#quit" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button layoutX="95.0" layoutY="53.0" mnemonicParsing="false" onAction="#quit" styleClass="title-button" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="30.0" />
                            </font>
@@ -82,5 +82,60 @@
                </children>
             </Pane>
          </children></Pane>
+      <Pane fx:id="levelSelectPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="1200.0" spacing="20.0" style="-fx-background-color: white;">
+               <padding>
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+               </padding>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSE YOUR LEVEL">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Text>
+                  <HBox alignment="CENTER" prefHeight="200.0" prefWidth="1140.0">
+                     <children>
+                        <ImageView fitHeight="175.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/playerfastfood.png" />
+                           </image></ImageView>
+                        <Pane maxHeight="175.0" prefHeight="175.0" prefWidth="300.0">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                           <children>
+                              <Label onMouseClicked="#loadFastFoodLevel" prefHeight="175.0" prefWidth="300.0" styleClass="hover-text" text="Fast Food&#10;Difficulty: Easy&#10;Starting Cash: 500$" textAlignment="CENTER" />
+                           </children>
+                        </Pane>
+                     </children></HBox>
+               </children>
+            </VBox>
+            <Button layoutX="1125.0" layoutY="25.0" maxHeight="100.0" mnemonicParsing="false" onAction="#closeLevelSelect" prefHeight="50.0" prefWidth="30.0" text="x" />
+         </children>
+      </Pane>
+      <Pane fx:id="companyNamePane" prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <Pane layoutX="300.0" layoutY="200.0" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: lightgrey;">
+               <children>
+                  <VBox alignment="CENTER" layoutX="100.0" prefHeight="300.0" prefWidth="400.0" spacing="30.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name your company:">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="companyNameInput" alignment="CENTER" onAction="#startNewGame" promptText="company name">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </TextField>
+                        <Button mnemonicParsing="false" onAction="#startNewGame" text="Confirm" />
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
    </children>
 </StackPane>

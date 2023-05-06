@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -23,7 +24,7 @@ public class UserCompanyTest {
 
     @Test
     public void initializeStats() {
-        HashMap<Enum<DataType>, Integer> stats = this.company.getStats();
+        EnumMap<DataType, Integer> stats = this.company.getStats();
         int price = stats.get(DataType.PRICE);
         assertEquals(50, price);
         int multiplier = stats.get(DataType.MULTIPLIER);

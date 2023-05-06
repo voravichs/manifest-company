@@ -16,7 +16,7 @@
                             <Pane fx:id="gameBoard" layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: lightgrey;" />
                      <TextFlow layoutY="450.0" prefHeight="100.0" prefWidth="600.0" textAlignment="CENTER">
                         <children>
-                           <Text fx:id="date" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="date-text" text="Date">
+                           <Text fx:id="turn" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="date-text" text="Date">
                               <font>
                                  <Font size="25.0" />
                               </font>
@@ -104,10 +104,10 @@
     </BorderPane>
    <Pane fx:id="dataPane" prefHeight="200.0" prefWidth="200.0" visible="false">
       <children>
-         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" layoutX="200.0" layoutY="111.0" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: lightgrey;" stylesheets="@css/chart.css">
+         <GridPane fx:id="dataChart" alignment="CENTER" gridLinesVisible="true" layoutX="150.0" layoutY="125.0" prefHeight="450.0" prefWidth="900.0" style="-fx-background-color: lightgrey;" stylesheets="@css/chart.css">
            <columnConstraints>
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="0.0" prefWidth="1089.0" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="19.0" prefWidth="1089.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="0.0" percentWidth="0.0" prefWidth="0.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" percentWidth="25.0" prefWidth="152.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1095.0" minWidth="10.0" prefWidth="1089.0" />
@@ -122,7 +122,7 @@
                <RowConstraints maxHeight="448.0" minHeight="10.0" percentHeight="20.0" prefHeight="369.0" vgrow="SOMETIMES" />
            </rowConstraints>
          </GridPane>
-         <Button layoutX="252.0" layoutY="131.0" mnemonicParsing="false" onAction="#closeData" text="x">
+         <Button layoutX="215.0" layoutY="140.0" mnemonicParsing="false" onAction="#closeData" text="x">
             <font>
                <Font size="25.0" />
             </font>
