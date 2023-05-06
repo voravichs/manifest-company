@@ -89,7 +89,7 @@ public class GameController {
     @FXML
     private GridPane sideBar;
     @FXML
-    private Text date;
+    private Text turn;
     @FXML
     private GridPane dataChart;
     @FXML
@@ -131,7 +131,7 @@ public class GameController {
         addText("[TURN " + game.getTurnNum() + "]\n");
         addText("Open the ACTIONS menu to\n");
         addText("start investing.\n");
-        date.setText("Turn " + game.getTurnNum());
+        turn.setText("Turn " + game.getTurnNum());
 
         // Set the startPane to invisible and the gamePane to visible
         startPane.setVisible(false);
@@ -453,6 +453,7 @@ public class GameController {
 
         // Add text to the box showing the turn has advanced
         addText("[TURN " + game.getTurnNum() + "]\n");
+        turn.setText("Turn " + game.getTurnNum());
     }
 
     /**

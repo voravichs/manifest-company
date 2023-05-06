@@ -5,6 +5,7 @@ import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
+import mc.manifestcompany.gui.TitleController;
 
 import java.io.*;
 import java.util.EnumMap;
@@ -41,14 +42,15 @@ public class FileHandler {
         for (Company company:
              companyList) {
             // Format:
-            // <PRICE> <MULTIPLIER> <CAPACITY> <COST> <CASH> <TILES>
+            // <NAME> <PRICE> <MULTIPLIER> <CAPACITY> <COST> <CASH> <TILES>
             EnumMap<DataType, Integer> stats = company.getStats();
-            writer.write(stats.get(DataType.PRICE) + " ");
-            writer.write(stats.get(DataType.MULTIPLIER) + " ");
-            writer.write(stats.get(DataType.CAPACITY) + " ");
-            writer.write(stats.get(DataType.COST) + " ");
-            writer.write(stats.get(DataType.CASH) + " ");
-            writer.write(stats.get(DataType.TILES) + " ");
+            writer.write(company.getName() + ",");
+            writer.write(stats.get(DataType.PRICE) + ",");
+            writer.write(stats.get(DataType.MULTIPLIER) + ",");
+            writer.write(stats.get(DataType.CAPACITY) + ",");
+            writer.write(stats.get(DataType.COST) + ",");
+            writer.write(stats.get(DataType.CASH) + ",");
+            writer.write(stats.get(DataType.TILES) + ",");
             writer.write("\n");
         }
 
@@ -74,7 +76,7 @@ public class FileHandler {
         String[] splitStart = startLine.split(" ");
         int xSize = Integer.parseInt(splitStart[1]);
         int ySize = Integer.parseInt(splitStart[2]);
-        Game game = new Game(xSize, ySize);
+        Game game = new Game(xSize, ySize, "", "companies/fastFood.txt");
 
         // Get parameters for square
         double squareSize = (double) Game.GRID_SIZE_X / xSize;
@@ -117,13 +119,14 @@ public class FileHandler {
         for (Company company: companyList) {
             EnumMap<DataType, Integer> stats = new EnumMap<>(DataType.class);
             String line = reader.readLine();
-            String[] splitLine = line.split(" ");
-            stats.put(DataType.PRICE, Integer.valueOf(splitLine[0]));
-            stats.put(DataType.MULTIPLIER, Integer.valueOf(splitLine[1]));
-            stats.put(DataType.CAPACITY, Integer.valueOf(splitLine[2]));
-            stats.put(DataType.COST, Integer.valueOf(splitLine[3]));
-            stats.put(DataType.CASH, Integer.valueOf(splitLine[4]));
-            stats.put(DataType.TILES, Integer.valueOf(splitLine[5]));
+            String[] splitLine = line.split(",");
+            company.setName(splitLine[0]);
+            stats.put(DataType.PRICE, Integer.valueOf(splitLine[1]));
+            stats.put(DataType.MULTIPLIER, Integer.valueOf(splitLine[2]));
+            stats.put(DataType.CAPACITY, Integer.valueOf(splitLine[3]));
+            stats.put(DataType.COST, Integer.valueOf(splitLine[4]));
+            stats.put(DataType.CASH, Integer.valueOf(splitLine[5]));
+            stats.put(DataType.TILES, Integer.valueOf(splitLine[6]));
             company.setStats(stats);
         }
 

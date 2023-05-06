@@ -6,6 +6,9 @@ import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
 import mc.manifestcompany.gui.Tile;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -13,7 +16,7 @@ import java.util.*;
  * @author Team Manifest Company
  */
 public class Game {
-    /* Final Variables */
+    /* Final Static Variables */
     public static final int GRID_SIZE_X = 400;
     public static final int X_SIZE = 20;
     public static final int Y_SIZE = 20;
@@ -42,7 +45,10 @@ public class Game {
     // Turns
     private int turnNum;
 
-    public Game(int xSize, int ySize) {
+    // Inputs from new game
+    private final String playerCompanyName;
+
+    public Game(int xSize, int ySize, String playerCompanyName, String levelChosen) {
         // Creates a tile array of x*y size
         tileGrid = new Tile[xSize][ySize];
         this.xSize = xSize;
@@ -53,8 +59,17 @@ public class Game {
         // Initializes the tileGrid
         initTileGrid();
 
+        // initializes the level
+        HashMap<String, String> levelCompanies;
+        try {
+            levelCompanies = initLevel(levelChosen);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         // initializes the players
-        initPlayers();
+        this.playerCompanyName = playerCompanyName;
+        initPlayers(levelCompanies);
 
         // set the turn number
         this.turnNum = 1;
@@ -78,7 +93,7 @@ public class Game {
     /**
      * Initializes the players by granting initial tiles and stats.
      */
-    public void initPlayers() {
+    public void initPlayers(HashMap<String, String> levelCompanies) {
         // Set the corner squares to players
         int arrayEndIdx = (int) squareSize - 1;
         claimTile(0,0, Tile.TileType.CLAIMED_P1);
@@ -86,15 +101,37 @@ public class Game {
         claimTile(arrayEndIdx,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
-        // TODO: DYNAMIC NAMES AND LINKS
-        this.player = new UserCompany("Player", new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
-        Company npc1 = new NPCCompany("WacMondalds", new NPCActionImpl(), Tile.TileType.CLAIMED_P2, "images/wacmonalds.png");
-        Company npc2 = new NPCCompany("Queso Queen", new NPCActionImpl(), Tile.TileType.CLAIMED_P3, "images/quesoqueen.png");
-        Company npc3 = new NPCCompany("Pizza Shack", new NPCActionImpl(), Tile.TileType.CLAIMED_P4, "images/pizzashack.png");
+        // Set user player
+        String playerImagePath = levelCompanies.get("Player");
+        this.player = new UserCompany(playerCompanyName, new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, playerImagePath);
+
+        // Set npcs
         this.npcQueue = new ArrayDeque<>();
-        this.npcQueue.add(npc1);
-        this.npcQueue.add(npc2);
-        this.npcQueue.add(npc3);
+        for (String company:
+             levelCompanies.keySet()) {
+            if (company.equals("Player")) {
+                continue;
+            }
+            Company npc = new NPCCompany(company, new NPCActionImpl(), Tile.TileType.CLAIMED_P2, levelCompanies.get(company));
+            this.npcQueue.add(npc);
+        }
+    }
+
+    public HashMap<String, String> initLevel(String levelChosen) throws IOException {
+        // Read in company names and images into a map
+        HashMap<String, String> levelCompanies = new HashMap<>();
+        BufferedReader reader = new BufferedReader(new FileReader(levelChosen));
+
+        // Read lines until end
+        String line = reader.readLine();
+        while (line != null) {
+            String[] splitLine = line.split(",");
+            String name = splitLine[0];
+            String imagePath = splitLine[1];
+            levelCompanies.put(name,imagePath);
+            line = reader.readLine();
+        }
+        return levelCompanies;
     }
 
     /**
