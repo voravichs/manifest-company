@@ -103,10 +103,12 @@ public class GameController {
     private boolean sorted;
     private DataType currentSorted;
 
+    // Constructor inits the textQueue on startup
     public GameController() {
         this.textQueue = new LinkedList<>();
     }
 
+    // Setter for the Game, used for loading a save file
     public void setGame(Game game) {
         this.game = game;
     }
@@ -116,6 +118,7 @@ public class GameController {
      */
     @FXML
     protected void init() throws FileNotFoundException {
+        // Inits all GUI elements
         initSidebar();
         initSpinners();
         initChart();
@@ -123,10 +126,14 @@ public class GameController {
         sorted = false;
         currentSorted = DataType.TILES;
         updateGrid();
+
+        // Add text to the textQueue and turn num
         addText("[TURN " + game.getTurnNum() + "]\n");
         addText("Open the ACTIONS menu to\n");
         addText("start investing.\n");
-        date.setText("January 1970");
+        date.setText("Turn " + game.getTurnNum());
+
+        // Set the startPane to invisible and the gamePane to visible
         startPane.setVisible(false);
         gamePane.setVisible(true);
     }
@@ -177,7 +184,6 @@ public class GameController {
                 possibleToInvest.setStyle("-fx-fill: red;");
             }
         };
-
         marketSpinner.valueProperty().addListener(totalUpdate);
         rdSpinner.valueProperty().addListener(totalUpdate);
         goodSpinner.valueProperty().addListener(totalUpdate);
@@ -248,6 +254,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Initializes the chart headers and sorting handlers.
+     */
     @FXML
     protected void initChart() {
         Label tiles = new Label("Tiles");
@@ -357,6 +366,10 @@ public class GameController {
                 });
     }
 
+    /**
+     * Updates the chart according to a sorted companyList.
+     * @param companyList a sorted list to display parameters for companies in order
+     */
     @FXML
     protected void updateChart(List<Company> companyList) {
         // Clear previous chart values
@@ -404,7 +417,7 @@ public class GameController {
     }
 
     /**
-     * Visually updates the grid using the game's tile
+     * Visually updates the grid using the game's tileGrid
      */
     @FXML
     protected void updateGrid() {
@@ -419,12 +432,15 @@ public class GameController {
     }
 
     /**
-     * Advances to the next turn
+     * Advances to the next turn.
+     * Updates the board, chart, and visually transitions to the next turn.
      */
     @FXML
     protected void advanceTurn() {
-        // go to next turn, changing the board, then update the grid
+        // Call the next turn method in game
         this.game.nextTurn(game.getTileGrid());
+
+        // Update chart and grid
         updateChart(game.sortCompaniesBy(DataType.TILES));
         sorted = false;
         currentSorted = DataType.TILES;
@@ -441,7 +457,7 @@ public class GameController {
 
     /**
      * Adds text to the textQueue, and removes text from the front
-     * once it reaches max capacity (10 texts)
+     * once it reaches max capacity (9 texts)
      * @param text the text to add to the queue
      */
     @FXML
@@ -491,7 +507,7 @@ public class GameController {
     }
 
     /**
-     * Removes all shapes from the GUI
+     * Removes all shapes from the tileGrid GUI.
      */
     @FXML
     protected void clearBoard() {
@@ -504,7 +520,7 @@ public class GameController {
     }
 
     /**
-     * Takes the data from the game and saves it to a file
+     * Takes the data from the game and saves it to a file.
      */
     @FXML
     protected void save() throws IOException {
@@ -512,7 +528,7 @@ public class GameController {
     }
 
     /**
-     * Exits to the main menu
+     * Exits to the main menu.
      */
     @FXML
     protected void exit(ActionEvent event) throws IOException {
@@ -523,6 +539,11 @@ public class GameController {
         stage.show();
     }
 
+    /**
+     * Sorts the companyList according to a dataType.
+     * Calls the sortCompaniesBy() method in Game.
+     * @param dataType the dataType which will be used to sort.
+     */
     @FXML
     protected void sort(DataType dataType) {
         List<Company> sortedCompanyList = game.sortCompaniesBy(dataType);
@@ -592,7 +613,7 @@ public class GameController {
     }
 
     /**
-     * Shows the exit confirmation pane.
+     * Shows the save name pane.
      */
     @FXML
     protected void showSaveName() {
@@ -601,7 +622,7 @@ public class GameController {
     }
 
     /**
-     * Shows the exit confirmation pane.
+     * Closes the save name pane.
      */
     @FXML
     protected void closeSaveName() {
@@ -626,7 +647,7 @@ public class GameController {
     }
 
     /**
-     * Shows the exit confirmation pane.
+     * Closes the exit confirmation pane.
      */
     @FXML
     protected void closeExitConfirm() {

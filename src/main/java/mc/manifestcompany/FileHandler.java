@@ -1,20 +1,14 @@
 package mc.manifestcompany;
 
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gamelogic.Game;
-import mc.manifestcompany.gui.GameController;
 import mc.manifestcompany.gui.Tile;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
 
 public class FileHandler {
     public static void save(Tile[][] tileMap, List<Company> companyList, int turnNum, String saveName) throws IOException {
