@@ -2,11 +2,18 @@
     src: url("DotGothic16-Regular.ttf");
 }
 
-Text {
+* {
     -fx-font-family: 'DotGothic16';
-    -fx-font-size: 25;
+}
+
+Text {
+    -fx-font-size: 20;
 }
 
 .label {
-    -fx-font-size: 20;
+    -fx-font-size: 25;
+}
+
+.label:hover {
+    -fx-text-fill: "goldenrod";
 }

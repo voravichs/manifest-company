@@ -100,6 +100,8 @@ public class GameController {
     /* Instance Variables */
     private Game game;
     private final Queue<Text> textQueue;
+    private boolean sorted;
+    private DataType currentSorted;
 
     public GameController() {
         this.textQueue = new LinkedList<>();
@@ -117,7 +119,9 @@ public class GameController {
         initSidebar();
         initSpinners();
         initChart();
-        updateChart();
+        updateChart(game.sortCompaniesBy(DataType.TILES));
+        sorted = false;
+        currentSorted = DataType.TILES;
         updateGrid();
         addText("[TURN " + game.getTurnNum() + "]\n");
         addText("Open the ACTIONS menu to\n");
@@ -246,29 +250,115 @@ public class GameController {
 
     @FXML
     protected void initChart() {
-        Text tiles = new Text("Tiles");
+        Label tiles = new Label("Tiles");
         GridPane.setHalignment(tiles, HPos.CENTER);
+        tiles.getStyleClass().add("hover-text");
         dataChart.add(tiles, 2,0);
 
-        Text cash = new Text("Cash");
+        Label cash = new Label("Cash");
         GridPane.setHalignment(cash, HPos.CENTER);
+        cash.getStyleClass().add("hover-text");
         dataChart.add(cash, 3,0);
 
-        Text price = new Text("Price of\nGoods");
+        Label price = new Label("Price of\nGoods");
         GridPane.setHalignment(price, HPos.CENTER);
+        price.getStyleClass().add("hover-text");
         dataChart.add(price, 4,0);
 
-        Text goods = new Text("Available\nGoods");
+        Label goods = new Label("Available\nGoods");
         GridPane.setHalignment(goods, HPos.CENTER);
+        goods.getStyleClass().add("hover-text");
         dataChart.add(goods, 5,0);
 
-        Text cost = new Text("Operation\nCost");
+        Label cost = new Label("Operation\nCost");
         GridPane.setHalignment(cost, HPos.CENTER);
+        cost.getStyleClass().add("hover-text");
         dataChart.add(cost, 6,0);
+
+        tiles.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    sort(DataType.TILES);
+                    if (sorted) {
+                        tiles.setText("Tiles↑");
+                    } else {
+                        tiles.setText("Tiles↓");
+                    }
+                    switch (currentSorted) {
+                        case CASH -> cash.setText("Cash");
+                        case PRICE -> price.setText("Price of\nGoods");
+                        case CAPACITY -> goods.setText("Available\nGoods");
+                        case COST -> cost.setText("Operation\nCost");
+                    }
+                    currentSorted = DataType.TILES;
+                });
+        cash.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    sort(DataType.CASH);
+                    if (sorted) {
+                        cash.setText("Cash↑");
+                    } else {
+                        cash.setText("Cash↓");
+                    }
+                    switch (currentSorted) {
+                        case TILES -> tiles.setText("Tiles");
+                        case PRICE -> price.setText("Price of\nGoods");
+                        case CAPACITY -> goods.setText("Available\nGoods");
+                        case COST -> cost.setText("Operation\nCost");
+                    }
+                    currentSorted = DataType.CASH;
+                });
+        price.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    sort(DataType.PRICE);
+                    if (sorted) {
+                        price.setText("Price of\nGoods↑");
+                    } else {
+                        price.setText("Price of\nGoods↓");
+                    }
+                    switch (currentSorted) {
+                        case TILES -> tiles.setText("Tiles");
+                        case CASH -> cash.setText("Cash");
+                        case CAPACITY -> goods.setText("Available\nGoods");
+                        case COST -> cost.setText("Operation\nCost");
+                    }
+                    currentSorted = DataType.PRICE;
+                });
+        goods.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    sort(DataType.CAPACITY);
+                    if (sorted) {
+                        goods.setText("Available\nGoods↑");
+                    } else {
+                        goods.setText("Available\nGoods↓");
+                    }
+                    switch (currentSorted) {
+                        case TILES -> tiles.setText("Tiles");
+                        case CASH -> cash.setText("Cash");
+                        case PRICE -> price.setText("Price of\nGoods");
+                        case COST -> cost.setText("Operation\nCost");
+                    }
+                    currentSorted = DataType.CAPACITY;
+                });
+        cost.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                event -> {
+                    sort(DataType.COST);
+                    if (sorted) {
+                        cost.setText("Operation\nCost↑");
+                    } else {
+                        cost.setText("Operation\nCost↓");
+                    }
+                    switch (currentSorted) {
+                        case TILES -> tiles.setText("Tiles");
+                        case CASH -> cash.setText("Cash");
+                        case PRICE -> price.setText("Price of\nGoods");
+                        case CAPACITY -> goods.setText("Available\nGoods");
+                    }
+                    currentSorted = DataType.COST;
+                });
     }
 
     @FXML
-    protected void updateChart() {
+    protected void updateChart(List<Company> companyList) {
         // Clear previous chart values
         for (int i = 1; i <= 4; i++) {
             for (int j = 1; j <= 6; j++) {
@@ -283,32 +373,30 @@ public class GameController {
         }
 
         // Init chart parameters
-        List<Company> companyList = game.sortCompaniesBy(DataType.TILES);
         int i = 1;
-        for (Company company:
-                companyList) {
+        for (Company company: companyList) {
             // Name
             Text name = new Text(company.getName());
             GridPane.setHalignment(name, HPos.CENTER);
             dataChart.add(name, 1, i);
             // Tiles
-            Label tiles = new Label(Integer.toString(company.getStats().get(DataType.TILES)));
+            Text tiles = new Text(Integer.toString(company.getStats().get(DataType.TILES)));
             GridPane.setHalignment(tiles, HPos.CENTER);
             dataChart.add(tiles, 2, i);
             // Cash
-            Label cash = new Label(Integer.toString(company.getStats().get(DataType.CASH)));
+            Text cash = new Text(Integer.toString(company.getStats().get(DataType.CASH)));
             GridPane.setHalignment(cash, HPos.CENTER);
             dataChart.add(cash, 3, i);
             // Price
-            Label price = new Label(Integer.toString(company.getStats().get(DataType.PRICE)));
+            Text price = new Text(Integer.toString(company.getStats().get(DataType.PRICE)));
             GridPane.setHalignment(price, HPos.CENTER);
             dataChart.add(price, 4, i);
             // Goods
-            Label goods = new Label(Integer.toString(company.getStats().get(DataType.CAPACITY)));
+            Text goods = new Text(Integer.toString(company.getStats().get(DataType.CAPACITY)));
             GridPane.setHalignment(goods, HPos.CENTER);
             dataChart.add(goods, 5, i);
             // Cost
-            Label cost = new Label(Integer.toString(company.getStats().get(DataType.COST)));
+            Text cost = new Text(Integer.toString(company.getStats().get(DataType.COST)));
             GridPane.setHalignment(cost, HPos.CENTER);
             dataChart.add(cost, 6, i);
             i++;
@@ -337,7 +425,9 @@ public class GameController {
     protected void advanceTurn() {
         // go to next turn, changing the board, then update the grid
         this.game.nextTurn(game.getTileGrid());
-        updateChart();
+        updateChart(game.sortCompaniesBy(DataType.TILES));
+        sorted = false;
+        currentSorted = DataType.TILES;
         updateGrid();
 
         // show the transition pane, set the text for the turn
@@ -431,6 +521,21 @@ public class GameController {
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    protected void sort(DataType dataType) {
+        List<Company> sortedCompanyList = game.sortCompaniesBy(dataType);
+        // Switch between forward and reverse sort
+        if (sorted) {
+            // Reverse sort
+            sorted = false;
+            Collections.reverse(sortedCompanyList);
+        } else {
+            // Forward sort
+            sorted = true;
+        }
+        updateChart(sortedCompanyList);
     }
 
     /* ***** SHOW/HIDE PANES ****** */
