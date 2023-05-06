@@ -7,6 +7,7 @@ import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
 
 import java.io.*;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class FileHandler {
              companyList) {
             // Format:
             // <PRICE> <MULTIPLIER> <CAPACITY> <COST> <CASH> <TILES>
-            HashMap<Enum<DataType>, Integer> stats = company.getStats();
+            EnumMap<DataType, Integer> stats = company.getStats();
             writer.write(stats.get(DataType.PRICE) + " ");
             writer.write(stats.get(DataType.MULTIPLIER) + " ");
             writer.write(stats.get(DataType.CAPACITY) + " ");
@@ -114,7 +115,7 @@ public class FileHandler {
         // Read in the same order as the company list
         List<Company> companyList = game.getCompanyList();
         for (Company company: companyList) {
-            HashMap<Enum<DataType>, Integer> stats = new HashMap<>();
+            EnumMap<DataType, Integer> stats = new EnumMap<>(DataType.class);
             String line = reader.readLine();
             String[] splitLine = line.split(" ");
             stats.put(DataType.PRICE, Integer.valueOf(splitLine[0]));

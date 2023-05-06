@@ -4,10 +4,7 @@ import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gui.Tile;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Subclass of Player that defines a Non-Playable Company (NPC).
@@ -21,7 +18,7 @@ public class NPCCompany extends Company {
     private Stack<Integer> revenue;
     private Stack<Integer> cogs;
     private Stack<Integer> profit;
-    private HashMap<Enum<DataType>, Integer> stats;
+    private EnumMap<DataType, Integer> stats;
     private Tile.TileType tileType;
 
     private Stack<Point2D> tileStack;
@@ -30,7 +27,7 @@ public class NPCCompany extends Company {
         this.name = name;
         this.actions = actions;
         this.imageLink = imageLink;
-        this.stats = new HashMap<>();
+        this.stats = new EnumMap<>(DataType.class);
         this.revenue = new Stack<>();
         this.cogs = new Stack <>();
         this.profit = new Stack <>();
@@ -76,12 +73,12 @@ public class NPCCompany extends Company {
     }
 
     @Override
-    public HashMap<Enum<DataType>, Integer> getStats() {
+    public EnumMap<DataType, Integer> getStats() {
         return this.stats;
     }
 
     @Override
-    public void setStats(HashMap<Enum<DataType>, Integer> stats) {
+    public void setStats(EnumMap<DataType, Integer> stats) {
         this.stats = stats;
     }
 

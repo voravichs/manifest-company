@@ -3,6 +3,7 @@ package mc.manifestcompany.gamelogic;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.Company;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Queue;
 
@@ -21,7 +22,7 @@ public class TurnImpl implements Turn {
 
     @Override
     public void turn(int numGoods, Company company) {
-        HashMap<Enum<DataType>, Integer> stats = company.getStats();
+        EnumMap<DataType, Integer> stats = company.getStats();
 
         numGoods = (int) (numGoods * (1.0 + stats.get(DataType.MULTIPLIER) / 10));  // num goods a company can sell
         numGoods = Math.min(numGoods, marketDemand);          // company can't sell more than market demand or capacity

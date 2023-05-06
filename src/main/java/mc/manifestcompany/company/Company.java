@@ -4,10 +4,7 @@ import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gui.Tile;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Defines an abstract company.
@@ -50,13 +47,13 @@ public abstract class Company {
      * Gets the company's stats object
      * @return the company stats object
      */
-    public abstract HashMap<Enum<DataType>, Integer> getStats();
+    public abstract EnumMap<DataType, Integer> getStats();
 
     /**
      * Sets the company's stats
      * @param stats company stats to set
      */
-    public abstract void setStats(HashMap<Enum<DataType>, Integer> stats);
+    public abstract void setStats(EnumMap<DataType, Integer> stats);
 
     /**
      * push the newest revenue to revenue stack
@@ -89,7 +86,7 @@ public abstract class Company {
     public abstract List<Integer> getFinancials();
 
     /**
-     * return a list of stack the contain all the past finanical data
+     * return a list of stack that contain all the past finanical data
      * in the order of: revenue, cogs, profit
      * @return
      */

@@ -1,5 +1,4 @@
 package mc.manifestcompany.gamelogic;
-import javafx.scene.paint.Color;
 
 public interface Event {
     enum EventType {
