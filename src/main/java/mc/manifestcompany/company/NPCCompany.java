@@ -8,7 +8,6 @@ import java.util.*;
 
 /**
  * Subclass of Player that defines a Non-Playable Company (NPC).
- * TODO: ADD METHODS THAT DIFFERENTIATE THIS FROM USER
  * @author Team Manifest Company
  */
 public class NPCCompany extends Company {

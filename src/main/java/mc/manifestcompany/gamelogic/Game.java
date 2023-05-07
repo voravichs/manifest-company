@@ -120,6 +120,12 @@ public class Game {
 
         // Set npcs
         this.npcQueue = new ArrayDeque<>();
+        List<Tile.TileType> npcTileTypes = List.of(
+                Tile.TileType.CLAIMED_P2,
+                Tile.TileType.CLAIMED_P3,
+                Tile.TileType.CLAIMED_P4
+        );
+        int npcIndex = 0;
         for (OpenAddressingBucket company: levelCompanies.getTable()) {
             String companyName = (String)company.getKey();
             if (companyName == null) {
@@ -128,11 +134,16 @@ public class Game {
             if (companyName.equals("Player")) {
                 continue;
             }
+
+            // Assign the correct tile type for the NPC company
+            Tile.TileType npcTileType = npcTileTypes.get(npcIndex % npcTileTypes.size());
+            npcIndex++;
+
             Company npc = new NPCCompany(
                     companyName,
                     new NPCActionImpl(),
-                    Tile.TileType.CLAIMED_P2, (String)
-                    levelCompanies.search(companyName));
+                    npcTileType,
+                    (String) levelCompanies.search(companyName));
             this.npcQueue.add(npc);
         }
     }
@@ -178,7 +189,7 @@ public class Game {
         // NPCs make their decisions
         for (Company npc : npcQueue) {
             NPCCompany npcCompany = (NPCCompany) npc;
-            npcCompany.getActions().performRandomAction(npcCompany, grid);
+            npcCompany.getActions().performRandomAction(npcCompany, grid, currentEvent);
         }
 
         // process all decisions for this turn
