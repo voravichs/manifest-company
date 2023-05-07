@@ -49,7 +49,7 @@ public class Tile extends FXShape {
         CLAIMED_P1(Color.AQUAMARINE),
         CLAIMED_P2(Color.LIGHTGREEN),
         CLAIMED_P3(Color.TOMATO),
-        CLAIMED_P4(Color.LIGHTCORAL),
+        CLAIMED_P4(Color.YELLOW),
         LOST(Color.RED);
 
         private final Color fill;
