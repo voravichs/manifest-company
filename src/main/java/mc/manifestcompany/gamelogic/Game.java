@@ -106,8 +106,8 @@ public class Game {
         // Set the corner squares to players
         int arrayEndIdx = (int) squareSize - 1;
         claimTile(0,0, Tile.TileType.CLAIMED_P1);
-        claimTile(0,arrayEndIdx, Tile.TileType.CLAIMED_P3);
-        claimTile(arrayEndIdx,0, Tile.TileType.CLAIMED_P2);
+        claimTile(0,arrayEndIdx, Tile.TileType.CLAIMED_P2);
+        claimTile(arrayEndIdx,0, Tile.TileType.CLAIMED_P3);
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // Set user player

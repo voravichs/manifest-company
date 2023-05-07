@@ -233,9 +233,9 @@ public class NPCActionImpl extends CompanyActionImpl {
         double squareSize = (double) Game.GRID_SIZE_X / Game.X_SIZE;
         int arrayEndIdx = (int) squareSize - 1;
         if (tileType == Tile.TileType.CLAIMED_P2) {
-            startX = arrayEndIdx;
-        } else if (tileType == Tile.TileType.CLAIMED_P3) {
             startY = arrayEndIdx;
+        } else if (tileType == Tile.TileType.CLAIMED_P3) {
+            startX = arrayEndIdx;
         } else if (tileType == Tile.TileType.CLAIMED_P4) {
             startX = arrayEndIdx;
             startY = arrayEndIdx;
