@@ -23,6 +23,10 @@ companies
 Pizza Shack,50,1,15,30,500,1,
 Queso Queen,50,1,15,30,500,1,
 WacMondalds,50,1,15,30,500,1,
-Sbubby: eef freef,50,0,15,30,50000,1,
+Sbubby: eef freef,50,1,15,30,50000,1,
 turn 
 1
+demand
+30
+price
+100

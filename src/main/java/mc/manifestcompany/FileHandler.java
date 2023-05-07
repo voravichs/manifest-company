@@ -5,15 +5,13 @@ import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.company.Company;
 import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
-import mc.manifestcompany.gui.TitleController;
 
 import java.io.*;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 
 public class FileHandler {
-    public static void save(Tile[][] tileMap, List<Company> companyList, int turnNum, String saveName) throws IOException {
+    public static void save(Tile[][] tileMap, List<Company> companyList, int turnNum, List<Integer> marketVals, String saveName) throws IOException {
         // Init files and writer
         String filePath = "saveFiles/" + saveName + ".txt";
         BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
@@ -55,7 +53,10 @@ public class FileHandler {
         }
 
         // Write the turn number
-        writer.write("turn " + "\n" + turnNum);
+        writer.write("turn " + "\n" + turnNum + "\n");
+        // Write the market demand and price
+        writer.write("demand " + "\n" + marketVals.get(0) + "\n");
+        writer.write("price " + "\n" + marketVals.get(1) + "\n");
 
         writer.close();
     }
@@ -133,6 +134,12 @@ public class FileHandler {
         // Read the turn number
         reader.readLine();
         game.setTurnNum(Integer.parseInt(reader.readLine()));
+
+        // Read demand and price
+        reader.readLine();
+        game.setMarketDemand(Integer.parseInt(reader.readLine()));
+        reader.readLine();
+        game.setMarketPrice(Integer.parseInt(reader.readLine()));
 
         reader.close();
         return game;

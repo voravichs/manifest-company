@@ -17,32 +17,32 @@ public class EventImpl implements Event {
     @Override
     public int[] updateMarket(EventType event, int marketDemand, int marketPrice) {
         int [] updated = {marketDemand, marketPrice};
-        switch(event) {
-            case PANDEMIC:
-                marketDemand = marketDemand / 2;
-                break;
-            case EXPANSION:
+        switch (event) {
+            case PANDEMIC -> marketDemand = marketDemand / 2;
+            case EXPANSION -> {
                 marketDemand *= 2;
                 marketPrice *= 2;
-                break;
-            case RECESSION:
+            }
+            case RECESSION -> {
                 marketDemand /= 2;
                 marketPrice /= 2;
-                break;
-            case COMPETITION:
+            }
+            case COMPETITION -> {
                 marketDemand *= 2;
                 marketPrice /= 4;
-                break;
-            case INNOVATION:
-                marketPrice *= 2;
-                break;
-            case WAR:
-                marketDemand = 1;
-                marketPrice = 1;
-                break;
+            }
+            case INNOVATION -> marketPrice *= 2;
+            case WAR -> {
+                marketDemand = 10;
+                marketPrice = 10;
+            }
         }
-        if (marketDemand == 0 ) { marketDemand = 1; }
-        if (marketPrice == 0 ) { marketPrice = 1; }
+        if (marketDemand == 0) {
+            marketDemand = 1;
+        }
+        if (marketPrice == 0) {
+            marketPrice = 1;
+        }
 
         updated[0] = marketDemand;
         updated[1] = marketPrice;

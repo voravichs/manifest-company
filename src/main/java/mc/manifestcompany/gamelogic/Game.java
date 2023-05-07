@@ -48,6 +48,9 @@ public class Game {
     // Inputs from new game
     private final String playerCompanyName;
 
+    // Event
+    private Event.EventType currentEvent;
+
     public Game(int xSize, int ySize, String playerCompanyName, String levelChosen) {
         // Creates a tile array of x*y size
         tileGrid = new Tile[xSize][ySize];
@@ -149,19 +152,25 @@ public class Game {
      * Updates all the necessary components when user advances the turn
      */
     public void nextTurn(Tile[][] grid) {
+        // Create a new turn to handle turn change
         Turn turn = new TurnImpl(marketDemand, marketPrice);
+
+        // Get a random number of goods sold
         int numGoods = turn.randomGoodsSold();
 
+        // NPCs make their decisions
         for (Company npc : npcQueue) {
             NPCCompany npcCompany = (NPCCompany) npc;
             npcCompany.getActions().performRandomAction(npcCompany, grid);
         }
 
+        // process all decisions for this turn
         turn.turn(numGoods, player);
         for (Company npc: npcQueue) {
             turn.turn(numGoods, npc);
         }
 
+        // Check if the player went bankrupt
         if (!turn.validCompany(player)) {
             // TODO: PLAYER LOST, GAME ENDS
             return;
@@ -186,10 +195,10 @@ public class Game {
         }
 
         Event event = new EventImpl();
-        Event.EventType eventType = event.randomEvent();
+        currentEvent = event.randomEvent();
         // TODO: eventType helps NPC make decisions
-        if (eventType != Event.EventType.NONE) {
-            int [] updated = event.updateMarket(eventType, marketDemand, marketPrice);
+        if (currentEvent != Event.EventType.NONE) {
+            int[] updated = event.updateMarket(currentEvent, marketDemand, marketPrice);
             this.marketDemand = updated[0];
             this.marketPrice = updated[1];
         }
@@ -262,5 +271,21 @@ public class Game {
 
     public void setTurnNum(int turnNum) {
         this.turnNum = turnNum;
+    }
+
+    public Event.EventType getCurrentEvent() {
+        return this.currentEvent;
+    }
+
+    public List<Integer> getMarketValues() {
+        return new ArrayList<>(Arrays.asList(marketDemand,marketPrice));
+    }
+
+    public void setMarketDemand(int marketDemand) {
+        this.marketDemand = marketDemand;
+    }
+
+    public void setMarketPrice(int marketPrice) {
+        this.marketPrice = marketPrice;
     }
 }

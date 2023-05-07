@@ -26,3 +26,7 @@ WacMondalds,50,5,15,24,283,1,
 Applebapple's,50,0,15,30,7550,5,
 turn
 5
+demand
+30
+price
+100
