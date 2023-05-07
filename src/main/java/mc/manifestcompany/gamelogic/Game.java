@@ -5,6 +5,8 @@ import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
 import mc.manifestcompany.gui.Tile;
+import mc.manifestcompany.hashtable.OpenAddressingBucket;
+import mc.manifestcompany.hashtable.QuadraticProbingHashTable;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,8 +24,8 @@ public class Game {
     public static final int Y_SIZE = 20;
 
     // Direction vectors for BFS
-    public static int[] ROW_OFFSET = {-1, 0, 1, 0};
-    public static int[] COL_OFFSET = { 0, 1, 0, -1 };
+    public static final int[] ROW_OFFSET = {-1, 0, 1, 0};
+    public static final int[] COL_OFFSET = { 0, 1, 0, -1 };
 
     /* Instance Variables */
     // TileGrid
@@ -63,7 +65,7 @@ public class Game {
         initTileGrid();
 
         // initializes the level
-        HashMap<String, String> levelCompanies;
+        QuadraticProbingHashTable levelCompanies;
         try {
             levelCompanies = initLevel(levelChosen);
         } catch (IOException e) {
@@ -96,7 +98,7 @@ public class Game {
     /**
      * Initializes the players by granting initial tiles and stats.
      */
-    public void initPlayers(HashMap<String, String> levelCompanies) {
+    public void initPlayers(QuadraticProbingHashTable levelCompanies) {
         // Set the corner squares to players
         int arrayEndIdx = (int) squareSize - 1;
         claimTile(0,0, Tile.TileType.CLAIMED_P1);
@@ -105,24 +107,35 @@ public class Game {
         claimTile(arrayEndIdx,arrayEndIdx, Tile.TileType.CLAIMED_P4);
 
         // Set user player
-        String playerImagePath = levelCompanies.get("Player");
-        this.player = new UserCompany(playerCompanyName, new CompanyActionImpl(), Tile.TileType.CLAIMED_P1, playerImagePath);
+        String playerImagePath = (String) levelCompanies.search("Player");
+        this.player = new UserCompany(
+                playerCompanyName,
+                new CompanyActionImpl(),
+                Tile.TileType.CLAIMED_P1,
+                playerImagePath);
 
         // Set npcs
         this.npcQueue = new ArrayDeque<>();
-        for (String company:
-             levelCompanies.keySet()) {
-            if (company.equals("Player")) {
+        for (OpenAddressingBucket company: levelCompanies.getTable()) {
+            String companyName = (String)company.getKey();
+            if (companyName == null) {
                 continue;
             }
-            Company npc = new NPCCompany(company, new NPCActionImpl(), Tile.TileType.CLAIMED_P2, levelCompanies.get(company));
+            if (companyName.equals("Player")) {
+                continue;
+            }
+            Company npc = new NPCCompany(
+                    companyName,
+                    new NPCActionImpl(),
+                    Tile.TileType.CLAIMED_P2, (String)
+                    levelCompanies.search(companyName));
             this.npcQueue.add(npc);
         }
     }
 
-    public HashMap<String, String> initLevel(String levelChosen) throws IOException {
+    public QuadraticProbingHashTable initLevel(String levelChosen) throws IOException {
         // Read in company names and images into a map
-        HashMap<String, String> levelCompanies = new HashMap<>();
+        QuadraticProbingHashTable levelCompanies = new QuadraticProbingHashTable(1,1,8);
         BufferedReader reader = new BufferedReader(new FileReader(levelChosen));
 
         // Read lines until end
@@ -131,7 +144,7 @@ public class Game {
             String[] splitLine = line.split(",");
             String name = splitLine[0];
             String imagePath = splitLine[1];
-            levelCompanies.put(name,imagePath);
+            levelCompanies.insert(name,imagePath);
             line = reader.readLine();
         }
         return levelCompanies;
@@ -201,26 +214,6 @@ public class Game {
             int[] updated = event.updateMarket(currentEvent, marketDemand, marketPrice);
             this.marketDemand = updated[0];
             this.marketPrice = updated[1];
-        }
-    }
-
-    /**
-     * called by game controller when user chooses to buy or sell tiles
-     * @param num number to dictate user option
-     */
-    public void tiles (int num) {
-        // Assumes that there will be an event handler in game controller that calls this function when user
-        // selects to buy or sell tiles
-        int amount = 0; // TODO: MISSING NUM TILES INPUT FROM GUI
-        switch (num) {
-            case 1 -> {
-                System.out.println(1);
-                player.tiles(amount, "Purchase", this.tileGrid);
-            }
-            case 2 -> {
-                System.out.println(2);
-                player.tiles(amount, "Sell", this.tileGrid);
-            }
         }
     }
 
