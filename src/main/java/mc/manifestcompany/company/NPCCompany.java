@@ -20,7 +20,7 @@ public class NPCCompany extends Company {
     private Stack<Integer> profit;
     private EnumMap<DataType, Integer> stats;
     private Tile.TileType tileType;
-
+    //private Point2D startingPosition;
     private Stack<Point2D> tileStack;
 
     public NPCCompany(String name, NPCActionImpl actions, Tile.TileType tileType, String imageLink) {
@@ -33,8 +33,13 @@ public class NPCCompany extends Company {
         this.profit = new Stack <>();
         this.tileStack = new Stack <>();
         this.tileType = tileType;
+        //this.startingPosition = startingPosition;
         initializeStats();
     }
+
+    //public Point2D getStartingPosition() {
+    //    return startingPosition;
+    //}
 
     @Override
     public void initializeStats() {

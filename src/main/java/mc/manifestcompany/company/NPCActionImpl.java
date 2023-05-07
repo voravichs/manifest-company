@@ -61,10 +61,14 @@ public class NPCActionImpl extends CompanyActionImpl {
             if (actionChoice == 0) {
                 invest(0, "", company);
             } else if (actionChoice == 1) {
-                tiles(0, "Purchase", company, grid);
+                int numTilesToPurchase = getRandomTileCount(company);
+                tiles(numTilesToPurchase, "Purchase", company, grid);
             }
         } else if (availableTiles > 0) {
             tiles(0, "Sell", company, grid);
+        } else {
+            // Go bankrupt
+            // TODO
         }
     }
 
@@ -96,9 +100,8 @@ public class NPCActionImpl extends CompanyActionImpl {
     }
 
     public void tiles(int numTile, String method, NPCCompany company, Tile[][] grid) {
-        int randomTileCount = getRandomTileCount(company);
 
-        System.out.println("NPC DECISION: " + method + " " + randomTileCount +
+        System.out.println("NPC DECISION: " + method + " " + numTile +
                 " tiles for company: " + company.getName());
         this.stats = company.getStats();
 
@@ -195,14 +198,14 @@ public class NPCActionImpl extends CompanyActionImpl {
      * @param numTiles number of tiles to purchase - each tile is $300
      * @return whether action was successful
      */
-    private boolean purchaseTiles(int numTiles, Tile[][] grid, Tile.TileType tileType, Company company) {
+    private boolean purchaseTiles(int numTiles, Tile[][] grid, Tile.TileType tileType, NPCCompany company) {
         int cost = numTiles * TILE_COST;
         if(!handleCash(-cost)) {
             return false;
         }
 
         //handle below
-//        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
+        //this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
 
         // TODO: TILE HANDLING - BFS to add a new tile
 
@@ -317,12 +320,8 @@ public class NPCActionImpl extends CompanyActionImpl {
                 } else if (adjTile.getType() == Tile.TileType.EMPTY) {
                     return new Point2D(adjX, adjY);
                 }
-
             }
         }
-
         return new Point2D(-1, -1);
-
     }
-
 }

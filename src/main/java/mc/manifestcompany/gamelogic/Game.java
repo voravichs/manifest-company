@@ -107,12 +107,22 @@ public class Game {
 
         // Set npcs
         this.npcQueue = new ArrayDeque<>();
-        for (String company:
-             levelCompanies.keySet()) {
+
+        // List of tile types for NPCs
+        List<Tile.TileType> npcTileTypes = List.of(
+                Tile.TileType.CLAIMED_P2,
+                Tile.TileType.CLAIMED_P3,
+                Tile.TileType.CLAIMED_P4
+        );
+        int npcIndex = 0;
+
+        for (String company: levelCompanies.keySet()) {
             if (company.equals("Player")) {
                 continue;
             }
-            Company npc = new NPCCompany(company, new NPCActionImpl(), Tile.TileType.CLAIMED_P2, levelCompanies.get(company));
+            Tile.TileType npcTileType = npcTileTypes.get(npcIndex % npcTileTypes.size()); // Assign the correct tile type
+            npcIndex++;
+            Company npc = new NPCCompany(company, new NPCActionImpl(), npcTileType, levelCompanies.get(company));
             this.npcQueue.add(npc);
         }
     }
