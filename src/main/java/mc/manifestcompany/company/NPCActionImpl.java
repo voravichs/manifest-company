@@ -2,6 +2,7 @@ package mc.manifestcompany.company;
 
 import javafx.geometry.Point2D;
 import mc.manifestcompany.DataType;
+import mc.manifestcompany.gamelogic.Event;
 import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
 
@@ -19,7 +20,13 @@ public class NPCActionImpl extends CompanyActionImpl {
         if (availableCash <= 0) {
             return 0;
         }
-        return random.nextInt(availableCash) + 1;
+
+        if (availableCash < 100) {
+            return availableCash;
+        }
+
+        int randomAmount = random.nextInt(availableCash / 100) + 1;
+        return randomAmount * 100;
     }
 
     private String getRandomSector() {
@@ -41,30 +48,49 @@ public class NPCActionImpl extends CompanyActionImpl {
         return random.nextInt(maxTiles) + 1;
     }
 
-    public void performRandomAction(NPCCompany company, Tile[][] grid) {
+    public void performRandomAction(NPCCompany company, Tile[][] grid, Event.EventType currentEvent) {
         int availableCash = company.getStats().get(DataType.CASH);
         boolean canInvest = availableCash > 0;
         boolean canBuyTiles = availableCash >= TILE_COST;
         int availableTiles = company.getStats().get(DataType.TILES);
 
+        boolean isPositiveEffect = currentEvent == Event.EventType.EXPANSION ||
+                currentEvent == Event.EventType.INNOVATION ||
+                currentEvent == Event.EventType.COMPETITION;
+
+        boolean isNegativeEffect = currentEvent == Event.EventType.PANDEMIC ||
+                currentEvent == Event.EventType.RECESSION ||
+                currentEvent == Event.EventType.WAR;
+
         if (canInvest || canBuyTiles) {
-            List<Integer> availableActions = new ArrayList<>();
-            if (canInvest) {
-                availableActions.add(0);
-            }
-            if (canBuyTiles) {
-                availableActions.add(1);
-            }
-
-            int actionChoice = availableActions.get(random.nextInt(availableActions.size()));
-
-            if (actionChoice == 0) {
+            if (isPositiveEffect && canInvest) {
                 invest(0, "", company);
-            } else if (actionChoice == 1) {
-                tiles(0, "Purchase", company, grid);
+            } else if (isNegativeEffect && canBuyTiles) {
+                int numTilesToPurchase = getRandomTileCount(company);
+                tiles(numTilesToPurchase, "Purchase", company, grid);
+            } else {
+                List<Integer> availableActions = new ArrayList<>();
+                if (canInvest) {
+                    availableActions.add(0);
+                }
+                if (canBuyTiles) {
+                    availableActions.add(1);
+                }
+
+                int actionChoice = availableActions.get(random.nextInt(availableActions.size()));
+
+                if (actionChoice == 0) {
+                    invest(0, "", company);
+                } else if (actionChoice == 1) {
+                    int numTilesToPurchase = getRandomTileCount(company);
+                    tiles(numTilesToPurchase, "Purchase", company, grid);
+                }
             }
         } else if (availableTiles > 0) {
             tiles(0, "Sell", company, grid);
+        } else {
+            // Go bankrupt
+            // TODO
         }
     }
 
@@ -96,9 +122,7 @@ public class NPCActionImpl extends CompanyActionImpl {
     }
 
     public void tiles(int numTile, String method, NPCCompany company, Tile[][] grid) {
-        int randomTileCount = getRandomTileCount(company);
-
-        System.out.println("NPC DECISION: " + method + " " + randomTileCount +
+        System.out.println("NPC DECISION: " + method + " " + numTile +
                 " tiles for company: " + company.getName());
         this.stats = company.getStats();
 
@@ -151,7 +175,6 @@ public class NPCActionImpl extends CompanyActionImpl {
      * @return whether the action was successful
      */
     private boolean investRD(int amount) {
-
         if(!handleCash(-amount)) {
             return false;
         }
@@ -200,11 +223,6 @@ public class NPCActionImpl extends CompanyActionImpl {
         if(!handleCash(-cost)) {
             return false;
         }
-
-        //handle below
-//        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
-
-        // TODO: TILE HANDLING - BFS to add a new tile
 
         int gridSize = grid.length;
 
@@ -279,7 +297,6 @@ public class NPCActionImpl extends CompanyActionImpl {
         int profit = numTiles * TILE_VALUE;
         handleCash(profit);
         this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
-        // TODO: TILE HANDLING - remove most recent tile
         for (int i = 0; i < numTiles; i++) {
             Point2D tileToBeRemoved = company.popFromStack();
             grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.LOST);
@@ -317,12 +334,9 @@ public class NPCActionImpl extends CompanyActionImpl {
                 } else if (adjTile.getType() == Tile.TileType.EMPTY) {
                     return new Point2D(adjX, adjY);
                 }
-
             }
         }
-
         return new Point2D(-1, -1);
-
     }
 
 }
