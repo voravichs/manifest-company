@@ -442,6 +442,19 @@ public class GameController {
     }
 
     /**
+     * Removes all shapes from the tileGrid GUI.
+     */
+    @FXML
+    protected void clearBoard() {
+        Tile[][] tileGrid = game.getTileGrid();
+        for (Tile[] tiles : tileGrid) {
+            for (Tile tile : tiles) {
+                gameBoard.getChildren().remove(tile.getSquare());
+            }
+        }
+    }
+
+    /**
      * Advances to the next turn.
      * Updates the board, chart, and visually transitions to the next turn.
      */
@@ -449,6 +462,15 @@ public class GameController {
     protected void advanceTurn() {
         // Call the next turn method in game
         this.game.nextTurn(game.getTileGrid());
+
+        // Check if game is over
+        if (game.isGameOver()) {
+//            try {
+//                gameOver();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+        }
 
         // Update chart and grid
         updateChart(game.sortCompaniesBy(DataType.TILES));
@@ -471,13 +493,21 @@ public class GameController {
         reportSales();
     }
 
-    private void reportSales() {
-        UserCompany player = game.getPlayer();
-        // Get revenue, cogs, profit, add them as text
-        List<Integer> financials = player.getFinancials();
-        addText("Revenue: " + financials.get(0) + "\n");
-        addText("Expenses: " + financials.get(1) + "\n");
-        addText("Profit: " + financials.get(2) + "\n");
+    /**
+     * Handles the game over conditions.
+     * 3 possible conditions: Player wins, player bankrupts, NPC wins.
+     * @throws IOException if there is a problem with the fxml passed in
+     */
+    @FXML
+    protected void gameOver() throws IOException {
+        if (game.isPlayerBankrupt()) {
+
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
+        Stage stage = (Stage) gamePane.getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
@@ -500,12 +530,29 @@ public class GameController {
         }
     }
 
-    private void clearAllText() {
+    /**
+     * Clears all text from the textQueue.
+     */
+    @FXML
+    protected void clearAllText() {
         for (Text text:
              textQueue) {
             textBox.getChildren().remove(text);
         }
         textQueue.clear();
+    }
+
+    /**
+     * Reports sales by adding text to the text queue
+     */
+    @FXML
+    protected void reportSales() {
+        UserCompany player = game.getPlayer();
+        // Get revenue, cogs, profit, add them as text
+        List<Integer> financials = player.getFinancials();
+        addText("Revenue: " + financials.get(0) + "\n");
+        addText("Expenses: " + financials.get(1) + "\n");
+        addText("Profit: " + financials.get(2) + "\n");
     }
 
     /**
@@ -541,19 +588,6 @@ public class GameController {
                     "Cash: $" + game.getPlayer().getStats().get(DataType.CASH));
 
             closeActions();
-        }
-    }
-
-    /**
-     * Removes all shapes from the tileGrid GUI.
-     */
-    @FXML
-    protected void clearBoard() {
-        Tile[][] tileGrid = game.getTileGrid();
-        for (Tile[] tiles : tileGrid) {
-            for (Tile tile : tiles) {
-                gameBoard.getChildren().remove(tile.getSquare());
-            }
         }
     }
 

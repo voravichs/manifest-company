@@ -9,6 +9,7 @@ import mc.manifestcompany.gui.Tile;
 import java.io.*;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Stack;
 
 public class FileHandler {
     public static void save(Tile[][] tileMap, List<Company> companyList, int turnNum, List<Integer> marketVals, String saveName) throws IOException {
@@ -50,6 +51,13 @@ public class FileHandler {
             writer.write(stats.get(DataType.CASH) + ",");
             writer.write(stats.get(DataType.TILES) + ",");
             writer.write("\n");
+            // Then write the tileStack for this company
+            Stack<Point2D> tileStack = company.getTileStack();
+            while (!tileStack.isEmpty()) {
+                Point2D tile = tileStack.pop();
+                writer.write((int)tile.getX() + "," + (int)tile.getY() + " ");
+            }
+            writer.write("\n");
         }
 
         // Write the turn number
@@ -86,8 +94,8 @@ public class FileHandler {
         // init a new tileGrid to load into
         Tile[][] tileGrid = new Tile[xSize][ySize];
         // Loop through the save file's grid
-        int x = 0;
-        for (int y = 0; y < xSize; y++) {
+        int y = 0;
+        for (int x = 0; x < xSize; x++) {
             String line = reader.readLine();
             String[] splitLine = line.split(" ");
             for (String tile: splitLine) {
@@ -106,9 +114,9 @@ public class FileHandler {
                         new Rectangle(squareSize,squareSize),
                         new Point2D(x * squareSize, y * squareSize),
                         type);
-                x++;
+                y++;
             }
-            x = 0;
+            y = 0;
         }
         // Load the tileGrid, overwriting the default one
         game.loadTileGrid(tileGrid);
@@ -117,6 +125,7 @@ public class FileHandler {
         reader.readLine();
         // Read in the same order as the company list
         List<Company> companyList = game.getCompanyList();
+
         for (Company company: companyList) {
             EnumMap<DataType, Integer> stats = new EnumMap<>(DataType.class);
             String line = reader.readLine();
@@ -129,7 +138,24 @@ public class FileHandler {
             stats.put(DataType.CASH, Integer.valueOf(splitLine[5]));
             stats.put(DataType.TILES, Integer.valueOf(splitLine[6]));
             company.setStats(stats);
+            // Read in tileStack
+            Stack<Point2D> reversedTileStack = new Stack<>();
+            line = reader.readLine();
+            if (line.isBlank()) {
+                continue;
+            }
+            splitLine = line.split(" ");
+            for (String coordString: splitLine) {
+                String[] splitCoord = coordString.split(",");
+                Point2D coord = new Point2D(Double.parseDouble(splitCoord[0]), Double.parseDouble(splitCoord[1]));
+                reversedTileStack.push(coord);
+            }
+            // Add the reverse of the stack to the company
+            while (!reversedTileStack.isEmpty()) {
+                company.addToStack(reversedTileStack.pop());
+            }
         }
+
 
         // Read the turn number
         reader.readLine();

@@ -50,8 +50,12 @@ public class Game {
     // Inputs from new game
     private final String playerCompanyName;
 
-    // Event
+    // Current Event
     private Event.EventType currentEvent;
+
+    // gameOver Conditions
+    private boolean playerBankrupt;
+    private boolean gameOver;
 
     public Game(int xSize, int ySize, String playerCompanyName, String levelChosen) {
         // Creates a tile array of x*y size
@@ -185,7 +189,8 @@ public class Game {
 
         // Check if the player went bankrupt
         if (!turn.validCompany(player)) {
-            // TODO: PLAYER LOST, GAME ENDS
+            gameOver = true;
+            playerBankrupt = true;
             return;
         }
         // check if any of the NPC went bankrupt, remove from npcQueue if bankrupt
@@ -280,5 +285,13 @@ public class Game {
 
     public void setMarketPrice(int marketPrice) {
         this.marketPrice = marketPrice;
+    }
+
+    public boolean isGameOver() {
+        return this.gameOver;
+    }
+
+    public boolean isPlayerBankrupt() {
+        return this.playerBankrupt;
     }
 }

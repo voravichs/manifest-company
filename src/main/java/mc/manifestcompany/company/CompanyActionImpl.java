@@ -6,7 +6,6 @@ import mc.manifestcompany.gamelogic.Game;
 import mc.manifestcompany.gui.Tile;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -18,7 +17,7 @@ public class CompanyActionImpl implements CompanyAction {
 
     protected EnumMap<DataType, Integer> stats;
     protected static final int TILE_COST = 300;
-    protected static final int TILE_VALUE = 100;
+    protected static final int TILE_VALUE = 300;
 
     @Override
     public void invest(int amount, String sector, Company company) {
@@ -200,19 +199,19 @@ public class CompanyActionImpl implements CompanyAction {
 
     /**
      * handles selling of tiles
-     * @param numTiles number of tiles to sell - each tile is worth $100
+     * @param numTiles number of tiles to sell - each tile is worth $300
      * @return whether action was successful
      */
     private boolean sellTiles(int numTiles, Tile[][] grid, Company company) {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
-        int profit = numTiles * TILE_VALUE;
+        int profit = -numTiles * TILE_VALUE;
         handleCash(profit);
-        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
+        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
         // TODO: TILE HANDLING - remove most recent tile
 
-        for (int i = 0; i < numTiles; i++) {
+        for (int i = 0; i < -numTiles; i++) {
             Point2D tileToBeRemoved = company.popFromStack();
             grid[(int)tileToBeRemoved.getX()][(int)tileToBeRemoved.getY()].setType(Tile.TileType.LOST);
         }
