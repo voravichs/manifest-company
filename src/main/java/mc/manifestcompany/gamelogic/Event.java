@@ -2,21 +2,33 @@ package mc.manifestcompany.gamelogic;
 
 public interface Event {
     enum EventType {
-        NONE(0.5),
-        PANDEMIC(0.03),
-        COMPETITION(0.15),
-        RECESSION(0.08),
-        EXPANSION(0.08),
-        INNOVATION(0.15),
-        WAR(0.01);
+        NONE(0.5, "The market will be normal this turn."),
+        PANDEMIC(0.03, "WHO has reported a worldwide pandemic has broken out!\n" +
+                        "Sales will be heavily affected."),
+        COMPETITION(0.15, "A hip new startup has started selling similar products!\n" +
+                        "This is sure to drive more sales and competition."),
+        RECESSION(0.08, "A global recession has hit the market!\n" +
+                        "Sales and prices will drop."),
+        EXPANSION(0.08, "Investors have funded an acquisition of another company!\n" +
+                        "This will greatly increase sales and prices."),
+        INNOVATION(0.15,"New technologies have been developed to streamline production!\n" +
+                        "The quality of products and prices will increase."),
+        WAR(0.01, "A war has broken out between two major countries many companies operate!\n" +
+                        "Sales will be almost non-existent this turn.");
 
         private final double likelihood;
 
-        EventType(double n) {
+        private final String text;
+
+        EventType(double n, String text) {
             this.likelihood = n;
+            this.text = text;
         }
         public double getProbability() {
             return likelihood;
+        }
+        public String getText() {
+            return text;
         }
     }
 

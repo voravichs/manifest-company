@@ -24,6 +24,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import mc.manifestcompany.*;
 import mc.manifestcompany.company.Company;
+import mc.manifestcompany.company.UserCompany;
 import mc.manifestcompany.gamelogic.Game;
 
 import java.io.FileInputStream;
@@ -102,6 +103,7 @@ public class GameController {
     private final Queue<Text> textQueue;
     private boolean sorted;
     private DataType currentSorted;
+    private Text playerSidebarCash;
 
     // Constructor inits the textQueue on startup
     public GameController() {
@@ -238,15 +240,23 @@ public class GameController {
             TextFlow tf = new TextFlow();
             tf.setPadding(new Insets(50,20,20,10));
             tf.getStyleClass().add("stats-text");
-            Text text = new Text(
-                    company.getName() + "\n" +
-                    "Cash: $" + company.getStats().get(DataType.CASH));
-            transitionPane.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                event -> text.setText(company.getName() + "\n" +
-                        "Cash: $" + company.getStats().get(DataType.CASH)));
-
-            tf.getChildren().add(text);
-
+            if (company instanceof UserCompany) {
+                playerSidebarCash = new Text(
+                        company.getName() + "\n" +
+                                "Cash: $" + company.getStats().get(DataType.CASH));
+                transitionPane.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        event -> playerSidebarCash.setText(company.getName() + "\n" +
+                                "Cash: $" + company.getStats().get(DataType.CASH)));
+                tf.getChildren().add(playerSidebarCash);
+            } else {
+                Text text = new Text(
+                        company.getName() + "\n" +
+                                "Cash: $" + company.getStats().get(DataType.CASH));
+                transitionPane.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        event -> text.setText(company.getName() + "\n" +
+                                "Cash: $" + company.getStats().get(DataType.CASH)));
+                tf.getChildren().add(text);
+            }
 
             sideBar.add(tf,1,i);
 
@@ -397,11 +407,11 @@ public class GameController {
             GridPane.setHalignment(tiles, HPos.CENTER);
             dataChart.add(tiles, 2, i);
             // Cash
-            Text cash = new Text(Integer.toString(company.getStats().get(DataType.CASH)));
+            Text cash = new Text("$" + company.getStats().get(DataType.CASH));
             GridPane.setHalignment(cash, HPos.CENTER);
             dataChart.add(cash, 3, i);
             // Price
-            Text price = new Text(Integer.toString(company.getStats().get(DataType.PRICE)));
+            Text price = new Text("$" + company.getStats().get(DataType.PRICE));
             GridPane.setHalignment(price, HPos.CENTER);
             dataChart.add(price, 4, i);
             // Goods
@@ -409,7 +419,7 @@ public class GameController {
             GridPane.setHalignment(goods, HPos.CENTER);
             dataChart.add(goods, 5, i);
             // Cost
-            Text cost = new Text(Integer.toString(company.getStats().get(DataType.COST)));
+            Text cost = new Text("$" + company.getStats().get(DataType.COST) + "/sale");
             GridPane.setHalignment(cost, HPos.CENTER);
             dataChart.add(cost, 6, i);
             i++;
@@ -432,6 +442,19 @@ public class GameController {
     }
 
     /**
+     * Removes all shapes from the tileGrid GUI.
+     */
+    @FXML
+    protected void clearBoard() {
+        Tile[][] tileGrid = game.getTileGrid();
+        for (Tile[] tiles : tileGrid) {
+            for (Tile tile : tiles) {
+                gameBoard.getChildren().remove(tile.getSquare());
+            }
+        }
+    }
+
+    /**
      * Advances to the next turn.
      * Updates the board, chart, and visually transitions to the next turn.
      */
@@ -439,6 +462,15 @@ public class GameController {
     protected void advanceTurn() {
         // Call the next turn method in game
         this.game.nextTurn(game.getTileGrid());
+
+        // Check if game is over
+        if (game.isGameOver()) {
+//            try {
+//                gameOver();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+        }
 
         // Update chart and grid
         updateChart(game.sortCompaniesBy(DataType.TILES));
@@ -449,11 +481,33 @@ public class GameController {
         // show the transition pane, set the text for the turn
         transitionPane.setVisible(true);
         game.setTurnNum(game.getTurnNum() + 1);
-        turnText.setText("Turn " + game.getTurnNum());
+        turnText.setText("Turn " + game.getTurnNum() + "\n" +
+                game.getCurrentEvent().getText());
 
         // Add text to the box showing the turn has advanced
+        clearAllText();
         addText("[TURN " + game.getTurnNum() + "]\n");
         turn.setText("Turn " + game.getTurnNum());
+
+        // Tell the player sales and profits
+        reportSales();
+    }
+
+    /**
+     * Handles the game over conditions.
+     * 3 possible conditions: Player wins, player bankrupts, NPC wins.
+     * @throws IOException if there is a problem with the fxml passed in
+     */
+    @FXML
+    protected void gameOver() throws IOException {
+        if (game.isPlayerBankrupt()) {
+
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
+        Stage stage = (Stage) gamePane.getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
@@ -474,6 +528,31 @@ public class GameController {
             // Call this again to add the text
             addText(text);
         }
+    }
+
+    /**
+     * Clears all text from the textQueue.
+     */
+    @FXML
+    protected void clearAllText() {
+        for (Text text:
+             textQueue) {
+            textBox.getChildren().remove(text);
+        }
+        textQueue.clear();
+    }
+
+    /**
+     * Reports sales by adding text to the text queue
+     */
+    @FXML
+    protected void reportSales() {
+        UserCompany player = game.getPlayer();
+        // Get revenue, cogs, profit, add them as text
+        List<Integer> financials = player.getFinancials();
+        addText("Revenue: " + financials.get(0) + "\n");
+        addText("Expenses: " + financials.get(1) + "\n");
+        addText("Profit: " + financials.get(2) + "\n");
     }
 
     /**
@@ -503,20 +582,12 @@ public class GameController {
             addText("Press NEXT TURN \n");
             addText("to continue.\n");
 
-            closeActions();
-        }
-    }
+            // Update sidebar
+            playerSidebarCash.setText(
+                    game.getPlayer().getName() + "\n" +
+                    "Cash: $" + game.getPlayer().getStats().get(DataType.CASH));
 
-    /**
-     * Removes all shapes from the tileGrid GUI.
-     */
-    @FXML
-    protected void clearBoard() {
-        Tile[][] tileGrid = game.getTileGrid();
-        for (Tile[] tiles : tileGrid) {
-            for (Tile tile : tiles) {
-                gameBoard.getChildren().remove(tile.getSquare());
-            }
+            closeActions();
         }
     }
 
@@ -525,7 +596,12 @@ public class GameController {
      */
     @FXML
     protected void save() throws IOException {
-        FileHandler.save(game.getTileGrid(), game.getCompanyList(), game.getTurnNum(), saveNameEntry.getText());
+        FileHandler.save(
+                game.getTileGrid(),
+                game.getCompanyList(),
+                game.getTurnNum(),
+                game.getMarketValues(),
+                saveNameEntry.getText());
     }
 
     /**

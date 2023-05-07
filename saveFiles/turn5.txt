@@ -1,28 +1,36 @@
 tileMap 20 20
-1 1 1 E E E E E E E E E E E E E L 2 2 2
-1 1 L E E E E E E E E E E E E E E E 2 2
-1 E E E E E E E E E E E E E E E E E E 2
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E E
-E E E E E E E E E E E E E E E E E E E L
-3 E E E E E E E E E E E E E E E E E L 4
-3 3 L E E E E E E E E E E E E E E E 4 4
-3 3 3 E E E E E E E E E E E E E E 4 4 4
+1 1 1 E E E E E E E E E E E E E E E E 2 
+1 1 E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E E E E E E 
+3 E E E E E E E E E E E E E E E E E E 4 
 companies
-Pizza Shack,50,5,15,24,196,1,
-Queso Queen,100,1,16,27,80,1,
-WacMondalds,50,5,15,24,283,1,
-Applebapple's,50,0,15,30,755,5,
+WacMondalds,50,1,15,30,1512,1,
+
+Pizza Shack,50,1,15,18,1587,1,
+
+Queso Queen,50,7,21,21,669,1,
+
+Dee's Nuts,80,6,15,21,1155,5,
+1,1 0,2 1,0 0,1 
 turn 
 5
+demand 
+60
+price 
+200

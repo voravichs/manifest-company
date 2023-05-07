@@ -38,7 +38,7 @@ public class UserCompany extends Company {
     @Override
     public void initializeStats() {
         this.stats.put(DataType.PRICE, 50);
-        this.stats.put(DataType.MULTIPLIER, 0);
+        this.stats.put(DataType.MULTIPLIER, 1);
         this.stats.put(DataType.CAPACITY, 15);
         this.stats.put(DataType.COST, 30);
         this.stats.put(DataType.CASH, 500);
@@ -128,16 +128,6 @@ public class UserCompany extends Company {
         return enoughTiles && enoughCash;
     }
 
-    //comparators
-//    public static Comparator<UserCompany> comparatorByCash() {
-//        return new Comparator<UserCompany>() {
-//            @Override
-//            public int compare(UserCompany o1, UserCompany o2) {
-//                return o2.stats.get(DataType.CASH) - o1.stats.get(DataType.CASH);
-//            }
-//        };
-//    }
-
     @Override
     public Stack<Point2D> getTileStack() {
         return this.tileStack;
@@ -151,9 +141,5 @@ public class UserCompany extends Company {
     public Point2D popFromStack() {
         return this.tileStack.pop();
     }
-
-
-
-
 
 }

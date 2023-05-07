@@ -24,11 +24,15 @@ public class TurnImpl implements Turn {
     public void turn(int numGoods, Company company) {
         EnumMap<DataType, Integer> stats = company.getStats();
 
-        numGoods = (int) (numGoods * (1.0 + stats.get(DataType.MULTIPLIER) / 10));  // num goods a company can sell
-        numGoods = Math.min(numGoods, marketDemand);          // company can't sell more than market demand or capacity
+        // num goods a company can sell
+        numGoods = (int) (numGoods * (1.0 + stats.get(DataType.MULTIPLIER) / 10));
+        // company can't sell more than market demand or capacity
+        numGoods = Math.min(numGoods, marketDemand);
         numGoods = Math.min(numGoods, stats.get(DataType.CAPACITY));
-        int price = Math.min(stats.get(DataType.PRICE), marketPrice);  // company can't sell higher price than market price
-        int cost = Math.max(stats.get(DataType.COST), 0);              // cost can be negative
+        // company can't sell higher price than market price
+        int price = Math.min(stats.get(DataType.PRICE), marketPrice);
+        // cost cannot be negative
+        int cost = Math.max(stats.get(DataType.COST), 0);
 
         int revenue = numGoods * price;
         int cogs = numGoods * cost;

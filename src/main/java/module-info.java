@@ -12,4 +12,5 @@ module mc.manifestcompany {
     opens mc.manifestcompany.company to javafx.fxml;
     exports mc.manifestcompany.gamelogic;
     opens mc.manifestcompany.gamelogic to javafx.fxml;
+    exports mc.manifestcompany.hashtable;
 }
