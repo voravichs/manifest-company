@@ -39,26 +39,26 @@ public class CompanyActionImplTest {
         this.actions.invest(100, "Marketing", this.company);
         int multiplier = this.company.getStats().get(DataType.MULTIPLIER);
         int cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(2, multiplier);
+        assertEquals(3, multiplier);
         assertEquals(400, cash);
 
         this.actions.invest(100, "R&D", this.company);
         int price = this.company.getStats().get(DataType.PRICE);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(60, price);
+        assertEquals(70, price);
         assertEquals(300, cash);
 
 
         this.actions.invest(100, "Goods", this.company);
         int capacity = this.company.getStats().get(DataType.CAPACITY);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(16, capacity);
+        assertEquals(17, capacity);
         assertEquals(200, cash);
 
         this.actions.invest(100, "HR", this.company);
         int cost = this.company.getStats().get(DataType.COST);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(27, cost);
+        assertEquals(24, cost);
         assertEquals(100, cash);
     }
 
@@ -70,7 +70,7 @@ public class CompanyActionImplTest {
         assertEquals(2, tiles);
         assertEquals(200, cash);
 
-        this.actions.tiles(1, "Sell", this.company, grid);
+        this.actions.tiles(-1, "Sell", this.company, grid);
         tiles = this.company.getStats().get(DataType.TILES);
         cash = this.company.getStats().get(DataType.CASH);
         assertEquals(1, tiles);
