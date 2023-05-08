@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="700.0" maxWidth="1200.0" prefHeight="700.0" prefWidth="1200.0" spacing="50.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mc.manifestcompany.gui.EndController">
+   <children>
+      <Label fx:id="results" text="Label" textAlignment="CENTER" />
+      <Button mnemonicParsing="false" onAction="#exit" text="Click Here to return to Main Menu" />
+   </children>
+</VBox>

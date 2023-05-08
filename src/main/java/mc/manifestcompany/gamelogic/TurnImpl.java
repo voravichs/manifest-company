@@ -4,7 +4,7 @@ import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.Company;
 
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Queue;
 
 public class TurnImpl implements Turn {
@@ -58,17 +58,15 @@ public class TurnImpl implements Turn {
     }
 
     @Override
-    public Company winner(int numTiles, Company player, Queue<Company> npcQueue) {
-        int threshold = numTiles / 2;
-        if (player.getStats().get(DataType.TILES) >= threshold) {
-            return player;
-        }
-        for (Company npc : npcQueue) {
-            if (npc.getStats().get(DataType.TILES) >= threshold) {
-                return npc;
+    public Company winner(int numTiles, List<Company> companyList) {
+        Company companyWithMostTiles = companyList.get(0);
+        for (Company company : companyList) {
+            if (company.getStats().get(DataType.TILES)
+                    > companyWithMostTiles.getStats().get(DataType.TILES)) {
+                companyWithMostTiles = company;
             }
         }
-        return null;
+        return companyWithMostTiles;
     }
 
 

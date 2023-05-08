@@ -198,7 +198,7 @@
                            <Insets />
                         </GridPane.margin>
                      </Label>
-                     <Spinner fx:id="tileSpinner" prefHeight="35.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                     <Spinner fx:id="tileSpinner" editable="true" prefHeight="35.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   </children>
                </GridPane>
                <Text fx:id="hrTotal" layoutX="460.0" layoutY="439.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" styleClass="action-text" text="\$0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />

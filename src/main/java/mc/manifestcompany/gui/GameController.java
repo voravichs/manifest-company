@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -419,9 +420,15 @@ public class GameController {
             GridPane.setHalignment(goods, HPos.CENTER);
             dataChart.add(goods, 5, i);
             // Cost
-            Text cost = new Text("$" + company.getStats().get(DataType.COST) + "/sale");
-            GridPane.setHalignment(cost, HPos.CENTER);
-            dataChart.add(cost, 6, i);
+            if (company.getStats().get(DataType.COST) < 0) {
+                Text cost = new Text("$" + 0 + "/sale");
+                GridPane.setHalignment(cost, HPos.CENTER);
+                dataChart.add(cost, 6, i);
+            } else {
+                Text cost = new Text("$" + company.getStats().get(DataType.COST) + "/sale");
+                GridPane.setHalignment(cost, HPos.CENTER);
+                dataChart.add(cost, 6, i);
+            }
             i++;
         }
     }
@@ -465,11 +472,12 @@ public class GameController {
 
         // Check if game is over
         if (game.isGameOver()) {
-//            try {
-//                gameOver();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
+            try {
+                gameOver();
+                return;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // Update chart and grid
@@ -500,12 +508,35 @@ public class GameController {
      */
     @FXML
     protected void gameOver() throws IOException {
-        if (game.isPlayerBankrupt()) {
-
+        Game.GameOverState gameOverState = game.getGameOverState();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("endScreen.fxml"));
+        Parent root = fxmlLoader.load();
+        EndController controller = fxmlLoader.getController();
+        switch (gameOverState) {
+            case PLAYER_BANKRUPT -> controller.setResults(
+                    "GAME OVER\n" +
+                    "You have filed for bankruptcy due to\n" +
+                    "not having enough cash to pay expenses.\n" +
+                    "You had: " + game.getPlayer().getStats().get(DataType.TILES) + " tile(s).");
+            case NPCS_BANKRUPT -> controller.setResults(
+                    "YOU WIN\n" +
+                    "All other companies have filed for bankruptcy!\n" +
+                    "You now hold a monopoly in this industry!\n" +
+                    "You had: " + game.getPlayer().getStats().get(DataType.TILES) + " tile(s).");
+            case BOARD_FULL_PLAYER -> controller.setResults(
+                    "YOU WIN\n" +
+                    "You control the most tiles!\n" +
+                    "Your company is leading in this industry!\n" +
+                    "You had: " + game.getPlayer().getStats().get(DataType.TILES) + " tile(s).");
+            case BOARD_FULL_NPC -> controller.setResults(
+                    "YOU LOST\n" +
+                    game.getWinner().getName() + " controls the most tiles.\n" +
+                    "Their company is now leading in this industry.\n" +
+                    "You had: " + game.getPlayer().getStats().get(DataType.TILES) + " tile(s).");
         }
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("title.fxml"));
+
         Stage stage = (Stage) gamePane.getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        Scene scene = new Scene(root, 1200, 700);
         stage.setScene(scene);
         stage.show();
     }

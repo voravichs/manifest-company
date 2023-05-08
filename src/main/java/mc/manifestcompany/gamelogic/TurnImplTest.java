@@ -8,6 +8,7 @@ import org.junit.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +16,7 @@ public class TurnImplTest {
     private TurnImpl turn;
     private Company company;
     private Deque<Company> npcQueue;
+    private List<Company> companyList;
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +29,7 @@ public class TurnImplTest {
         this.npcQueue.add(npc1);
         this.npcQueue.add(npc2);
         this.npcQueue.add(npc3);
-
+        this.companyList.addAll(Arrays.asList(company, npc1, npc2, npc3));
     }
 
     @Test
@@ -53,8 +55,8 @@ public class TurnImplTest {
 
     @Test
     public void winner() {
-        assertEquals(null, this.turn.winner(100, this.company, this.npcQueue));
+        assertEquals(null, this.turn.winner(100, this.companyList));
         this.company.getStats().put(DataType.TILES, 50);
-        assertEquals(this.company, this.turn.winner(100, this.company, this.npcQueue));
+        assertEquals(this.company, this.turn.winner(100, this.companyList));
     }
 }

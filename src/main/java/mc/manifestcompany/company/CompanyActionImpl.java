@@ -146,8 +146,6 @@ public class CompanyActionImpl implements CompanyAction {
         if(!handleCash(-cost)) {
             return false;
         }
-//        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
-        // TODO: TILE HANDLING - BFS to add a new tile
 
         int startX = 0;
         int startY = 0;
@@ -175,6 +173,7 @@ public class CompanyActionImpl implements CompanyAction {
                         if (tiles[k].getType() == Tile.TileType.EMPTY) {
                             tiles[k].setType(tileType);
 
+                            tilesPurchased++;
                             //add the tile to the company's stack
                             company.addToStack(newTile);
                             findAnAvailableTile = true;
@@ -206,10 +205,9 @@ public class CompanyActionImpl implements CompanyAction {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
-        int profit = numTiles * TILE_VALUE;
+        int profit = -numTiles * TILE_VALUE;
         handleCash(profit);
-        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
-        // TODO: TILE HANDLING - remove most recent tile
+        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
 
         for (int i = 0; i < -numTiles; i++) {
             Point2D tileToBeRemoved = company.popFromStack();
@@ -219,6 +217,14 @@ public class CompanyActionImpl implements CompanyAction {
         return true;
     }
 
+    /**
+     * BFS implementation to find the next tile to buy
+     * @param startingX starting x coord
+     * @param startingY starting y coord
+     * @param playerType the player type to find tiles for
+     * @param grid the tileGrid
+     * @return the Point2D coord of the tile
+     */
     private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType, Tile[][] grid) {
         Queue<Point2D> q = new LinkedList<>();
         boolean[][] visited = new boolean[grid.length][grid.length];
