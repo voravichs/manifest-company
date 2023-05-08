@@ -7,7 +7,6 @@ import mc.manifestcompany.gui.Tile;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -80,7 +79,7 @@ public class CompanyActionImpl implements CompanyAction {
 
     /**
      * handles marketing investment
-     * @param amount amount to invest - each $100 leads to a 20% multiplier increase
+     * @param amount amount to invest - each $100 leads to a 10% multiplier increase
      * @return whether the action was successful
      */
     private boolean investMarketing(int amount) {
@@ -93,13 +92,13 @@ public class CompanyActionImpl implements CompanyAction {
             this.stats.put(DataType.MULTIPLIER, (int) (multiplier + (2 * (1 - Math.pow(0.5, increase)))));
         } else {
             this.stats.put(DataType.MULTIPLIER, multiplier + (2 * (int)increase));
-            lastInvestment = DataType.MULTIPLIER;
         }
+        lastInvestment = DataType.MULTIPLIER;
         return true;
     }
     /**
      * handles R&D investment
-     * @param amount amount to invest - each $100 leads to a $20 price increase
+     * @param amount amount to invest - each $100 leads to a $10 price increase
      * @return whether the action was successful
      */
     private boolean investRD(int amount) {
@@ -112,14 +111,14 @@ public class CompanyActionImpl implements CompanyAction {
             this.stats.put(DataType.PRICE, (int) (price + (20 * (1 - Math.pow(0.5, increase)))));
         } else {
             this.stats.put(DataType.PRICE, price + (20 * (int)increase));
-            lastInvestment = DataType.PRICE;
         }
+        lastInvestment = DataType.PRICE;
         return true;
     }
 
     /**
      * handles Raw Goods investment
-     * @param amount amount to invest - each $100 leads to 2 unit capacity increase
+     * @param amount amount to invest - each $100 leads to 1 unit capacity increase
      * @return whether the action was successful
      */
     private boolean investGoods(int amount) {
@@ -132,9 +131,8 @@ public class CompanyActionImpl implements CompanyAction {
             this.stats.put(DataType.CAPACITY, (int) (capacity + (2 * (1 - Math.pow(0.5, increase)))));
         } else {
             this.stats.put(DataType.CAPACITY, capacity + (2 * (int)increase));
-            lastInvestment = DataType.CAPACITY;
         }
-
+        lastInvestment = DataType.CAPACITY;
         return true;
     }
     /**
@@ -149,12 +147,11 @@ public class CompanyActionImpl implements CompanyAction {
         double decrease = amount / 100.0;
         int cost = this.stats.get(DataType.COST);
         if (lastInvestment == DataType.COST) {
-            this.stats.put(DataType.COST, (int) (cost - (3 * (1 - Math.pow(0.5, decrease)))));
+            this.stats.put(DataType.COST, (int) (cost - (6 * (1 - Math.pow(0.5, decrease)))));
         } else {
-            this.stats.put(DataType.COST, cost - (3 * (int)decrease));
-            lastInvestment = DataType.COST;
+            this.stats.put(DataType.COST, cost - (6 * (int)decrease));
         }
-
+        lastInvestment = DataType.COST;
         return true;
     }
 
@@ -281,6 +278,11 @@ public class CompanyActionImpl implements CompanyAction {
 
             }
         }
+
         return new Point2D(-1, -1);
+
     }
+
+
+
 }

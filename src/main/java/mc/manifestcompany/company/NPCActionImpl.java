@@ -34,6 +34,11 @@ public class NPCActionImpl extends CompanyActionImpl {
         return sectors[random.nextInt(sectors.length)];
     }
 
+    private String getRandomMethod() {
+        String[] methods = {"Purchase", "Sell"};
+        return methods[random.nextInt(methods.length)];
+    }
+
     private int getRandomTileCount(NPCCompany company) {
         int availableCash = company.getStats().get(DataType.CASH);
         int maxTiles = availableCash / TILE_COST;
@@ -83,6 +88,9 @@ public class NPCActionImpl extends CompanyActionImpl {
             }
         } else if (availableTiles > 0) {
             tiles(0, "Sell", company, grid);
+        } else {
+            // Go bankrupt
+            // TODO
         }
     }
 
@@ -149,7 +157,7 @@ public class NPCActionImpl extends CompanyActionImpl {
 
     /**
      * handles marketing investment
-     * @param amount amount to invest - each $100 leads to a 20% multiplier increase
+     * @param amount amount to invest - each $100 leads to a 10% multiplier increase
      * @return whether the action was successful
      */
     private boolean investMarketing(int amount) {
@@ -168,7 +176,7 @@ public class NPCActionImpl extends CompanyActionImpl {
     }
     /**
      * handles R&D investment
-     * @param amount amount to invest - each $100 leads to a $20 price increase
+     * @param amount amount to invest - each $100 leads to a $10 price increase
      * @return whether the action was successful
      */
     private boolean investRD(int amount) {
@@ -188,7 +196,7 @@ public class NPCActionImpl extends CompanyActionImpl {
 
     /**
      * handles Raw Goods investment
-     * @param amount amount to invest - each $100 leads to 2 unit capacity increase
+     * @param amount amount to invest - each $100 leads to 1 unit capacity increase
      * @return whether the action was successful
      */
     private boolean investGoods(int amount) {
@@ -217,9 +225,9 @@ public class NPCActionImpl extends CompanyActionImpl {
         double decrease = amount / 100.0;
         int cost = this.stats.get(DataType.COST);
         if (lastInvestment == DataType.COST) {
-            this.stats.put(DataType.COST, (int) (cost - (3 * (1 - Math.pow(0.5, decrease)))));
+            this.stats.put(DataType.COST, (int) (cost - (6 * (1 - Math.pow(0.5, decrease)))));
         } else {
-            this.stats.put(DataType.COST, cost - (3 * (int)decrease));
+            this.stats.put(DataType.COST, cost - (6 * (int)decrease));
         }
         lastInvestment = DataType.COST;
         return true;
