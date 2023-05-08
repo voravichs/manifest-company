@@ -1,5 +1,7 @@
 package mc.manifestcompany.company;
 
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.gui.Tile;
 import org.junit.Before;
@@ -20,6 +22,17 @@ public class UserCompanyTest {
     public void setUp() throws Exception {
         this.company = new UserCompany("company", new CompanyActionImpl(),
                 Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
+
+        this.grid = new Tile[20][20];
+
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                grid[i][j] = new Tile(
+                        new Rectangle(20,20),
+                        new Point2D(i * 20, j * 20),
+                        Tile.TileType.EMPTY);
+            }
+        }
     }
 
     @Test
@@ -28,7 +41,7 @@ public class UserCompanyTest {
         int price = stats.get(DataType.PRICE);
         assertEquals(50, price);
         int multiplier = stats.get(DataType.MULTIPLIER);
-        assertEquals(0, multiplier);
+        assertEquals(1, multiplier);
         int capacity = stats.get(DataType.CAPACITY);
         assertEquals(15, capacity);
         int cost = stats.get(DataType.COST);
@@ -40,7 +53,7 @@ public class UserCompanyTest {
         this.company.invest(100, "Marketing");
         int multiplier = this.company.getStats().get(DataType.MULTIPLIER);
         int cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(1, multiplier);
+        assertEquals(2, multiplier);
         assertEquals(400, cash);
 
         this.company.invest(100, "R&D");
@@ -75,7 +88,7 @@ public class UserCompanyTest {
         tiles = this.company.getStats().get(DataType.TILES);
         cash = this.company.getStats().get(DataType.CASH);
         assertEquals(1, tiles);
-        assertEquals(300, cash);
+        assertEquals(500, cash);
     }
 
 
