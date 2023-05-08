@@ -1,6 +1,7 @@
 package mc.manifestcompany.gamelogic;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
@@ -54,8 +55,9 @@ public class Game {
     private Event.EventType currentEvent;
 
     // gameOver Conditions
-    private boolean playerBankrupt;
     private boolean gameOver;
+    private GameOverState gameOverState;
+    private Company winner;
 
     public Game(int xSize, int ySize, String playerCompanyName, String levelChosen) {
         // Creates a tile array of x*y size
@@ -201,9 +203,10 @@ public class Game {
         // Check if the player went bankrupt
         if (!turn.validCompany(player)) {
             gameOver = true;
-            playerBankrupt = true;
+            gameOverState = GameOverState.PLAYER_BANKRUPT;
             return;
         }
+
         // check if any of the NPC went bankrupt, remove from npcQueue if bankrupt
         int numNPCs = npcQueue.size();
         for (int i = 0; i < numNPCs; i++) {
@@ -212,20 +215,29 @@ public class Game {
                 npcQueue.add(npc);
             }
         }
-
-        Company winner = turn.winner(numTiles, player, npcQueue);
-        if (turn.boardFull(numTiles, player, npcQueue) || winner != null) {
-            if (winner != null) {
-                System.out.println(winner.getName() + " wins!");
-            } else {
-                System.out.println("Game ended! no player won.");
-            }
-            // TODO: GAME ENDS
+        // Then check if all npcs are bankrupt
+        if (npcQueue.size() == 0) {
+            gameOver = true;
+            gameOverState = GameOverState.NPCS_BANKRUPT;
+            return;
         }
 
+        // Check for a winner if they at least half the tiles
+
+        // Check if the board is full, then declare a winner if it is
+        if (turn.boardFull(numTiles, player, npcQueue)) {
+            this.winner = turn.winner(numTiles, getCompanyList());
+            gameOver = true;
+            switch (winner.getTileType()) {
+                case CLAIMED_P1 -> gameOverState = GameOverState.BOARD_FULL_PLAYER;
+                case CLAIMED_P2, CLAIMED_P3, CLAIMED_P4 -> gameOverState = GameOverState.BOARD_FULL_NPC;
+            }
+            return;
+        }
+
+        // Set the random events for next
         Event event = new EventImpl();
         currentEvent = event.randomEvent();
-        // TODO: eventType helps NPC make decisions
         if (currentEvent != Event.EventType.NONE) {
             int[] updated = event.updateMarket(currentEvent, marketDemand, marketPrice);
             this.marketDemand = updated[0];
@@ -302,7 +314,16 @@ public class Game {
         return this.gameOver;
     }
 
-    public boolean isPlayerBankrupt() {
-        return this.playerBankrupt;
+    public GameOverState getGameOverState() {
+        return gameOverState;
+    }
+
+    public Company getWinner() {
+        return this.winner;
+    }
+
+    public enum GameOverState {
+        PLAYER_BANKRUPT, NPCS_BANKRUPT,
+        BOARD_FULL_PLAYER, BOARD_FULL_NPC;
     }
 }

@@ -262,10 +262,11 @@ public class NPCActionImpl extends CompanyActionImpl {
                     for (int k = 0; k < gridSize; k++) {
                         if (grid[j][k].getType() == Tile.TileType.EMPTY) {
                             grid[j][k].setType(tileType);
-
+                            tilesPurchased++;
                             //add the tile to the company's stack
                             company.addToStack(newTile);
                             findAnAvailableTile = true;
+
                         }
                     }
                 }
@@ -304,6 +305,14 @@ public class NPCActionImpl extends CompanyActionImpl {
         return true;
     }
 
+    /**
+     * BFS implementation to find the next tile to buy
+     * @param startingX starting x coord
+     * @param startingY starting y coord
+     * @param playerType the player type to find tiles for
+     * @param grid the tileGrid
+     * @return the Point2D coord of the tile
+     */
     private Point2D findTheNextTile(int startingX, int startingY, Tile.TileType playerType, Tile[][] grid) {
         Queue<Point2D> q = new LinkedList<>();
         boolean[][] visited = new boolean[grid.length][grid.length];

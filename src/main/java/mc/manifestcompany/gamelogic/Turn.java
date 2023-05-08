@@ -2,6 +2,7 @@ package mc.manifestcompany.gamelogic;
 
 import mc.manifestcompany.company.Company;
 
+import java.util.List;
 import java.util.Queue;
 
 public interface Turn {
@@ -37,11 +38,10 @@ public interface Turn {
     /**
      * gets the winner of the game - a player wins if it has more than half of the tiles
      * @param numTiles total number of tiles on the board
-     * @param player player
-     * @param npcQueue queue of npcs in the game
+     * @param companyList list of companies to check for winners
      * @return the company that won, or null if the board is filled with no winner
      */
-    Company winner(int numTiles, Company player, Queue<Company> npcQueue);
+    Company winner(int numTiles, List<Company> companyList);
 
 
 }
