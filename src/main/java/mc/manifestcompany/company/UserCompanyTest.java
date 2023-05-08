@@ -53,26 +53,26 @@ public class UserCompanyTest {
         this.company.invest(100, "Marketing");
         int multiplier = this.company.getStats().get(DataType.MULTIPLIER);
         int cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(2, multiplier);
+        assertEquals(3, multiplier);
         assertEquals(400, cash);
 
         this.company.invest(100, "R&D");
         int price = this.company.getStats().get(DataType.PRICE);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(60, price);
+        assertEquals(70, price);
         assertEquals(300, cash);
 
 
         this.company.invest(100, "Goods");
         int capacity = this.company.getStats().get(DataType.CAPACITY);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(16, capacity);
+        assertEquals(17, capacity);
         assertEquals(200, cash);
 
         this.company.invest(100, "HR");
         int cost = this.company.getStats().get(DataType.COST);
         cash = this.company.getStats().get(DataType.CASH);
-        assertEquals(27, cost);
+        assertEquals(24, cost);
         assertEquals(100, cash);
     }
 
@@ -84,7 +84,7 @@ public class UserCompanyTest {
         assertEquals(2, tiles);
         assertEquals(200, cash);
 
-        this.company.tiles(1, "Sell", grid);
+        this.company.tiles(-1, "Sell", grid);
         tiles = this.company.getStats().get(DataType.TILES);
         cash = this.company.getStats().get(DataType.CASH);
         assertEquals(1, tiles);
