@@ -206,9 +206,9 @@ public class CompanyActionImpl implements CompanyAction {
         if (this.stats.get(DataType.TILES) < numTiles) {
             return false;
         }
-        int profit = -numTiles * TILE_VALUE;
+        int profit = numTiles * TILE_VALUE;
         handleCash(profit);
-        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) + numTiles);
+        this.stats.put(DataType.TILES, this.stats.get(DataType.TILES) - numTiles);
         // TODO: TILE HANDLING - remove most recent tile
 
         for (int i = 0; i < -numTiles; i++) {
