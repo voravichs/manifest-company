@@ -19,6 +19,8 @@ public class NPCCompany extends Company {
     private Stack<Integer> profit;
     private EnumMap<DataType, Integer> stats;
     private Tile.TileType tileType;
+    private DataType lastInvestment;
+
 
     private Stack<Point2D> tileStack;
 
@@ -34,6 +36,15 @@ public class NPCCompany extends Company {
         this.tileType = tileType;
         initializeStats();
     }
+
+    public DataType getLastInvestment() {
+        return lastInvestment;
+    }
+
+    public void setLastInvestment(DataType lastInvestment) {
+        this.lastInvestment = lastInvestment;
+    }
+
 
     @Override
     public void initializeStats() {
