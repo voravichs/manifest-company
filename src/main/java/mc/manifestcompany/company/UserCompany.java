@@ -144,11 +144,4 @@ public class UserCompany extends Company {
         return this.tileStack.pop();
     }
 
-    public List<DataType> getLastInvestments() {
-        return this.lastInvestments;
-    }
-    public void resetLastInvestments() {
-        this.lastInvestments = new ArrayList<>();
-    }
-
 }
