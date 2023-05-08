@@ -19,6 +19,7 @@ public class UserCompany extends Company {
     private Stack<Integer> profit;
     private EnumMap<DataType, Integer> stats;
     private Stack<Point2D> tileStack;
+    private List<DataType> lastInvestments;
 
     private Tile.TileType tileType;
 
@@ -33,6 +34,7 @@ public class UserCompany extends Company {
         this.profit = new Stack <>();
         this.tileStack = new Stack <>();
         this.tileType = tileType;
+        this.lastInvestments = new ArrayList<>();
         initializeStats();
     }
     @Override

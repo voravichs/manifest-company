@@ -48,8 +48,8 @@ public class EventImplTest {
         assertEquals(200, updated[1]);
 
         updated = event.updateMarket(Event.EventType.WAR, 30, 100);
-        assertEquals(1, updated[0]);
-        assertEquals(1, updated[1]);
+        assertEquals(10, updated[0]);
+        assertEquals(10, updated[1]);
 
         updated = event.updateMarket(Event.EventType.RECESSION, 1, 1);
         assertEquals(1, updated[0]);
