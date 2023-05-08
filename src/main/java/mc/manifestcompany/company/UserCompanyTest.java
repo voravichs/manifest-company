@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Stack;
 
 import static org.junit.Assert.*;
@@ -19,7 +18,7 @@ public class UserCompanyTest {
 
     private Tile[][] grid;
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.company = new UserCompany("company", new CompanyActionImpl(),
                 Tile.TileType.CLAIMED_P1, "images/playerfastfood.png");
 
@@ -106,25 +105,35 @@ public class UserCompanyTest {
 
 
 
-//    @Test
-//    public void getStats() {
-//    }
-//
-//    @Test
-//    public void setStats() {
-//    }
+    @Test
+    public void getStats() {
+        EnumMap<DataType, Integer> stats = this.company.getStats();
+        int price = stats.get(DataType.PRICE);
+        assertEquals(50, price);
+        int multiplier = stats.get(DataType.MULTIPLIER);
+        assertEquals(1, multiplier);
+        int capacity = stats.get(DataType.CAPACITY);
+        assertEquals(15, capacity);
+        int cost = stats.get(DataType.COST);
+        assertEquals(30, cost);
 
-//    @Test
-//    public void setRevenue() {
-//    }
-//
-//    @Test
-//    public void setCogs() {
-//    }
-//
-//    @Test
-//    public void setProfit() {
-//    }
+    }
+
+    @Test
+    public void setStats() {
+    }
+
+    @Test
+    public void setRevenue() {
+    }
+
+    @Test
+    public void setCogs() {
+    }
+
+    @Test
+    public void setProfit() {
+    }
 
     @Test
     public void getFinancials() {
