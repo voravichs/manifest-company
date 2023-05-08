@@ -10,7 +10,7 @@ import java.util.*;
 
 public class NPCActionImpl extends CompanyActionImpl {
     private Random random;
-
+    private DataType lastInvestment;
     public NPCActionImpl() {
         random = new Random();
     }
@@ -32,11 +32,6 @@ public class NPCActionImpl extends CompanyActionImpl {
     private String getRandomSector() {
         String[] sectors = {"Marketing", "R&D", "Goods", "HR"};
         return sectors[random.nextInt(sectors.length)];
-    }
-
-    private String getRandomMethod() {
-        String[] methods = {"Purchase", "Sell"};
-        return methods[random.nextInt(methods.length)];
     }
 
     private int getRandomTileCount(NPCCompany company) {
@@ -88,9 +83,6 @@ public class NPCActionImpl extends CompanyActionImpl {
             }
         } else if (availableTiles > 0) {
             tiles(0, "Sell", company, grid);
-        } else {
-            // Go bankrupt
-            // TODO
         }
     }
 
@@ -157,45 +149,60 @@ public class NPCActionImpl extends CompanyActionImpl {
 
     /**
      * handles marketing investment
-     * @param amount amount to invest - each $100 leads to a 10% multiplier increase
+     * @param amount amount to invest - each $100 leads to a 20% multiplier increase
      * @return whether the action was successful
      */
     private boolean investMarketing(int amount) {
-        if(!handleCash(-amount)) {
+        if (!handleCash(-amount)) {
             return false;
         }
-        int increase = amount / 100;
+        double increase = amount / 100.0;
         int multiplier = this.stats.get(DataType.MULTIPLIER);
-        this.stats.put(DataType.MULTIPLIER, multiplier + increase);
+        if (lastInvestment == DataType.MULTIPLIER) {
+            this.stats.put(DataType.MULTIPLIER, (int) (multiplier + (2 * (1 - Math.pow(0.5, increase)))));
+        } else {
+            this.stats.put(DataType.MULTIPLIER, multiplier + (2 * (int)increase));
+        }
+        lastInvestment = DataType.MULTIPLIER;
         return true;
     }
     /**
      * handles R&D investment
-     * @param amount amount to invest - each $100 leads to a $10 price increase
+     * @param amount amount to invest - each $100 leads to a $20 price increase
      * @return whether the action was successful
      */
     private boolean investRD(int amount) {
-        if(!handleCash(-amount)) {
+        if (!handleCash(-amount)) {
             return false;
         }
-        int increase = amount / 100;
+        double increase = amount / 100.0;
         int price = this.stats.get(DataType.PRICE);
-        this.stats.put(DataType.PRICE, price + (increase * 10));
+        if (lastInvestment == DataType.PRICE) {
+            this.stats.put(DataType.PRICE, (int) (price + (20 * (1 - Math.pow(0.5, increase)))));
+        } else {
+            this.stats.put(DataType.PRICE, price + (20 * (int)increase));
+        }
+        lastInvestment = DataType.PRICE;
         return true;
     }
 
     /**
      * handles Raw Goods investment
-     * @param amount amount to invest - each $100 leads to 1 unit capacity increase
+     * @param amount amount to invest - each $100 leads to 2 unit capacity increase
      * @return whether the action was successful
      */
     private boolean investGoods(int amount) {
-        if(!handleCash(-amount)) {
+        if (!handleCash(-amount)) {
             return false;
         }
-        int increase = amount / 100;
+        double increase = amount / 100.0;
         int capacity = this.stats.get(DataType.CAPACITY);
-        this.stats.put(DataType.CAPACITY, capacity + increase);
+        if (lastInvestment == DataType.CAPACITY) {
+            this.stats.put(DataType.CAPACITY, (int) (capacity + (2 * (1 - Math.pow(0.5, increase)))));
+        } else {
+            this.stats.put(DataType.CAPACITY, capacity + (2 * (int)increase));
+        }
+        lastInvestment = DataType.CAPACITY;
         return true;
     }
     /**
@@ -204,12 +211,17 @@ public class NPCActionImpl extends CompanyActionImpl {
      * @return whether the action was successful
      */
     private boolean investHumanCapital(int amount) {
-        if(!handleCash(-amount)) {
+        if (!handleCash(-amount)) {
             return false;
         }
-        int decrease = amount / 100;
+        double decrease = amount / 100.0;
         int cost = this.stats.get(DataType.COST);
-        this.stats.put(DataType.COST, cost - (decrease * 3));
+        if (lastInvestment == DataType.COST) {
+            this.stats.put(DataType.COST, (int) (cost - (3 * (1 - Math.pow(0.5, decrease)))));
+        } else {
+            this.stats.put(DataType.COST, cost - (3 * (int)decrease));
+        }
+        lastInvestment = DataType.COST;
         return true;
     }
 

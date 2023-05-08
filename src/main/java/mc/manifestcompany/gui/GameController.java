@@ -595,10 +595,24 @@ public class GameController {
     protected void invest() {
         if (possibleToInvest.getText().equals("Investment possible!")) {
             // Invest values from spinners
-            game.getPlayer().invest(marketSpinner.getValue(), "Marketing");
-            game.getPlayer().invest(rdSpinner.getValue(), "R&D");
-            game.getPlayer().invest(goodSpinner.getValue(), "Goods");
-            game.getPlayer().invest(hrSpinner.getValue(), "HR");
+            List<Integer> spinnerValues = new ArrayList<>(Arrays.asList(
+                    marketSpinner.getValue(),
+                    rdSpinner.getValue(),
+                    goodSpinner.getValue(),
+                    hrSpinner.getValue()));
+            List<String> investLabels = new ArrayList<>(Arrays.asList(
+                    "Marketing",
+                    "R&D",
+                    "Goods",
+                    "HR"));
+            int i = 0;
+            for (int amount : spinnerValues) {
+                if (amount == 0) {
+                    continue;
+                }
+                game.getPlayer().invest(amount, investLabels.get(i));
+                i++;
+            }
 
             if (tileSpinner.getValue() > 0) {
                 // (+) Buy Tiles
