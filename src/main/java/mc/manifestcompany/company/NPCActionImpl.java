@@ -331,7 +331,7 @@ public class NPCActionImpl extends CompanyActionImpl {
                     visited[adjX][adjY] = true;
 
                     //if the current tile(already occupied by the player) has an empty neighbor return it!
-                } else if (adjTile.getType() == Tile.TileType.EMPTY) {
+                } else if (adjTile.getType() == Tile.TileType.EMPTY || adjTile.getType() == Tile.TileType.LOST) {
                     return new Point2D(adjX, adjY);
                 }
             }
