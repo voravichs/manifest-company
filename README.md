@@ -87,8 +87,11 @@ At any time, a user may choose to save their progress or quit out of the game.
  ## Credits
 
 Sung Je Moon: https://github.com/solar268
+
 Antina Yeh: https://github.com/antinayeh
+
 Peici Qiu: https://github.com/peiciqiu
+
 Voravich Silapachairueng: https://github.com/voravichs
  
 
