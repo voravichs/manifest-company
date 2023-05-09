@@ -34,11 +34,6 @@ public class NPCActionImpl extends CompanyActionImpl {
         return sectors[random.nextInt(sectors.length)];
     }
 
-    private String getRandomMethod() {
-        String[] methods = {"Purchase", "Sell"};
-        return methods[random.nextInt(methods.length)];
-    }
-
     private int getRandomTileCount(NPCCompany company) {
         int availableCash = company.getStats().get(DataType.CASH);
         int maxTiles = availableCash / TILE_COST;
@@ -88,9 +83,6 @@ public class NPCActionImpl extends CompanyActionImpl {
             }
         } else if (availableTiles > 0) {
             tiles(0, "Sell", company, grid);
-        } else {
-            // Go bankrupt
-            // TODO
         }
     }
 
@@ -278,10 +270,10 @@ public class NPCActionImpl extends CompanyActionImpl {
                 //no adjacent tiles available, iterate over the grid to find an empty tile
             } else {
                 boolean findAnAvailableTile = false;
-                for (int j = 0; j < gridSize; j++) {
+                for (Tile[] tiles : grid) {
                     for (int k = 0; k < gridSize; k++) {
-                        if (grid[j][k].getType() == Tile.TileType.EMPTY) {
-                            grid[j][k].setType(tileType);
+                        if (tiles[k].getType() == Tile.TileType.EMPTY) {
+                            tiles[k].setType(tileType);
                             tilesPurchased++;
                             //add the tile to the company's stack
                             company.addToStack(newTile);
