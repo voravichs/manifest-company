@@ -34,37 +34,25 @@ public class NPCActionImplTest {
 
     @Test
     public void testInvest() {
-        try {
-            npcAction.invest(100, "Marketing", company);
-            npcAction.invest(100, "R&D", company);
-            npcAction.invest(100, "Goods", company);
-            npcAction.invest(100, "HR", company);
-            // No need to check the results since we're only testing if the code runs without errors
-        } catch (Exception e) {
-            fail("An exception occurred while running invest: " + e.getMessage());
-        }
+        npcAction.invest(100, "Marketing", company);
+        npcAction.invest(100, "R&D", company);
+        npcAction.invest(100, "Goods", company);
+        npcAction.invest(100, "HR", company);
+        // No need to check the results since we're only testing if the code runs without errors
     }
 
     @Test
     public void testTiles() {
-        try {
-            npcAction.tiles(1, "Purchase", company, grid);
-            npcAction.tiles(-1, "Sell", company, grid);
-            // No need to check the results since we're only testing if the code runs without errors
-        } catch (Exception e) {
-            fail("An exception occurred while running tiles: " + e.getMessage());
-        }
+        npcAction.tiles(1, "Purchase", company, grid);
+        npcAction.tiles(-1, "Sell", company, grid);
+        // No need to check the results since we're only testing if the code runs without errors
     }
 
     @Test
     public void testPerformRandomAction() {
-        try {
-            int initialCash = company.getStats().get(DataType.CASH);
-            npcAction.performRandomAction(company, grid, Event.EventType.EXPANSION);
-            int newCash = company.getStats().get(DataType.CASH);
-            // No need to check the results since we're only testing if the code runs without errors
-        } catch (Exception e) {
-            fail("An exception occurred while running performRandomAction: " + e.getMessage());
-        }
+        int initialCash = company.getStats().get(DataType.CASH);
+        npcAction.performRandomAction(company, grid, Event.EventType.EXPANSION);
+        int newCash = company.getStats().get(DataType.CASH);
+        // No need to check the results since we're only testing if the code runs without errors
     }
 }

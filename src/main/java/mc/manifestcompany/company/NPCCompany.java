@@ -21,9 +21,15 @@ public class NPCCompany extends Company {
     private Tile.TileType tileType;
     private DataType lastInvestment;
 
-
     private Stack<Point2D> tileStack;
 
+    /**
+     * Constructor for the NPCCompany class.
+     * @param name The name of the NPC company.
+     * @param actions The NPCActionImpl object containing the company's actions.
+     * @param tileType The TileType of the company's tiles.
+     * @param imageLink A string representing the link to the company's image.
+     */
     public NPCCompany(String name, NPCActionImpl actions, Tile.TileType tileType, String imageLink) {
         this.name = name;
         this.actions = actions;
@@ -37,15 +43,9 @@ public class NPCCompany extends Company {
         initializeStats();
     }
 
-    public DataType getLastInvestment() {
-        return lastInvestment;
-    }
-
-    public void setLastInvestment(DataType lastInvestment) {
-        this.lastInvestment = lastInvestment;
-    }
-
-
+    /**
+     * Initializes the statistics for the NPC companies.
+     */
     @Override
     public void initializeStats() {
         this.stats.put(DataType.PRICE, 50);
@@ -56,12 +56,23 @@ public class NPCCompany extends Company {
         this.stats.put(DataType.TILES, 1);
     }
 
+    /**
+     * Invests the given amount in the specified sector for this NPC company.
+     * @param num The amount to be invested.
+     * @param sector The sector in which the amount will be invested.
+     */
     @Override
     public void invest(int num, String sector) {
         System.out.println("Investing in " + this.name);
         actions.invest(num, sector, this);
     }
 
+    /**
+     * Purchases or sells tiles for this NPC company based on the provided method.
+     * @param num The number of tiles to purchase or sell.
+     * @param method The method to be used for this action, either "Purchase" or "Sell".
+     * @param grid A 2D array of Tile objects representing the game grid.
+     */
     @Override
     public void tiles(int num, String method, Tile[][] grid) {
         System.out.println("Purchasing/Selling tiles in " + this.name);
@@ -112,11 +123,19 @@ public class NPCCompany extends Company {
         return this.imageLink;
     }
 
+    /**
+     * Returns the financials of the NPC company as a list of integers.
+     * @return A list containing revenue, cogs, and profit.
+     */
     @Override
     public List<Integer> getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
 
+    /**
+     * Returns the financial history of the NPC company as a list of stacks of integers.
+     * @return A list containing stacks of revenue, cogs, and profit.
+     */
     @Override
     public List<Stack<Integer>> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);

@@ -15,6 +15,11 @@ public class NPCActionImpl extends CompanyActionImpl {
         random = new Random();
     }
 
+    /**
+     * Generates a random investment amount for the NPC based on their available cash.
+     * @param company the NPC company
+     * @return a random investment amount (multiple of 100) considering the available cash of the company
+     */
     private int getRandomAmount(NPCCompany company) {
         int availableCash = company.getStats().get(DataType.CASH);
         if (availableCash <= 0) {
@@ -29,11 +34,20 @@ public class NPCActionImpl extends CompanyActionImpl {
         return randomAmount * 100;
     }
 
+    /**
+     * Returns a random sector from the sectors array.
+     * @return A random sector as a string.
+     */
     private String getRandomSector() {
         String[] sectors = {"Marketing", "R&D", "Goods", "HR"};
         return sectors[random.nextInt(sectors.length)];
     }
 
+    /**
+     * Calculates the random tile count based on the company's available cash.
+     * @param company The NPC company object.
+     * @return The random tile count as an integer.
+     */
     private int getRandomTileCount(NPCCompany company) {
         int availableCash = company.getStats().get(DataType.CASH);
         int maxTiles = availableCash / TILE_COST;
@@ -43,6 +57,12 @@ public class NPCActionImpl extends CompanyActionImpl {
         return random.nextInt(maxTiles) + 1;
     }
 
+    /**
+     * Performs a random action for the NPC company based on its current cash, tiles, and the current event.
+     * @param company The NPC company object.
+     * @param grid The grid of tiles.
+     * @param currentEvent The current event type.
+     */
     public void performRandomAction(NPCCompany company, Tile[][] grid, Event.EventType currentEvent) {
         int availableCash = company.getStats().get(DataType.CASH);
         boolean canInvest = availableCash > 0;
@@ -86,6 +106,12 @@ public class NPCActionImpl extends CompanyActionImpl {
         }
     }
 
+    /**
+     * Invests a random amount in a random sector for the NPC company.
+     * @param amount Unused parameter, will be calculated within the method.
+     * @param sector Unused parameter, will be calculated within the method.
+     * @param company The NPC company object.
+     */
     public void invest(int amount, String sector, NPCCompany company) {
         int randomAmount = getRandomAmount(company);
         String randomSector = getRandomSector();
@@ -113,6 +139,13 @@ public class NPCActionImpl extends CompanyActionImpl {
         company.setStats(this.stats);
     }
 
+    /**
+     * Purchases or sells tiles for the NPC company based on the provided method.
+     * @param numTile The number of tiles to purchase or sell.
+     * @param method The method to use, either "Purchase" or "Sell".
+     * @param company The NPC company object.
+     * @param grid The grid of tiles.
+     */
     public void tiles(int numTile, String method, NPCCompany company, Tile[][] grid) {
         System.out.println("NPC DECISION: " + method + " " + numTile +
                 " tiles for company: " + company.getName());
