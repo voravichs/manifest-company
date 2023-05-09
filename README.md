@@ -1,5 +1,7 @@
 
-# Manifest Company ![manifest company logo](./src/main/resources/mc/manifestcompany/images/manifest_company.png)
+# Manifest Company 
+
+<img src="./src/main/resources/mc/manifestcompany/images/manifest_company.png" width="50%" height="50%"/>
 
   ## Table of Contents:
   1. [Description](#description)
