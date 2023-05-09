@@ -1,16 +1,12 @@
 package mc.manifestcompany.company;
 
 import mc.manifestcompany.DataType;
-import mc.manifestcompany.company.NPCActionImpl;
-import mc.manifestcompany.company.NPCCompany;
 import mc.manifestcompany.gamelogic.Event;
 import mc.manifestcompany.gui.Tile;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class NPCActionImplTest {
     private NPCActionImpl npcAction;
@@ -20,7 +16,8 @@ public class NPCActionImplTest {
     @Before
     public void setUp() {
         npcAction = new NPCActionImpl();
-        company = new NPCCompany("Test Company", npcAction, Tile.TileType.CLAIMED_P2, "images/npc_image.png");
+        company = new NPCCompany(
+                "Test Company", npcAction, Tile.TileType.CLAIMED_P2, "images/npc_image.png");
         grid = new Tile[20][20];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
