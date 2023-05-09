@@ -23,6 +23,13 @@ public class UserCompany extends Company {
 
     private Tile.TileType tileType;
 
+    /**
+     * Constructor for the UserCompany class.
+     * @param name The name of the user company.
+     * @param actions The CompanyAction object associated with the user company.
+     * @param tileType The type of tile associated with the user company.
+     * @param imageLink The image link for the user company.
+     */
     public UserCompany(String name, CompanyAction actions, Tile.TileType tileType,
                        String imageLink) {
         this.name = name;
@@ -37,6 +44,10 @@ public class UserCompany extends Company {
         this.lastInvestments = new ArrayList<>();
         initializeStats();
     }
+
+    /**
+     * Initializes the statistics for the user company.
+     */
     @Override
     public void initializeStats() {
         this.stats.put(DataType.PRICE, 50);
@@ -46,12 +57,24 @@ public class UserCompany extends Company {
         this.stats.put(DataType.CASH, 500);
         this.stats.put(DataType.TILES, 1);
     }
+
+    /**
+     * Invests the specified amount in the given sector for the user company.
+     * @param amount The amount to invest.
+     * @param sector The sector to invest in.
+     */
     @Override
     public void invest(int amount, String sector) {
         System.out.println("Investing in " + this.name);
         actions.invest(amount, sector, this);
     }
 
+    /**
+     * Purchases or sells tiles for the user company based on the provided method.
+     * @param num The number of tiles to purchase or sell.
+     * @param method The method to use, either "Purchase" or "Sell".
+     * @param grid The grid of tiles.
+     */
     @Override
     public void tiles(int num, String method, Tile[][] grid) {
         System.out.println("Purchasing/Selling tiles in " + this.name);
@@ -98,11 +121,19 @@ public class UserCompany extends Company {
         return this.imageLink;
     }
 
+    /**
+     * Returns the financials of the user company as a list of integers.
+     * @return A list containing revenue, cogs, and profit.
+     */
     @Override
     public List<Integer> getFinancials() {
         return Arrays.asList(this.revenue.peek(), this.cogs.peek(), this.profit.peek());
     }
 
+    /**
+     * Returns the financial history of the user company as a list of stacks of integers.
+     * @return A list containing stacks of revenue, cogs, and profit.
+     */
     @Override
     public List<Stack<Integer>> getFinancialHistory() {
         return Arrays.asList(revenue, cogs, profit);

@@ -20,6 +20,12 @@ public class CompanyActionImpl implements CompanyAction {
     protected static final int TILE_VALUE = 300;
     private DataType lastInvestment;
 
+    /**
+     * Invests the specified amount in the given sector for the specified company.
+     * @param amount The amount to invest.
+     * @param sector The sector to invest in (Marketing, R&D, Goods, or HR).
+     * @param company The company in which to invest.
+     */
     @Override
     public void invest(int amount, String sector, Company company) {
         System.out.println("INVESTING: " + amount +
@@ -43,6 +49,13 @@ public class CompanyActionImpl implements CompanyAction {
         company.setStats(this.stats);
     }
 
+    /**
+     * Performs the specified method (Purchase or Sell) for the specified number of tiles for the given company.
+     * @param numTile The number of tiles to purchase or sell.
+     * @param method The method to use, either "Purchase" or "Sell".
+     * @param company The company for which to purchase or sell tiles.
+     * @param grid The grid of tiles.
+     */
     @Override
     public void tiles(int numTile, String method, Company company, Tile[][] grid) {
         this.stats = company.getStats();
