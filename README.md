@@ -60,7 +60,66 @@ becomes full, a winner is chosen as the company with the highest number of tiles
 At any time, a user may choose to save their progress or quit out of the game.
 
 ## Documentation
-
+Project Structure/Packages:
+* company package
+  * Company: superclass for subclasses:
+    * UserCompany: A company belonging the user player
+    * NPCCompany: The companies belonging to the CPU players
+    * These classes manage the company statistics and methods relating to their operation. Actions towards these companies are accessed by a Mediator design pattern mediated by CompanyAction.
+    * Company statistics is stored in an EnumMap using the enum DataType
+  * CompanyAction: interface
+    * CompanyActionImpl: Implementation of CompanyAction as the mediator of the Mediator design pattern. Includes methods to handle changing and investing in company statistics.
+    * NPCActionImpl: A subclass of company action, that inherits all its methods and has extra methods to make random decisions with random values.
+* gamelogic package
+  * Event: interface
+    * EventImpl: Implementation of Event that changes the market values according to which event is chosen.
+    * EventType: Java Enum, stores the chances of the event occurring and the text that will be displayed to the GUI once that event is chosen
+  * Turn: interface
+    * TurnImpl: Implementation of Turn that controls the revenue, expenses, and profit gained during a company's turn, and has methods to check the win/loss condition of the game for each company.
+  * Game: class that controls the entire backend of the game
+    * Initializes the game board and players
+    * Has a method to advance the turn logically and update the company statistics according to the decisions made by each company
+    * Manages various game parameters, such as turn number, market statistics, and game over state
+    * GameOverState: Java Enum, stores values representing the state of the game when certain conditions are met.
+* gui package
+  * Tile: Manages a logical and graphical tile in the game.
+    * TileType: Java Enum, stores a color associated with player 1(user), and the 3 other CPU players.
+    * Stores tile position, and color according to the TileType
+  * FXShape: Superclass of tile, defines that a shape in this program must be a Rectangle and have Point2D location.
+  * GameController: controls all the GUI logic for the game
+    * Many, many FXML private variables to load various GUI elements into variables in order to manipulate and change them according to user actions.
+    * Initializes various aspects upon the user's first click on the game GUI, alongside listeners for changes in input.
+    * Updates the grid and chart after each turn or each user decision.
+    * Adds and removes text from a text queue.
+    * Calls nextTurn() in Game when the Next Turn button is clicked, and updates all associated GUI elements as the turn passes.
+    * Manages the investing inputs from the investing menu, calling the UserCompany's investing methods upon confirmation
+    * Manages the game-over-states and exiting of the game once finished
+    * Allows saving of the game by taking in various parameters into the FileLoader's save method
+  * TitleController: Manages the title screen and loading of save files
+    * Can start a new game given input of a company name for the user and the level selected by the user on the title screen
+    * Shows all the files currently in the saveFiles directory upon clicking Continue
+    * Loads the given file as a new Game to be loaded into the game screen upon clicking one of the files to load
+    * Quits the program upon clicking quit
+  * EndController: Manages the end screen
+    * Sets the end screen text given certain game-over-states
+    * Returns to the main menu upon clicking the end screen
+* hashtable package
+  * HashTable: an abstract hash table with hash, insert, remove, and search methods
+  * OpenAddressingBucket: an open addressable bucket in an open addressable hash table
+    * stores a key-value pair
+    * stores final static variables to indicate whether a bucket has been empty from the start or empty since removal
+  * OpenAddressingHashTable: an open addressable hash table
+    * Fleshes out the insert, remove, and search methods of the hash table
+    * According to the probing strategy set by QuadraticProbingHashTable, retrieves, removes, or searches items in the hash table
+  * QuadraticProbingHashTable: a subclass of OpenAddressingHashTable that implements quadratic probing
+    * Defines the probing strategy of OpenAddressingHashTable as quadratic probing, one that uses 2 constants and an index to return a bucket index for items to be put in a hash table
+  * This package was adapted from CIT 5940: Data Structures and Software Design zyBooks Activity 6.10
+* misc
+  * App: JavaFX method that starts the application, contains the main method
+  * DataType: Java Enum, defines the data stored in a company's statistics EnumMap
+  * FileHandler: Handles saving and loading of files
+    * Saving takes certain important game parameters and saves them into a file
+    * Loading takes a save file name and returns a game containing all the parameters from that file pertaining to the Game's re-construction
 
 ## Screenshots
 
