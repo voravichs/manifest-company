@@ -1,7 +1,6 @@
 package mc.manifestcompany.gamelogic;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import mc.manifestcompany.DataType;
 import mc.manifestcompany.company.*;
