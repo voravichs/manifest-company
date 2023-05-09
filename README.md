@@ -6,10 +6,11 @@
   ## Table of Contents:
   1. [Description](#description)
   2. [Gameplay](#gameplay)
-  3. [Screenshots](#screenshots)
-  4. [Credits](#credits)
+  3. [Documentation](#documentation) 
+  4. [Screenshots](#screenshots) 
+  5. [Credits](#credits)
 
-  ## Description 
+## Description 
 
 Manifest Company is a business management game built in Java with JavaFX as a final project for CIT 5940. This program 
 demonstrates the use of data structures in order to store and manipulate data in the program to perform
@@ -18,7 +19,7 @@ complex tasks.
 The game allows users to take control of a company and invest in its future in order to dominate
 an industry among other CPU competitors.
 
-  ## Gameplay
+## Gameplay
 
 Upon booting up the game, the user is presented with a title screen and options to start a new game,
 continue from a save file, or quit. Pressing New Game allows the user to pick a level, name your company,
@@ -58,7 +59,10 @@ becomes full, a winner is chosen as the company with the highest number of tiles
 
 At any time, a user may choose to save their progress or quit out of the game.
 
-  ## Screenshots
+## Documentation
+
+
+## Screenshots
 
 * Main Menu
 
